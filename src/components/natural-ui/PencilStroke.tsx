@@ -1,13 +1,6 @@
 "use client";
 
-import React, {
-  useEffect,
-  useId,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useId, useMemo, useRef, useState } from "react";
 
 interface PencilStrokeProps {
   className?: string;
@@ -233,6 +226,7 @@ interface PencilUnderlineProps {
   frequency?: number;
   seed?: number;
   opacity?: number;
+  hoverMode?: "animate" | "appear";
 }
 
 export const PencilUnderline: React.FC<PencilUnderlineProps> = ({
@@ -242,16 +236,15 @@ export const PencilUnderline: React.FC<PencilUnderlineProps> = ({
   className = "",
   href,
   as: Component = "span",
+  deviation = 1,
+  hoverMode = "animate",
+  opacity,
   ...props
 }) => {
   const id = useId();
   const ref = useRef<HTMLElement>(null);
   const [rects, setRects] = useState<DOMRect[]>([]);
-
-  // Use useLayoutEffect to measure immediately after render to avoid flash
-  // but must be isomorphic safe (useEffect on server)
-  const useIsomorphicLayoutEffect =
-    typeof window !== "undefined" ? useLayoutEffect : useEffect;
+  const [isHovered, setIsHovered] = useState(false);
 
   const measure = () => {
     if (!ref.current) return;
@@ -262,42 +255,7 @@ export const PencilUnderline: React.FC<PencilUnderlineProps> = ({
       (r) => r.width > 0 && r.height > 0
     );
 
-    // To position the strokes absolutely relative to the *first* rect (or the container),
-    // we need a stable coordinate system.
-    // However, since the wrapper is `relative`, `absolute` children are positioned relative to it.
-    // But for `inline` elements, the "containing block" is complicated.
-
-    // Let's calculate relative to the first rect (top-left corner).
-    // Actually, if we just use the first rect as the origin (0,0) for our strokes container?
-    // No, we can just store the raw rects, and render a fixed overlay?
-    // No, simpler: Store relative coordinates.
-
     if (rectArray.length === 0) return;
-
-    // We will render the strokes in a container that is positioned relative to the first rect.
-    // Or just relative to the wrapper.
-    // If the wrapper is `inline`, `getClientRects` gives us viewport coords.
-    // The `absolute` child's origin depends on browser implementation of `inline-block` vs `inline`.
-
-    // Let's store the rects relative to the *element's bounding client rect*.
-    const bounding = ref.current.getBoundingClientRect();
-
-    // Actually, `getBoundingClientRect` is the union of all `getClientRects`.
-    // So `bounding.left` is the min left, `bounding.top` is min top.
-
-    // If we put an absolute container at `left: 0; top: 0` of a `relative inline` element,
-    // it usually aligns with the first line box's top-left content edge.
-
-    // To be robust, let's just save the rects relative to the bounding rect.
-    const relativeRects = rectArray.map((r) => ({
-      width: r.width,
-      height: r.height,
-      left: r.left - bounding.left,
-      top: r.top - bounding.top,
-    }));
-
-    // Check if changed deeply to avoid loops? React state usually handles ref equality.
-    // Just set it.
     setRects(rectArray);
   };
 
@@ -307,32 +265,12 @@ export const PencilUnderline: React.FC<PencilUnderlineProps> = ({
     return () => window.removeEventListener("resize", measure);
   }, [children]);
 
-  // We render the strokes in a portal-like way? No.
-  // We render them inside the wrapper.
-  // We need a container that covers the entire bounding box of the text.
-
-  // If we use `display: inline` for the wrapper, `position: relative`.
-  // Then we place a `span` inside that is `absolute`.
-  // We need to offset the strokes based on where the wrapper thinks (0,0) is vs where the rects are.
-
   const strokes = rects.length > 0 && (
     <span
       className="absolute top-0 left-0 pointer-events-none w-full h-full block"
       aria-hidden="true"
     >
       {rects.map((r, i) => {
-        // We need to calculate the position of this specific line rect relative to the container's origin.
-        // The container is the `absolute` span above.
-        // Its origin is... tricky with inline parents.
-
-        // Robust Hack:
-        // Instead of guessing where the `absolute` container is,
-        // We render the container `fixed` or use the `boundingClientRect` as the reference frame
-        // if we could.
-
-        // Let's try the offset strategy:
-        // The wrapper's bounding rect top-left is our reference frame if we set the absolute container there?
-
         // Better:
         // Just use `transform` to place strokes.
         // If the wrapper is `relative`, and we have a child `absolute left-0 top-0`,
@@ -351,7 +289,7 @@ export const PencilUnderline: React.FC<PencilUnderlineProps> = ({
               left: 0,
               top: 0,
               transform: `translate(${leftOffset}px, ${
-                topOffset + r.height - 12
+                topOffset + r.height - 13
               }px)`, // Align to bottom
               width: r.width,
               height: 10,
@@ -363,6 +301,16 @@ export const PencilUnderline: React.FC<PencilUnderlineProps> = ({
               height={10}
               color={color}
               strokeWidth={thickness}
+              deviation={
+                hoverMode === "animate" && isHovered ? deviation * 3 : deviation
+              }
+              opacity={
+                hoverMode === "appear"
+                  ? isHovered
+                    ? opacity ?? 0.8
+                    : 0
+                  : opacity ?? 0.8
+              }
               {...props}
               // Use a unique seed based on index if not provided, to vary lines
               seed={props.seed ? props.seed + i : undefined}
@@ -387,6 +335,8 @@ export const PencilUnderline: React.FC<PencilUnderlineProps> = ({
         ref={ref as any}
         className={`relative inline group no-underline ${className}`}
         style={{ textDecoration: "none" }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
         {content}
       </a>
@@ -394,7 +344,12 @@ export const PencilUnderline: React.FC<PencilUnderlineProps> = ({
   }
 
   return (
-    <Component ref={ref} className={`relative inline ${className}`}>
+    <Component
+      ref={ref}
+      className={`relative inline ${className}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {content}
     </Component>
   );

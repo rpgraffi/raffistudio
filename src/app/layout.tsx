@@ -1,6 +1,6 @@
 import NoiseOverlay from "@/components/NoiseOverlay";
 import type { Metadata } from "next";
-import { Fira_Code, Geist, Geist_Mono, Inter } from "next/font/google";
+import { Caveat, Fira_Code, Geist, Geist_Mono, Inter } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -26,6 +26,11 @@ const inter = Inter({
 
 const firaCode = Fira_Code({
   variable: "--font-fira-code",
+  subsets: ["latin"],
+});
+
+const caveat = Caveat({
+  variable: "--font-caveat",
   subsets: ["latin"],
 });
 
@@ -56,7 +61,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${sentient.variable} ${firaCode.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} ${sentient.variable} ${firaCode.variable} ${caveat.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NoiseOverlay />
         {children}

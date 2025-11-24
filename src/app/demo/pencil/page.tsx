@@ -40,8 +40,8 @@ export default function DemoPage() {
           in a sentence.
         </p>
         <p>
-          <PencilUnderline color="blue" deviation={3}>
-            Custom Blue Underline
+          <PencilUnderline color="blue" deviation={10}>
+            Custom Blue Underline hgvjfvzivizcvuzc
           </PencilUnderline>
         </p>
         <h3 className="text-xl">

@@ -122,7 +122,7 @@ export default function NoiseOverlay() {
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none fixed inset-0 z-50 h-full w-full opacity-20 mix-blend-soft-light"
+      className="pointer-events-none fixed inset-0 z-50 h-full w-full opacity-10 mix-blend-lighten"
       aria-hidden="true"
     />
   );

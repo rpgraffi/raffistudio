@@ -1,5 +1,5 @@
 import { LightProvider } from "@/components/light/LightContext";
-import { PolaroidStack } from "@/components/light/PolaroidStack";
+import { Analytics } from "@vercel/analytics/next"
 import { Mail } from "@/components/mail/Mail";
 import { PencilUnderline } from "@/components/natural-ui/PencilStroke";
 import { GridSection } from "@/components/ui/GridSection";
@@ -54,6 +54,7 @@ const textureIcons = [
 export default function Home() {
   return (
     <main className="min-h-screen bg-background flex flex-col gap-12 items-center justify-center">
+      <Analytics />
       <LightProvider>
         <div className="min-h-screen flex flex-col py-12 gap-4 items-center justify-center">
           <h1 className="text-4xl font-bold font-sentient">I'm Raffi</h1>

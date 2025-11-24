@@ -2,6 +2,7 @@ import { LightProvider } from "@/components/light/LightContext";
 import { PolaroidStack } from "@/components/light/PolaroidStack";
 import { Mail } from "@/components/mail/Mail";
 import { PencilUnderline } from "@/components/natural-ui/PencilStroke";
+import { GridSection } from "@/components/ui/GridSection";
 import { TextureSection } from "@/components/ui/TextureSection";
 import Image from "next/image";
 
@@ -78,7 +79,6 @@ export default function Home() {
         </div>
 
         <TextureSection className="py-12 my-12 flex flex-col items-center justify-center text-center gap-8">
-
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-8 p-4 max-w-5xl w-full">
             {textureIcons.map((icon, index) => (
               <div
@@ -98,6 +98,12 @@ export default function Home() {
             ))}
           </div>
         </TextureSection>
+        <GridSection className="h-64">
+          <div className="p-8">
+            <h2 className="text-xl font-bold">Grid Content</h2>
+            <p>This is a math paper style background.</p>
+          </div>
+        </GridSection>
       </LightProvider>
     </main>
   );

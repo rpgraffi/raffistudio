@@ -95,8 +95,10 @@ const PencilStrokeRenderer: React.FC<PencilStrokeProps & { id: string }> = ({
 
   if (width <= 0) return null;
 
+  const Tag = Component as any;
+
   return (
-    <Component
+    <Tag
       className={className}
       style={{
         width,
@@ -161,7 +163,7 @@ const PencilStrokeRenderer: React.FC<PencilStrokeProps & { id: string }> = ({
           style={{ transform: "translateY(0.5px)" }}
         />
       </svg>
-    </Component>
+    </Tag>
   );
 };
 
@@ -196,10 +198,10 @@ export const PencilStroke: React.FC<PencilStrokeProps> = (props) => {
   }
 
   // If dynamic, render wrapper to measure, then render SVG
-  const Component = props.as || "div"; // Default to div for responsive containers usually
+  const Tag = (props.as || "div") as any; // Default to div for responsive containers usually
 
   return (
-    <Component ref={ref} className={`w-full ${props.className || ""}`}>
+    <Tag ref={ref} className={`w-full ${props.className || ""}`}>
       {measuredWidth > 0 && (
         <PencilStrokeRenderer
           id={id}
@@ -210,7 +212,7 @@ export const PencilStroke: React.FC<PencilStrokeProps> = (props) => {
           as="span"
         />
       )}
-    </Component>
+    </Tag>
   );
 };
 
@@ -343,14 +345,16 @@ export const PencilUnderline: React.FC<PencilUnderlineProps> = ({
     );
   }
 
+  const Tag = Component as any;
+
   return (
-    <Component
+    <Tag
       ref={ref}
       className={`relative inline ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {content}
-    </Component>
+    </Tag>
   );
 };

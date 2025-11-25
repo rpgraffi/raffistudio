@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #E4E4E7;
+  --background: #e4e4e7;
   --foreground: #171717;
 }
 
@@ -12,6 +12,8 @@
   --font-mono: var(--font-fira-code);
   --font-sentient: var(--font-sentient);
   --font-handwriting: var(--font-caveat);
+
+  --max-width-site: 1600px;
 }
 
 body {

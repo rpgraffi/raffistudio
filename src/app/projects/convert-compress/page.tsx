@@ -7,7 +7,7 @@ import { ProjectStats } from "@/app/projects/components/ProjectStats";
 import ShadowBackground from "@/components/shadows/ShadowBackground";
 import { TextureSection } from "@/components/ui/TextureSection";
 
-export default function LMUAppPage() {
+export default function ConvertCompressPage() {
   return (
     <main className="min-h-screen font-sans relative">
       <ShadowBackground className="min-h-screen flex flex-col">
@@ -27,19 +27,19 @@ export default function LMUAppPage() {
             {/* Left: Title & Links */}
             <div className="md:col-span-5 flex flex-col gap-8">
               <h1 className="text-5xl md:text-7xl text-zinc-900 leading-[1.1] font-sentient">
-                LMU
+                Convert 
                 <br />
-                Students
+                & Compress
               </h1>
 
               <div className="flex gap-6">
-                <PencilUnderline href="#" className="text-lg text-zinc-800">
+                <PencilUnderline href="https://apps.apple.com/us/app/convert-compress/id6752861983" className="text-lg text-zinc-800">
                   App Store
                 </PencilUnderline>
-                <PencilUnderline href="#" className="text-lg text-zinc-800">
-                  Play Store
+                <PencilUnderline href="https://convert-compress.com" className="text-lg text-zinc-800">
+                  Website
                 </PencilUnderline>
-                <PencilUnderline href="#" className="text-lg text-zinc-800">
+                <PencilUnderline href="https://github.com/rpgraffi/convert-compress" className="text-lg text-zinc-800">
                   GitHub
                 </PencilUnderline>
               </div>

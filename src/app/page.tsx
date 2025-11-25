@@ -84,7 +84,7 @@ export default function Home() {
             {textureIcons.map((icon, index) => (
               <div
                 key={icon}
-                className="relative w-24 h-24 md:w-32 md:h-32 mx-auto transition-transform hover:scale-110 duration-300"
+                className="relative w-24 h-24 md:w-32 md:h-32 mx-auto"
                 style={{
                   transform: `rotate(${((index * 137) % 15) - 7}deg)`,
                 }}

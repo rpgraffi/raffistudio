@@ -61,7 +61,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${sentient.variable} ${firaCode.variable} ${caveat.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} ${sentient.variable} ${firaCode.variable} ${caveat.variable} ${geistSans.variable} ${geistMono.variable} antialiased relative min-h-screen`}
       >
         <NoiseOverlay />
         {children}

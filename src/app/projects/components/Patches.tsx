@@ -20,19 +20,14 @@ export function Patch({
 }: PatchProps) {
   return (
     <div
-      className={`relative ${className}`}
+      className={`shrink-0 relative ${className}`}
       style={{
         width: size,
         height: size,
         transform: `rotate(${rotation}deg)`,
       }}
     >
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        className="object-contain"
-      />
+      <Image src={src} alt={alt} fill className="object-contain" />
     </div>
   );
 }
@@ -56,7 +51,7 @@ export const PatchesRow: React.FC<PatchesRowProps> = ({
           src={patch.src}
           alt={patch.alt}
           rotation={((index * 137) % 15) - 7} // Random-ish rotation
-          size={120}
+          size={140}
         />
       ))}
     </div>

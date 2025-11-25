@@ -66,23 +66,16 @@ export default function ConvertCompressPage() {
         <TextureSection>
           <ProjectStats
             stats={[
-              { value: "12.000", label: "Downloads" },
+              { value: "2.000", label: "Downloads" },
               { value: "4,9", label: "Stars" },
-              { value: "122", label: "Reviews" },
-              { value: "14", label: "GitHub Stars" },
+              { value: "22", label: "Reviews" },
+              { value: "100", label: "GitHub Stars" },
             ]}
             tools={[
+              { src: "/images/texture-icons/swift.webp", alt: "Swift" },
+              { src: "/images/texture-icons/xcode.webp", alt: "Xcode" },
               { src: "/images/texture-icons/figma.webp", alt: "Figma" },
-              { src: "/images/texture-icons/dart.webp", alt: "Dart" },
-              { src: "/images/texture-icons/flutter.webp", alt: "Flutter" },
               { src: "/images/texture-icons/git.webp", alt: "Git" },
-              { src: "/images/texture-icons/github.webp", alt: "GitHub" },
-              { src: "/images/texture-icons/docker.webp", alt: "Docker" },
-              { src: "/images/texture-icons/python.webp", alt: "Python" },
-              { src: "/images/texture-icons/fastapi.webp", alt: "FastAPI" },
-              { src: "/images/texture-icons/graphql.webp", alt: "GraphQL" },
-              { src: "/images/texture-icons/nginx.webp", alt: "Nginx" },
-              { src: "/images/texture-icons/postgres.webp", alt: "PostgreSQL" },
             ]}
           />
         </TextureSection>

@@ -14,7 +14,9 @@ export const StatItem: React.FC<StatItemProps> = ({
   className = "",
 }) => {
   return (
-    <div className={`flex flex-col gap-1 min-w-[120px] ${className}`}>
+    <div
+      className={`flex flex-col gap-1 min-w-[140px] shrink-0 ${className}`}
+    >
       <span className="font-sentient text-4xl md:text-5xl font-bold text-zinc-900">
         {value}
       </span>

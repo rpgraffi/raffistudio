@@ -1,9 +1,8 @@
 "use client";
 
-import { Patch, PatchesRow } from "@/app/projects/components/Patches";
-import { PencilStroke } from "@/components/natural-ui/PencilStroke";
+import { PatchesRow } from "@/app/projects/components/Patches";
 import { StatsRow } from "@/app/projects/components/Stats";
-import Image from "next/image";
+import { PencilStroke } from "@/components/natural-ui/PencilStroke";
 import React from "react";
 
 interface RatingRowProps {
@@ -12,7 +11,6 @@ interface RatingRowProps {
   downloadUrl?: string;
   downloadImage?: string;
 }
-
 
 export interface ProjectStatsProps {
   stats: { value: string; label: string }[];
@@ -30,28 +28,27 @@ export const ProjectStats: React.FC<ProjectStatsProps> = ({
 }) => {
   return (
     <section
-      className={`w-full max-w-site mx-auto px-8 md:px-12 py-12 flex flex-col gap-12 ${className}`}
+      className={`w-full max-w-site mx-auto py-12 flex flex-col gap-12 ${className}`}
     >
       {/* Row 1: Stats */}
       <div className="w-full">
-        <StatsRow stats={stats} />
+        <StatsRow stats={stats} className="px-8 md:px-12" />
       </div>
 
       {/* Divider */}
-      <div className="w-full overflow-hidden">
+      <div className="w-full overflow-hidden px-8 md:px-12">
         <PencilStroke className="w-full" opacity={0.1} strokeWidth={3} />
       </div>
 
       {/* Row 2: Tech Stack Patches */}
       <div className="w-full">
-        <PatchesRow patches={tools} />
+        <PatchesRow patches={tools} className="px-8 md:px-12" />
       </div>
 
       {/* Divider */}
-      <div className="w-full overflow-hidden">
+      <div className="w-full overflow-hidden px-8 md:px-12">
         <PencilStroke className="w-full" opacity={0.1} strokeWidth={3} />
       </div>
-
     </section>
   );
 };

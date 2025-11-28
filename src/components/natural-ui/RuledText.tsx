@@ -19,7 +19,7 @@ export const RuledText: React.FC<RuledTextProps> = ({
   color = "rgba(0,0,0,0.1)",
   strokeWidth = 1.5,
   opacity = 1,
-  deviation = 1,
+  deviation = .5,
   seed,
 }) => {
   const id = useId();

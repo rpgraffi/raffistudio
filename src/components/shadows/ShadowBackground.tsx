@@ -17,8 +17,6 @@ const SHADOW_IMAGES = [
   "/images/shadows/plant_shadow-08.jpg",
   "/images/shadows/plant_shadow-09.jpg",
   "/images/shadows/plant_shadow-10.jpg",
-  "/images/shadows/tree_shadow-01.jpg",
-  "/images/shadows/tree_shadow-02.jpg",
 ] as const;
 
 export type ShadowImage = (typeof SHADOW_IMAGES)[number];
@@ -319,7 +317,7 @@ export const getRandomShadowImage = (): ShadowImage => {
  */
 export default function ShadowBackground({
   image,
-  backgroundColor = "#E4E4E7",
+  backgroundColor = "#F4F4F4",
   shadowColor = "#000000",
   intensity = 1.0,
   contrast = 1.0,

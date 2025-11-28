@@ -15,14 +15,7 @@ export default function Header() {
             hoverMode="appear"
             className="text-zinc-600"
           >
-            Projects,
-          </PencilUnderline>
-          <PencilUnderline
-            href="/explorations"
-            hoverMode="appear"
-            className="text-zinc-600"
-          >
-            Explorations
+            Projects
           </PencilUnderline>
         </nav>
         <PencilUnderline

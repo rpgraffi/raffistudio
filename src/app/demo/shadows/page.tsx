@@ -18,7 +18,7 @@ export default function ShadowsPage() {
 
       {/* Warm Tone Example */}
       <ShadowBackground
-        image="/images/shadows/tree_shadow-01.jpg"
+        image="/images/shadows/plant_shadow-01.jpg"
         backgroundColor="#f5f0e8"
         shadowColor="#4a3728"
         className="h-screen flex flex-col items-center justify-center"

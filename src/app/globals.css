@@ -30,3 +30,13 @@ h5,
 h6 {
   font-family: var(--font-sentient), Arial, Helvetica, sans-serif;
 }
+
+/* Hide scrollbar */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

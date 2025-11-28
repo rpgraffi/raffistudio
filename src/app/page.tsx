@@ -77,6 +77,14 @@ export default function Home() {
           <div className="flex flex-col md:flex-row gap-12 items-center mt-8">
             <Mail width={100} url="mailto:hello@raphaelwennmacher.com" />
           </div>
+          <div className="flex gap-4">
+            <PencilUnderline href="/projects/convert-compress">
+              Convert & Compress
+            </PencilUnderline>
+            <PencilUnderline href="/projects/lmu-app">
+              LMU Students
+            </PencilUnderline>
+          </div>
         </div>
 
         <TextureSection className="py-12 my-12 flex flex-col items-center justify-center text-center gap-8">

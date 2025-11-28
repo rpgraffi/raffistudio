@@ -28,7 +28,7 @@ export const ProjectStats: React.FC<ProjectStatsProps> = ({
 }) => {
   return (
     <section
-      className={`w-full max-w-site mx-auto py-12 flex flex-col gap-12 ${className}`}
+      className={`w-full max-w-site mx-auto flex flex-col gap-6 md:gap-8 ${className}`}
     >
       {/* Row 1: Stats */}
       <div className="w-full">

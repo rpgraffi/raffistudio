@@ -7,23 +7,14 @@ interface PatchProps {
   src: string;
   alt: string;
   className?: string;
-  size?: number;
   rotation?: number;
 }
 
-export function Patch({
-  src,
-  alt,
-  className = "",
-  size = 64,
-  rotation = 0,
-}: PatchProps) {
+export function Patch({ src, alt, className = "", rotation = 0 }: PatchProps) {
   return (
     <div
       className={`shrink-0 relative ${className}`}
       style={{
-        width: size,
-        height: size,
         transform: `rotate(${rotation}deg)`,
       }}
     >
@@ -43,7 +34,7 @@ export const PatchesRow: React.FC<PatchesRowProps> = ({
 }) => {
   return (
     <div
-      className={`flex items-center gap-4 md:gap-8 overflow-x-auto pb-4 scrollbar-hide ${className}`}
+      className={`flex items-center gap-4 md:gap-8 overflow-x-auto overflow-y-hidden scrollbar-hide ${className}`}
     >
       {patches.map((patch, index) => (
         <Patch
@@ -51,7 +42,7 @@ export const PatchesRow: React.FC<PatchesRowProps> = ({
           src={patch.src}
           alt={patch.alt}
           rotation={((index * 137) % 15) - 7} // Random-ish rotation
-          size={140}
+          className="w-24 h-24 md:w-[140px] md:h-[140px]"
         />
       ))}
     </div>

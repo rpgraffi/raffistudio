@@ -15,12 +15,12 @@ export const StatItem: React.FC<StatItemProps> = ({
 }) => {
   return (
     <div
-      className={`flex flex-col gap-1 min-w-[140px] shrink-0 ${className}`}
+      className={`flex flex-col gap-1 shrink-0 ${className}`}
     >
-      <span className="font-sentient text-4xl md:text-5xl font-bold text-zinc-900">
+      <span className="font-sentient text-4xl md:text-6xl font-medium">
         {value}
       </span>
-      <span className="text-zinc-600 font-medium">{label}</span>
+      <span className="text-xl md:text-2xl font-regular">{label}</span>
     </div>
   );
 };
@@ -36,7 +36,7 @@ export const StatsRow: React.FC<StatsRowProps> = ({
 }) => {
   return (
     <div
-      className={`flex gap-12 md:gap-16 overflow-x-auto pb-4 scrollbar-hide ${className}`}
+      className={`flex gap-12 md:gap-16 overflow-x-auto scrollbar-hide ${className}`}
     >
       {stats.map((stat, index) => (
         <StatItem key={index} value={stat.value} label={stat.label} />

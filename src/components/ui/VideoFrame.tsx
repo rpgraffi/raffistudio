@@ -55,6 +55,7 @@ function TesaStripe({ position, stripeIndex }: TesaStripeProps) {
         alt=""
         fill
         className="object-contain drop-shadow-md"
+        sizes="128px"
         aria-hidden="true"
       />
     </div>

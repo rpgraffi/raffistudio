@@ -60,6 +60,7 @@ export function StarRating({
                     alt="Star"
                     fill
                     className="object-contain py-[10%]"
+                    sizes="(max-width: 768px) 10vw, 5vw"
                   />
                 </div>
               </div>

@@ -8,27 +8,31 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-heebo);
   --font-mono: var(--font-fira-code);
   --font-sentient: var(--font-sentient);
   --font-handwriting: var(--font-caveat);
 
   --max-width-site: 1600px;
+  --max-width-text-content: 700px;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  font-family: var(--font-heebo), Arial, Helvetica, sans-serif;
 }
 
 h1,
-h2,
+h2 {
+  font-family: var(--font-sentient), Arial, Helvetica, sans-serif;
+}
+
 h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-sentient), Arial, Helvetica, sans-serif;
+  font-family: var(--font-heebo), Arial, Helvetica, sans-serif;
 }
 
 /* Hide scrollbar */

@@ -18,7 +18,13 @@ export function Patch({ src, alt, className = "", rotation = 0 }: PatchProps) {
         transform: `rotate(${rotation}deg)`,
       }}
     >
-      <Image src={src} alt={alt} fill className="object-contain" />
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        className="object-contain"
+        sizes="(max-width: 768px) 96px, 140px"
+      />
     </div>
   );
 }

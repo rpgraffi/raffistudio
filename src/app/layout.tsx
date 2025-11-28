@@ -1,6 +1,6 @@
 import NoiseOverlay from "@/components/NoiseOverlay";
 import type { Metadata } from "next";
-import { Caveat, Fira_Code, Geist, Geist_Mono, Inter } from "next/font/google";
+import { Caveat, Fira_Code, Heebo } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -19,11 +19,6 @@ const sentient = localFont({
   display: "swap",
 });
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
-
 const firaCode = Fira_Code({
   variable: "--font-fira-code",
   subsets: ["latin"],
@@ -34,15 +29,12 @@ const caveat = Caveat({
   subsets: ["latin"],
 });
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+
+const heebo = Heebo({
+  variable: "--font-heebo",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Raphael Wennmacher • Portfolio",
@@ -61,7 +53,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${sentient.variable} ${firaCode.variable} ${caveat.variable} ${geistSans.variable} ${geistMono.variable} antialiased relative min-h-screen`}
+        className={`${sentient.variable} ${firaCode.variable} ${caveat.variable} ${heebo.variable} antialiased relative min-h-screen`}
       >
         <NoiseOverlay />
         {children}

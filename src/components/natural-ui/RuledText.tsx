@@ -19,16 +19,24 @@ export const RuledText: React.FC<RuledTextProps> = ({
   color = "rgba(0,0,0,0.1)",
   strokeWidth = 1.5,
   opacity = 1,
-  deviation = .5,
+  deviation = 0.5,
   seed,
 }) => {
   const id = useId();
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
   const [lines, setLines] = useState<{ top: number; width: number }[]>([]);
+  const [fontSize, setFontSize] = useState(16);
 
   const measure = () => {
     if (!containerRef.current || !textRef.current) return;
+
+    // Measure font size
+    const style = window.getComputedStyle(textRef.current);
+    const fs = parseFloat(style.fontSize);
+    if (!isNaN(fs)) {
+      setFontSize(fs);
+    }
 
     const containerRect = containerRef.current.getBoundingClientRect();
     const textRects = textRef.current.getClientRects();
@@ -53,7 +61,8 @@ export const RuledText: React.FC<RuledTextProps> = ({
       seenY.add(roundedY);
 
       // Calculate top position relative to the container
-      const top = rect.top - containerRect.top + rect.height - 14;
+      // Position the line at the bottom of the line box (between lines of text)
+      const top = rect.top - containerRect.top + rect.height - 4;
 
       newLines.push({
         top,
@@ -102,6 +111,7 @@ export const RuledText: React.FC<RuledTextProps> = ({
               top: line.top,
               width: line.width,
               height: 10,
+              lineHeight: 0, // Reset inherited line-height
             }}
           >
             <PencilStroke

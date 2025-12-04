@@ -5,6 +5,7 @@ import { PencilUnderline } from "@/components/natural-ui/PencilStroke";
 import { GridSection } from "@/components/ui/GridSection";
 import { TextureSection } from "@/components/ui/TextureSection";
 import Image from "next/image";
+import DrawingHeadline from "@/components/natural-ui/DrawingHeadline";
 
 const polaroidItems = [
   {
@@ -56,8 +57,15 @@ export default function Home() {
     <main className="min-h-screen bg-background flex flex-col gap-12 items-center justify-center">
       <Analytics />
       <LightProvider>
-        <div className="min-h-screen flex flex-col py-12 gap-4 items-center justify-center">
-          <h1 className="text-4xl font-bold font-sentient">I'm Raffi</h1>
+        <div className="min-h-screen flex flex-col py-12 gap-8 items-center justify-center">
+        <DrawingHeadline
+            className="text-6xl md:text-8xl text-zinc-900 font-sentient"
+            triggerOnView={false}
+            animate={true}
+            as="h1"
+          >
+            Hey, I'm Raffi!
+          </DrawingHeadline>
           <p className="text-lg text-center">
             and love to design and develop digital products.
           </p>

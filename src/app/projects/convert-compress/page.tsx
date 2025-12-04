@@ -11,6 +11,7 @@ import {
 } from "@/app/projects/components/ProjectContent";
 import { ProjectStats } from "@/app/projects/components/ProjectStats";
 import Header from "@/components/Header";
+import { DrawingHeadlineMultiline } from "@/components/natural-ui/DrawingHeadline";
 import { PencilUnderline } from "@/components/natural-ui/PencilStroke";
 import { RuledText } from "@/components/natural-ui/RuledText";
 import { TextMarker } from "@/components/natural-ui/TextMarker";
@@ -46,11 +47,14 @@ export default function ConvertCompressPage() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 z-10">
             {/* Left: Title & Links */}
             <div className="md:col-span-5 flex flex-col justify-between gap-8">
-              <h1 className="text-5xl md:text-7xl text-zinc-900 leading-[1.1] font-sentient">
-                Convert &
-                <br />
-                Compress
-              </h1>
+              <DrawingHeadlineMultiline
+                lines={["Convert &", "Compress"]}
+                className="text-5xl md:text-7xl text-zinc-900 font-sentient"
+                triggerOnView={false}
+                animate={true}
+                lineDelay={0.5}
+                as="h1"
+              />
 
               <div className="flex gap-6">
                 <PencilUnderline
@@ -336,6 +340,20 @@ export default function ConvertCompressPage() {
                 some fiddling to achieve the depth and hierarchy I had in mind
                 while keeping the icon readable across both appearance modes.
               </ProjectText>
+              <GridSection>
+                <Image
+                  src="/images/projects/convert-compress/app-icon-light.webp"
+                  alt="App Icon Light"
+                  width={100}
+                  height={100}
+                />
+                <Image
+                  src="/images/projects/convert-compress/app-icon-dark.webp"
+                  alt="App Icon Dark"
+                  width={100}
+                  height={100}
+                />
+              </GridSection>
             </ProjectTextBlock>
           </ProjectSectionContent>
         </ProjectSection>
@@ -345,8 +363,11 @@ export default function ConvertCompressPage() {
           <ProjectHeading>Release</ProjectHeading>
           <ProjectSectionContent>
             <ProjectText>
-              Preparing for the App Store involved creating assets and
-              translating the app into{" "}
+              Preparing for the{" "}
+              <PencilUnderline href="https://apps.apple.com/us/app/convert-compress/id6752861983">
+                App Store
+              </PencilUnderline>{" "}
+              involved creating assets and translating the app into{" "}
               <TextMarker>over 17 languages</TextMarker>. I released the app on
               October 1, 2025. The process wasn&apos;t entirely smooth; I
               initially requested permission to access the Downloads folder to
@@ -385,9 +406,12 @@ export default function ConvertCompressPage() {
               <PencilUnderline href="https://convert-compress.com">
                 convert-compress.com
               </PencilUnderline>
-              . Since the tool is <TextMarker>open source</TextMarker>, I could
-              post in developer communities like r/SwiftUI and r/WebDev, though
-              most users came from r/MacApps. My{" "}
+              . Since the tool is{" "}
+              <PencilUnderline href="https://github.com/rpgraffi/convert-compress">
+                open source
+              </PencilUnderline>
+              , I could post in developer communities like r/SwiftUI and
+              r/WebDev, though most users came from r/MacApps. My{" "}
               <PencilUnderline href="https://www.reddit.com/r/SwiftUI/comments/1nzov5y/for_my_first_swift_app_i_built_a_native_macos/">
                 post
               </PencilUnderline>{" "}

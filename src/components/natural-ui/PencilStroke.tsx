@@ -106,7 +106,8 @@ const PencilStrokeRenderer: React.FC<PencilStrokeProps & { id: string }> = ({
         display: "inline-flex",
         alignItems: "center",
         overflow: "visible",
-        verticalAlign: "middle",
+        verticalAlign: "top",
+        lineHeight: 0, // Reset inherited line-height
         ...(props as any).style,
       }}
     >
@@ -246,10 +247,19 @@ export const PencilUnderline: React.FC<PencilUnderlineProps> = ({
   const id = useId();
   const ref = useRef<HTMLElement>(null);
   const [rects, setRects] = useState<DOMRect[]>([]);
+  const [fontSize, setFontSize] = useState(16);
   const [isHovered, setIsHovered] = useState(false);
 
   const measure = () => {
     if (!ref.current) return;
+
+    // Measure font size
+    const style = window.getComputedStyle(ref.current);
+    const fs = parseFloat(style.fontSize);
+    if (!isNaN(fs)) {
+      setFontSize(fs);
+    }
+
     // Get all line boxes
     const clientRects = ref.current.getClientRects();
     // Convert to array and filter empty rects
@@ -291,10 +301,11 @@ export const PencilUnderline: React.FC<PencilUnderlineProps> = ({
               left: 0,
               top: 0,
               transform: `translate(${leftOffset}px, ${
-                topOffset + r.height - 13
-              }px)`, // Align to bottom
+                topOffset + fontSize * 1.25 - 2
+              }px)`,
               width: r.width,
               height: 10,
+              lineHeight: 0, // Reset inherited line-height to prevent layout shifts
             }}
           >
             <PencilStrokeRenderer

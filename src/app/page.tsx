@@ -77,6 +77,14 @@ export default function Home() {
           <div className="flex flex-col md:flex-row gap-12 items-center mt-8">
             <Mail width={100} url="mailto:hello@raphaelwennmacher.com" />
           </div>
+          <div className="flex gap-4">
+            <PencilUnderline href="/projects/convert-compress">
+              Convert & Compress
+            </PencilUnderline>
+            <PencilUnderline href="/projects/lmu-app">
+              LMU Students
+            </PencilUnderline>
+          </div>
         </div>
 
         <TextureSection className="py-12 my-12 flex flex-col items-center justify-center text-center gap-8">
@@ -84,7 +92,7 @@ export default function Home() {
             {textureIcons.map((icon, index) => (
               <div
                 key={icon}
-                className="relative w-24 h-24 md:w-32 md:h-32 mx-auto transition-transform hover:scale-110 duration-300"
+                className="relative w-24 h-24 md:w-32 md:h-32 mx-auto"
                 style={{
                   transform: `rotate(${((index * 137) % 15) - 7}deg)`,
                 }}
@@ -99,12 +107,6 @@ export default function Home() {
             ))}
           </div>
         </TextureSection>
-        <GridSection className="h-64">
-          <div className="p-8">
-            <h2 className="text-xl font-bold">Grid Content</h2>
-            <p>This is a math paper style background.</p>
-          </div>
-        </GridSection>
       </LightProvider>
     </main>
   );

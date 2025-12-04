@@ -49,6 +49,45 @@ export default function DemoPage() {
             Headline Underline
           </PencilUnderline>
         </h3>
+
+        <div className="space-y-8 pt-8 border-t">
+          <p className="text-sm">
+            <span className="font-bold">Small text (text-sm):</span> <br />
+            <PencilUnderline>
+              The quick brown fox jumps over the lazy dog.
+            </PencilUnderline>
+          </p>
+          <p className="text-base">
+            <span className="font-bold">Base text (text-base):</span> <br />
+            <PencilUnderline>
+              The quick brown fox jumps over the lazy dog.
+            </PencilUnderline>
+          </p>
+          <p className="text-2xl">
+            <span className="font-bold">Large text (text-2xl):</span> <br />
+            <PencilUnderline thickness={2}>
+              The quick brown fox jumps over the lazy dog.
+            </PencilUnderline>
+          </p>
+          <p className="text-5xl">
+            <span className="font-bold">Huge text (text-5xl):</span> <br />
+            <PencilUnderline thickness={4}>The quick brown fox</PencilUnderline>
+          </p>
+          <p className="text-4xl leading-none">
+            <span className="font-bold">
+              Tight leading (text-4xl leading-none):
+            </span>{" "}
+            <br />
+            <PencilUnderline thickness={3}>The quick brown fox</PencilUnderline>
+          </p>
+          <p className="text-4xl leading-loose">
+            <span className="font-bold">
+              Loose leading (text-4xl leading-loose):
+            </span>{" "}
+            <br />
+            <PencilUnderline thickness={3}>The quick brown fox</PencilUnderline>
+          </p>
+        </div>
       </section>
 
       <section className="space-y-4">

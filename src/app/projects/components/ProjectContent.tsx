@@ -13,7 +13,7 @@ export function ProjectContent({
   return (
     <div
       className={cn(
-        "w-full max-w-site mx-auto px-8 md:px-12 py-24 md:py-32 flex flex-col gap-32 md:gap-48",
+        "w-full max-w-site mx-auto px-8 md:px-12 py-24 md:py-32 flex flex-col gap-24 md:gap-32",
         className
       )}
       {...props}

@@ -107,12 +107,6 @@ export default function Home() {
             ))}
           </div>
         </TextureSection>
-        <GridSection className="h-64">
-          <div className="p-8">
-            <h2 className="text-xl font-bold">Grid Content</h2>
-            <p>This is a math paper style background.</p>
-          </div>
-        </GridSection>
       </LightProvider>
     </main>
   );

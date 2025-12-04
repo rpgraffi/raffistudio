@@ -144,52 +144,294 @@ export default function ConvertCompressPage() {
 
       {/* Content Section */}
       <ProjectContent>
-        {/* Motivation Block 1 */}
+        {/* Motivation */}
         <ProjectSection>
           <ProjectHeading>Motivation</ProjectHeading>
           <ProjectSectionContent>
+            <ProjectText>
+              Anyone working in web design, app development, or marketing knows
+              the struggle. Some formats are better for the web, others compress
+              better, some support transparency, and others are simply mandatory
+              requirements. Often, you have multiple assets that need adjustment
+              simultaneously. While existing tools can handle these tasks, I
+              couldn&apos;t find one that handled{" "}
+              <TextMarker>everything in a single pipeline</TextMarker>. I found
+              myself using one tool to convert, another to compress, and a third
+              to resize. This disrupted my workflow, so I started designing
+              Convert &amp; Compress.
+            </ProjectText>
+          </ProjectSectionContent>
+        </ProjectSection>
+
+        {/* Concept */}
+        <ProjectSection>
+          <ProjectHeading>Concept</ProjectHeading>
+          <ProjectSectionContent>
+            <ProjectText>
+              The goal was a <TextMarker>single pipeline</TextMarker> combining
+              all the transformations I previously spread across different
+              tools. Users needed a before-and-after comparison to find the
+              right balance between file size and quality. Additionally, the
+              tool had to run{" "}
+              <TextMarker>
+                locally for privacy, performance, and legal reasons
+              </TextMarker>
+              . This also eliminated the need for a backend.
+            </ProjectText>
+          </ProjectSectionContent>
+        </ProjectSection>
+
+        {/* Human-Centered Design */}
+        <ProjectSection>
+          <ProjectHeading>Human-Centered Design</ProjectHeading>
+          <ProjectSectionContent>
+            <ProjectText>
+              The design process was rooted in{" "}
+              <TextMarker>understanding real user workflows</TextMarker>. I
+              started by analyzing my own pain points as a designer, then
+              validated these assumptions by engaging with communities on Reddit
+              and gathering feedback from early testers.
+            </ProjectText>
+
             <ProjectTextBlock>
-              <ProjectSubHeading>Sub heading</ProjectSubHeading>
+              <ProjectSubHeading>Research &amp; Discovery</ProjectSubHeading>
               <ProjectText>
-                A small, native tool for macOS that does exactly one thing:
-                converting, compressing,{" "}
-                <PencilUnderline>and resizing</PencilUnderline> images. With a
-                live preview. All in one pipeline. Native, local & private.
-                Written in swift for macOS.
+                Before writing any code, I documented the tasks I performed
+                repeatedly: converting screenshots to WebP, compressing hero
+                images, resizing assets for different breakpoints. I mapped out
+                which tools I used for each step and identified the friction
+                points: context switching, inconsistent quality settings, and
+                lack of batch processing.
               </ProjectText>
             </ProjectTextBlock>
 
             <ProjectTextBlock>
+              <ProjectSubHeading>Continuous Feedback Loop</ProjectSubHeading>
               <ProjectText>
-                A small, native tool for macOS that does exactly one thing:
-                converting, compressing, and resizing images.{" "}
-                <TextMarker>With a live</TextMarker> preview. With a live
-                preview. All in one pipeline. Native, local & private. Written
-                in swift for macOS.
+                Rather than building in isolation, I{" "}
+                <TextMarker>shared progress publicly</TextMarker> from early
+                stages. Reddit became my primary channel for user research.
+                Posts generated hundreds of comments with specific use cases I
+                hadn&apos;t considered, like scaling by the shorter side for
+                social media thumbnails, or the need for keyboard-only
+                workflows.
               </ProjectText>
             </ProjectTextBlock>
 
             <ProjectTextBlock>
-              <ProjectSubHeading>Sub heading</ProjectSubHeading>
+              <ProjectSubHeading>Prioritizing Feedback</ProjectSubHeading>
               <ProjectText>
-                A small, native tool for macOS that does exactly one thing:
-                converting, compressing, and resizing images. With a live
-                preview. All in one pipeline. Native, local & private. Written
-                in swift for macOS.
+                Not every suggestion made it into the app. I developed a
+                framework for evaluating requests:{" "}
+                <TextMarker>
+                  Does this affect many users? Does it fit the app&apos;s scope?
+                  Can it be implemented without adding complexity?
+                </TextMarker>{" "}
+                This helped maintain focus while still being responsive to the
+                community.
               </ProjectText>
             </ProjectTextBlock>
           </ProjectSectionContent>
         </ProjectSection>
 
-        {/* Motivation Block 2 */}
+        {/* Design */}
         <ProjectSection>
-          <ProjectHeading>Motivation</ProjectHeading>
+          <ProjectHeading>Design</ProjectHeading>
           <ProjectSectionContent>
             <ProjectText>
-              A small, native tool for macOS that does exactly one thing:
-              converting, compressing, and resizing images. With a live preview.
-              All in one pipeline. Native, local & private. Written in swift for
-              macOS.
+              I wanted the app to feel <TextMarker>native to macOS</TextMarker>,
+              so I chose Swift for development. This allowed for the
+              implementation of{" "}
+              <TextMarker>
+                physics-based animations, trackpad gestures, and haptic feedback
+              </TextMarker>
+              .
+            </ProjectText>
+
+            <ProjectTextBlock>
+              <ProjectSubHeading>The Pipeline</ProjectSubHeading>
+              <ProjectText>
+                The interface reflects the pipeline concept: a toolbar
+                containing all available adjustments. The file format sits at
+                the start, as it dictates the available steps (e.g., JPEG vs.
+                PNG options). This is followed by resizing, compression
+                (quality), flipping, background removal, and metadata stripping.
+              </ProjectText>
+            </ProjectTextBlock>
+
+            <ProjectTextBlock>
+              <ProjectSubHeading>Size Controls</ProjectSubHeading>
+              <ProjectText>
+                Resizing presented a few challenges. Users needed to scale by
+                height, width, or, <TextMarker>based on feedback</TextMarker>,
+                the shorter side. I also needed to include cropping and size
+                templates. The challenge was fitting these options into a
+                compact, easy-to-understand control. Since cropping and scaling
+                along a specific side are rarely done simultaneously, I used a
+                switch to toggle between these two modes.
+              </ProjectText>
+            </ProjectTextBlock>
+
+            <ProjectTextBlock>
+              <ProjectSubHeading>Sliders</ProjectSubHeading>
+              <ProjectText>
+                I implemented sliders to let users quickly snap to common
+                values. For image size, this includes powers of two up to 4K
+                (16, 32... 3840) and standard resolutions like 1080p. Quality
+                adjusts in increments of five. For precise control, clicking the
+                slider converts it into a text input field.
+              </ProjectText>
+            </ProjectTextBlock>
+
+            <ProjectTextBlock>
+              <ProjectSubHeading>File Management</ProjectSubHeading>
+              <ProjectText>
+                To support different workflows, files can be loaded via the
+                Finder, drag-and-drop (to the icon or window), or copy-paste.
+                Once loaded, files are immediately transformed based on the
+                current pipeline settings, showing the estimated export size in
+                pixels and kilobytes. Users can remove individual images or copy
+                the processed versions directly to the clipboard.
+              </ProjectText>
+            </ProjectTextBlock>
+
+            <ProjectTextBlock>
+              <ProjectSubHeading>Comparison</ProjectSubHeading>
+              <ProjectText>
+                A direct comparison view was a priority for me and the users. It
+                helps estimate how much an image can be compressed without
+                visible quality loss. I built a UI where a slider overlays the
+                new version on top of the original. Both images zoom
+                synchronously for close inspection, and a double-click resets
+                the view to 100%. Parameters can be adjusted while viewing the
+                comparison for <TextMarker>immediate feedback</TextMarker>.
+              </ProjectText>
+            </ProjectTextBlock>
+
+            <ProjectTextBlock>
+              <ProjectSubHeading>Details</ProjectSubHeading>
+              <ProjectText>
+                A few smaller details improved the user experience. I added
+                keyboard shortcuts for changing formats, opening the comparison
+                view, deleting, and saving. Users also requested templates,
+                allowing them to save and reuse specific pipelines.
+              </ProjectText>
+              <ProjectText>
+                The save button also acts as a status indicator. It shows
+                progress during import and export. After exporting, the app
+                automatically reveals the saved images in the folder. If no
+                specific destination is selected, it defaults to the source
+                folder.
+              </ProjectText>
+            </ProjectTextBlock>
+
+            <ProjectTextBlock>
+              <ProjectSubHeading>App Icon</ProjectSubHeading>
+              <ProjectText>
+                For the app icon, I used Apple&apos;s new{" "}
+                <TextMarker>Icon Composer in Xcode</TextMarker>, which allows
+                layered, dynamic icons that adapt to light and dark mode. I
+                prepared the individual layers in Figma, then imported them into
+                Icon Composer. The tool limits you to 5 layers which required
+                some fiddling to achieve the depth and hierarchy I had in mind
+                while keeping the icon readable across both appearance modes.
+              </ProjectText>
+            </ProjectTextBlock>
+          </ProjectSectionContent>
+        </ProjectSection>
+
+        {/* Release */}
+        <ProjectSection>
+          <ProjectHeading>Release</ProjectHeading>
+          <ProjectSectionContent>
+            <ProjectText>
+              Preparing for the App Store involved creating assets and
+              translating the app into{" "}
+              <TextMarker>over 17 languages</TextMarker>. I released the app on
+              October 1, 2025. The process wasn&apos;t entirely smooth; I
+              initially requested permission to access the Downloads folder to
+              streamline imports. This caused a rejection during review, so I
+              had to remove that specific permission to get the app published.
+            </ProjectText>
+          </ProjectSectionContent>
+        </ProjectSection>
+
+        {/* Iterative Improvement */}
+        <ProjectSection>
+          <ProjectHeading>Iterative Improvement</ProjectHeading>
+          <ProjectSectionContent>
+            <ProjectText>
+              After the release, I shared my progress on Reddit. The community
+              reception was positive, but posts also generated suggestions on
+              how to make the app more useful. I kept a backlog of these ideas,
+              considering how to integrate them{" "}
+              <TextMarker>without cluttering the interface</TextMarker>.
+              Features like the cropping tool and the zoomable comparison view
+              came <TextMarker>directly from this feedback</TextMarker>. I am
+              still working on the app, with plans to potentially add
+              video/audio conversion and support for more formats.
+            </ProjectText>
+          </ProjectSectionContent>
+        </ProjectSection>
+
+        {/* Marketing */}
+        <ProjectSection>
+          <ProjectHeading>Marketing</ProjectHeading>
+          <ProjectSectionContent>
+            <ProjectText>
+              Marketing took place almost exclusively on Reddit, with additional
+              launches on Product Hunt and BetaList. I also designed a landing
+              page at{" "}
+              <PencilUnderline href="https://convert-compress.com">
+                convert-compress.com
+              </PencilUnderline>
+              . Since the tool is <TextMarker>open source</TextMarker>, I could
+              post in developer communities like r/SwiftUI and r/WebDev, though
+              most users came from r/MacApps. My{" "}
+              <PencilUnderline href="https://www.reddit.com/r/SwiftUI/comments/1nzov5y/for_my_first_swift_app_i_built_a_native_macos/">
+                post
+              </PencilUnderline>{" "}
+              in r/SwiftUI became the subreddit&apos;s{" "}
+              <TextMarker>top-voted post of all time</TextMarker>. Collectively,{" "}
+              <TextMarker>over 300,000 people</TextMarker> viewed the posts.
+            </ProjectText>
+          </ProjectSectionContent>
+        </ProjectSection>
+
+        {/* Development */}
+        <ProjectSection>
+          <ProjectHeading>Development</ProjectHeading>
+          <ProjectSectionContent>
+            <ProjectText>
+              As this was my <TextMarker>first Swift project</TextMarker>, using
+              Xcode with Cursor helped significantly with understanding the
+              syntax. I used Claude Sonnet 4.5 and Gemini 3 to assist with the
+              code. The focus was on utilizing{" "}
+              <TextMarker>native macOS APIs</TextMarker>, such as ImageIO and
+              StoreKit.
+            </ProjectText>
+          </ProjectSectionContent>
+        </ProjectSection>
+
+        {/* What I Learned */}
+        <ProjectSection>
+          <ProjectHeading>What I Learned</ProjectHeading>
+          <ProjectSectionContent>
+            <ProjectText>
+              Developing a product <TextMarker>from start to finish</TextMarker>
+              , including feedback, marketing, and support, is a lot of work,
+              but enjoyable. I learned that{" "}
+              <TextMarker>
+                user feedback shouldn&apos;t always be implemented exactly as
+                requested
+              </TextMarker>
+              . It is better to evaluate if the issue affects many users and
+              fits the broader context of the app before building a solution.
+              Reddit proved to be an effective platform when engaging
+              organically and putting effort into responses. The community is
+              active and honest, providing exactly the kind of direct feedback
+              needed to improve a product. And last, image processing is way
+              harder than I thought.
             </ProjectText>
           </ProjectSectionContent>
         </ProjectSection>

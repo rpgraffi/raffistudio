@@ -59,7 +59,7 @@ export default function Home() {
       <LightProvider>
         <div className="min-h-screen flex flex-col py-12 gap-8 items-center justify-center">
         <DrawingHeadline
-            className="text-6xl md:text-8xl text-zinc-900 font-sentient"
+            className="text-6xl md:text-8xl text-zinc-800 font-sentient"
             triggerOnView={false}
             animate={true}
             as="h1"

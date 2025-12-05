@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  DrawingHeadline,
-  DrawingHeadlineMultiline,
-} from "@/components/natural-ui/DrawingHeadline";
+import DrawingHeadline from "@/components/natural-ui/DrawingHeadline";
 import { useState } from "react";
 
 export default function DrawingDemoPage() {
@@ -27,7 +24,7 @@ export default function DrawingDemoPage() {
         {/* Demo 1: Basic headline */}
         <section className="mb-24" key={`basic-${key}`}>
           <p className="text-sm text-zinc-500 mb-4 font-mono">
-            Grid draws → stroke reveals → fill fades in → grid fades out
+            Grid draws → stroke reveals → fill fades in → grid wipes out
           </p>
           <DrawingHeadline
             className="text-6xl md:text-8xl text-zinc-900 font-sentient"
@@ -38,18 +35,20 @@ export default function DrawingDemoPage() {
           </DrawingHeadline>
         </section>
 
-        {/* Demo 2: Multi-line headline */}
+        {/* Demo 2: Multi-line headline with <br/> */}
         <section className="mb-24" key={`multi-${key}`}>
           <p className="text-sm text-zinc-500 mb-4 font-mono">
-            Multi-line headline with staggered animation
+            Multi-line with {"<br/>"} - auto-detects line breaks
           </p>
-          <DrawingHeadlineMultiline
-            lines={["Convert &", "Compress"]}
+          <DrawingHeadline
             className="text-5xl md:text-7xl text-zinc-900 font-sentient"
             triggerOnView={false}
             animate={true}
             lineDelay={0.8}
-          />
+          >
+            Convert &<br />
+            Compress
+          </DrawingHeadline>
         </section>
 
         {/* Demo 3: Without grid */}
@@ -131,37 +130,34 @@ export default function DrawingDemoPage() {
             <li>
               <strong>Animation sequence:</strong>
               <ol className="ml-4 mt-1 space-y-1 text-sm list-decimal list-inside">
-                <li>Grid lines draw in (staggered)</li>
+                <li>Grid lines draw in (staggered per line)</li>
                 <li>Stroke reveals left-to-right via SVG mask</li>
                 <li>Fill fades in</li>
-                <li>Grid lines fade out (staggered)</li>
+                <li>Grid lines wipe out left-to-right</li>
               </ol>
             </li>
             <li>
-              <strong>Performance:</strong> GPU-accelerated CSS animations with{" "}
+              <strong>Inner stroke:</strong> Uses{" "}
               <code className="bg-zinc-300/50 px-1.5 py-0.5 rounded text-sm">
-                will-change
+                clipPath
               </code>{" "}
-              hints
+              to clip stroke inside text shape
             </li>
             <li>
-              <strong>Accessibility:</strong> Original text preserved in{" "}
+              <strong>Multiline:</strong> Auto-detects line breaks from{" "}
+              <code className="bg-zinc-300/50 px-1.5 py-0.5 rounded text-sm">
+                {"<br/>"}
+              </code>{" "}
+              or text wrapping
+            </li>
+            <li>
+              <strong>Performance:</strong> GPU-accelerated CSS animations
+            </li>
+            <li>
+              <strong>Accessibility:</strong> Original text in{" "}
               <code className="bg-zinc-300/50 px-1.5 py-0.5 rounded text-sm">
                 sr-only
-              </code>{" "}
-              for screen readers
-            </li>
-            <li>
-              <strong>Font support:</strong> Works with any font including
-              Sentient variable font
-            </li>
-            <li>
-              <strong>Grid lines:</strong> Draws baseline, x-height, cap-height,
-              and ascender lines
-            </li>
-            <li>
-              <strong>Trigger options:</strong> IntersectionObserver for scroll
-              trigger or manual control
+              </code>
             </li>
           </ul>
         </section>

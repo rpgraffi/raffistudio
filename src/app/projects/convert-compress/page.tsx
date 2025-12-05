@@ -11,7 +11,7 @@ import {
 } from "@/app/projects/components/ProjectContent";
 import { ProjectStats } from "@/app/projects/components/ProjectStats";
 import Header from "@/components/Header";
-import { DrawingHeadlineMultiline } from "@/components/natural-ui/DrawingHeadline";
+import DrawingHeadline from "@/components/natural-ui/DrawingHeadline";
 import { PencilUnderline } from "@/components/natural-ui/PencilStroke";
 import { RuledText } from "@/components/natural-ui/RuledText";
 import { TextMarker } from "@/components/natural-ui/TextMarker";
@@ -47,14 +47,16 @@ export default function ConvertCompressPage() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 z-10">
             {/* Left: Title & Links */}
             <div className="md:col-span-5 flex flex-col justify-between gap-8">
-              <DrawingHeadlineMultiline
-                lines={["Convert &", "Compress"]}
+              <DrawingHeadline
                 className="text-5xl md:text-7xl text-zinc-900 font-sentient"
                 triggerOnView={false}
                 animate={true}
                 lineDelay={0.5}
                 as="h1"
-              />
+              >
+                Convert &<br />
+                Compress
+              </DrawingHeadline>
 
               <div className="flex gap-6">
                 <PencilUnderline

@@ -1,3 +1,6 @@
+"use client";
+
+import DrawingHeadline from "@/components/natural-ui/DrawingHeadline";
 import { cn } from "@/lib/utils";
 import React from "react";
 
@@ -29,7 +32,7 @@ export function ProjectSection({
   ...props
 }: ProjectContentProps) {
   return (
-    <div className={cn("flex flex-col gap-12", className)} {...props}>
+    <div className={cn("flex flex-col gap-8", className)} {...props}>
       {children}
     </div>
   );
@@ -65,11 +68,40 @@ export function ProjectTextBlock({
   );
 }
 
+interface ProjectHeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
+  animated?: boolean;
+  viewThreshold?: number;
+}
+
 export function ProjectHeading({
   children,
   className,
+  animated = true,
+  viewThreshold = 0.2,
   ...props
-}: React.HTMLAttributes<HTMLHeadingElement>) {
+}: ProjectHeadingProps) {
+  if (animated) {
+    return (
+      <h2
+        className={cn(
+          "text-4xl md:text-5xl text-zinc-900 font-sentient w-full max-w-text-content mx-auto",
+          className
+        )}
+        {...props}
+      >
+        <DrawingHeadline
+          as="span"
+          triggerOnView={true}
+          viewThreshold={viewThreshold}
+          showGrid={true}
+          gridColor="rgba(0,0,0,0.1)"
+        >
+          {children}
+        </DrawingHeadline>
+      </h2>
+    );
+  }
+
   return (
     <h2
       className={cn(

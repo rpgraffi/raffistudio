@@ -1,11 +1,19 @@
 "use client";
 
-import React, { useEffect, useId, useRef, useState } from "react";
+import React, {
+  Children,
+  isValidElement,
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from "react";
 
 interface DrawingHeadlineProps {
-  children: string;
+  children: React.ReactNode;
   className?: string;
-  as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+  as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "span";
   strokeColor?: string;
   fillColor?: string;
   gridColor?: string;
@@ -18,6 +26,7 @@ interface DrawingHeadlineProps {
   fillDuration?: number;
   gridFadeOutDuration?: number;
   gridDelay?: number;
+  lineDelay?: number; // Delay between lines for multiline
   // Trigger options
   triggerOnView?: boolean;
   viewThreshold?: number;
@@ -25,89 +34,248 @@ interface DrawingHeadlineProps {
   animate?: boolean;
 }
 
-interface TextMetrics {
+interface LineMetrics {
+  text: string;
   width: number;
   height: number;
+  top: number;
+  left: number;
   baseline: number;
   xHeight: number;
   capHeight: number;
+}
+
+interface Metrics {
+  lines: LineMetrics[];
+  totalWidth: number;
+  totalHeight: number;
   fontSize: number;
+}
+
+// Extract plain text and explicit breaks from children
+function extractTextAndBreaks(children: React.ReactNode): {
+  text: string;
+  hasExplicitBreaks: boolean;
+  explicitLines: string[];
+} {
+  const segments: string[] = [];
+  let currentSegment = "";
+  let hasExplicitBreaks = false;
+
+  const processNode = (node: React.ReactNode) => {
+    if (typeof node === "string" || typeof node === "number") {
+      currentSegment += String(node);
+    } else if (isValidElement(node)) {
+      if (node.type === "br") {
+        hasExplicitBreaks = true;
+        if (currentSegment.trim()) {
+          segments.push(currentSegment.trim());
+        }
+        currentSegment = "";
+      } else {
+        const props = node.props as { children?: React.ReactNode };
+        if (props.children) {
+          Children.forEach(props.children, processNode);
+        }
+      }
+    } else if (Array.isArray(node)) {
+      node.forEach(processNode);
+    }
+  };
+
+  Children.forEach(children, processNode);
+
+  if (currentSegment.trim()) {
+    segments.push(currentSegment.trim());
+  }
+
+  return {
+    text: segments.join(" "),
+    hasExplicitBreaks,
+    explicitLines: hasExplicitBreaks ? segments : [],
+  };
 }
 
 export const DrawingHeadline: React.FC<DrawingHeadlineProps> = ({
   children,
   className = "",
-  as: Tag = "h1",
+  as: Tag = "span",
   strokeColor = "currentColor",
   fillColor = "currentColor",
   gridColor = "rgba(0,0,0,0.15)",
-  strokeWidth = 1.5,
+  strokeWidth = 1.2,
   showGrid = true,
   gridStrokeWidth = 1,
-  gridDuration = 0.6,
-  strokeDuration = 1.2,
+  gridDuration = 0.5,
+  strokeDuration = 0.6,
   fillDuration = 0.4,
   gridFadeOutDuration = 0.5,
   gridDelay = 0,
+  lineDelay = 0.1,
   triggerOnView = true,
   viewThreshold = 0.3,
   animate: manualAnimate,
 }) => {
   const id = useId();
   const containerRef = useRef<HTMLDivElement>(null);
-  const [metrics, setMetrics] = useState<TextMetrics | null>(null);
+  const measureRef = useRef<HTMLSpanElement>(null);
+  const [metrics, setMetrics] = useState<Metrics | null>(null);
+  const [computedLines, setComputedLines] = useState<string[]>([]);
   const [isInView, setIsInView] = useState(!triggerOnView);
   const [hasAnimated, setHasAnimated] = useState(false);
 
-  // Measure text metrics
-  useEffect(() => {
-    if (!containerRef.current) return;
+  // Extract text content from children
+  const { text, hasExplicitBreaks, explicitLines } =
+    extractTextAndBreaks(children);
 
-    const measureText = () => {
+  // Measure and compute line breaks
+  const measureAndSplit = useCallback(() => {
+    const container = containerRef.current;
+    const measureSpan = measureRef.current;
+    if (!container || !measureSpan) return;
+
+    const containerWidth = container.offsetWidth;
+    const style = window.getComputedStyle(container);
+    const fontSize = parseFloat(style.fontSize);
+
+    // If explicit breaks, use those
+    if (hasExplicitBreaks && explicitLines.length > 0) {
+      setComputedLines(explicitLines);
+      return;
+    }
+
+    // Word-based splitting
+    const words = text.split(/\s+/).filter(Boolean);
+    if (words.length === 0) return;
+
+    // Measure word widths using a temp span
+    const tempSpan = document.createElement("span");
+    tempSpan.style.cssText = `
+      position: absolute;
+      visibility: hidden;
+      white-space: nowrap;
+      font: ${style.font};
+      font-size: ${style.fontSize};
+      font-family: ${style.fontFamily};
+      font-weight: ${style.fontWeight};
+      letter-spacing: ${style.letterSpacing};
+    `;
+    container.appendChild(tempSpan);
+
+    // Measure space width
+    tempSpan.textContent = "\u00A0"; // non-breaking space
+    const spaceWidth = tempSpan.offsetWidth;
+
+    // Build lines by measuring cumulative width
+    const lines: string[] = [];
+    let currentLine: string[] = [];
+    let currentWidth = 0;
+
+    for (const word of words) {
+      tempSpan.textContent = word;
+      const wordWidth = tempSpan.offsetWidth;
+
+      const totalWidth =
+        currentWidth + (currentLine.length > 0 ? spaceWidth : 0) + wordWidth;
+
+      if (totalWidth > containerWidth && currentLine.length > 0) {
+        // Start new line
+        lines.push(currentLine.join(" "));
+        currentLine = [word];
+        currentWidth = wordWidth;
+      } else {
+        currentLine.push(word);
+        currentWidth = totalWidth;
+      }
+    }
+
+    // Push remaining words
+    if (currentLine.length > 0) {
+      lines.push(currentLine.join(" "));
+    }
+
+    container.removeChild(tempSpan);
+    setComputedLines(lines);
+  }, [text, hasExplicitBreaks, explicitLines]);
+
+  // Measure line metrics after lines are computed
+  useEffect(() => {
+    if (!containerRef.current || computedLines.length === 0) return;
+
+    const measureLines = () => {
       const container = containerRef.current;
       if (!container) return;
 
-      // Create a temporary element to measure
-      const temp = document.createElement("span");
-      temp.style.cssText = `
-        position: absolute;
-        visibility: hidden;
-        white-space: nowrap;
-        font: inherit;
-      `;
-      temp.textContent = children;
-      container.appendChild(temp);
-
-      const style = window.getComputedStyle(temp);
+      const style = window.getComputedStyle(container);
       const fontSize = parseFloat(style.fontSize);
-      const rect = temp.getBoundingClientRect();
+      const lineHeight = parseFloat(style.lineHeight) || fontSize * 1.2;
 
-      // Typography metrics (approximations based on typical font ratios)
-      // These work well for most serif/display fonts like Sentient
+      // Typography metrics (approximations)
       const xHeightRatio = 0.73;
       const capHeightRatio = 0.91;
       const baselineRatio = 0.78;
 
-      container.removeChild(temp);
+      // Create temp span for measuring each line
+      const tempSpan = document.createElement("span");
+      tempSpan.style.cssText = `
+        position: absolute;
+        visibility: hidden;
+        white-space: nowrap;
+        font: ${style.font};
+        font-size: ${style.fontSize};
+        font-family: ${style.fontFamily};
+        font-weight: ${style.fontWeight};
+        letter-spacing: ${style.letterSpacing};
+      `;
+      container.appendChild(tempSpan);
+
+      const lines: LineMetrics[] = computedLines.map((lineText, i) => {
+        tempSpan.textContent = lineText;
+        const width = tempSpan.offsetWidth;
+        const height = lineHeight;
+        const top = i * lineHeight;
+
+        return {
+          text: lineText,
+          width,
+          height,
+          top,
+          left: 0,
+          baseline: height * baselineRatio,
+          xHeight: height * (1 - xHeightRatio * (fontSize / height)),
+          capHeight: height * (1 - capHeightRatio * (fontSize / height)),
+        };
+      });
+
+      container.removeChild(tempSpan);
+
+      const totalWidth = Math.max(...lines.map((l) => l.width), 0);
+      const totalHeight = lines.length * lineHeight;
 
       setMetrics({
-        width: rect.width,
-        height: rect.height,
+        lines,
+        totalWidth,
+        totalHeight,
         fontSize,
-        baseline: rect.height * baselineRatio,
-        xHeight: rect.height * (1 - xHeightRatio * (fontSize / rect.height)),
-        capHeight:
-          rect.height * (1 - capHeightRatio * (fontSize / rect.height)),
       });
     };
 
-    measureText();
+    requestAnimationFrame(measureLines);
+  }, [computedLines]);
 
-    const observer = new ResizeObserver(measureText);
+  // Initial measurement and resize observer
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    measureAndSplit();
+
+    const observer = new ResizeObserver(() => {
+      measureAndSplit();
+    });
     observer.observe(containerRef.current);
 
     return () => observer.disconnect();
-  }, [children]);
+  }, [measureAndSplit]);
 
   // Intersection observer for triggering animation
   useEffect(() => {
@@ -131,40 +299,33 @@ export const DrawingHeadline: React.FC<DrawingHeadlineProps> = ({
   }, [triggerOnView, viewThreshold, hasAnimated]);
 
   const shouldAnimate = manualAnimate ?? isInView;
-
-  // Calculate animation delays
-  const strokeDelay = gridDelay + (showGrid ? gridDuration : 0);
-  const fillDelay = strokeDelay + strokeDuration;
-  // Grid fades out after fill animation completes
-  const gridFadeOutDelay = fillDelay + fillDuration + 0.2;
-
   const svgId = `drawing-headline-${id.replace(/:/g, "")}`;
 
-  if (!metrics) {
-    // Render invisible placeholder for measurement
+  // Padding for stroke overflow
+  const paddingX = strokeWidth * 2;
+  const paddingTop = strokeWidth * 2;
+  const descenderHeight = metrics ? metrics.fontSize * 0.25 : 0;
+  const paddingBottom = strokeWidth * 2 + descenderHeight;
+
+  if (!metrics || metrics.lines.length === 0) {
     return (
       <Tag ref={containerRef as any} className={`${className} relative`}>
-        <span className="invisible">{children}</span>
+        {/* Invisible text for initial measurement */}
+        <span ref={measureRef} className="invisible block">
+          {children}
+        </span>
       </Tag>
     );
   }
 
-  // Padding for stroke overflow
-  // Extra bottom padding for descenders (y, p, g, q, j go below baseline)
-  const paddingX = strokeWidth * 2;
-  const paddingTop = strokeWidth * 2;
-  // Descenders typically extend ~25% of font size below baseline
-  const descenderHeight = metrics.fontSize * 0.25;
-  const paddingBottom = strokeWidth * 2 + descenderHeight;
-
-  const svgWidth = metrics.width + paddingX * 2;
-  const svgHeight = metrics.height + paddingTop + paddingBottom;
+  const svgWidth = metrics.totalWidth + paddingX * 2;
+  const svgHeight = metrics.totalHeight + paddingTop + paddingBottom;
 
   return (
     <Tag
       ref={containerRef as any}
       className={`${className} relative`}
-      style={{ lineHeight: 1 }}
+      style={{ lineHeight: 1.2 }}
     >
       {/* Hidden text for accessibility and SEO */}
       <span className="sr-only">{children}</span>
@@ -183,228 +344,230 @@ export const DrawingHeadline: React.FC<DrawingHeadlineProps> = ({
         aria-hidden="true"
       >
         <defs>
-          {/* Mask for text stroke reveal animation */}
-          <mask id={`${svgId}-reveal-mask`}>
-            <rect
-              x={paddingX}
-              y={0}
-              width={metrics.width}
-              height={svgHeight}
-              fill="white"
-              className={`${svgId}-mask-rect ${shouldAnimate ? "animate" : ""}`}
-            />
-          </mask>
+          {/* Masks and clipPaths for each line */}
+          {metrics.lines.map((line, i) => {
+            const y = paddingTop + line.top + line.baseline;
+            const x = paddingX + line.left;
 
-          {/* Mask for grid wipe-out animation */}
-          <mask id={`${svgId}-grid-wipe-mask`}>
-            <rect
-              x={paddingX}
-              y={0}
-              width={metrics.width}
-              height={svgHeight}
-              fill="white"
-              className={`${svgId}-grid-mask-rect ${
-                shouldAnimate ? "animate" : ""
-              }`}
-            />
-          </mask>
+            return (
+              <React.Fragment key={i}>
+                {/* ClipPath for inner stroke - clips stroke to text shape */}
+                <clipPath id={`${svgId}-text-clip-${i}`}>
+                  <text x={x} y={y} style={{ font: "inherit" }}>
+                    {line.text}
+                  </text>
+                </clipPath>
+
+                {/* Reveal mask for stroke animation */}
+                <mask id={`${svgId}-reveal-mask-${i}`}>
+                  <rect
+                    x={paddingX + line.left}
+                    y={paddingTop + line.top}
+                    width={line.width}
+                    height={line.height + descenderHeight}
+                    fill="white"
+                    className={`${svgId}-mask-rect-${i} ${
+                      shouldAnimate ? "animate" : ""
+                    }`}
+                  />
+                </mask>
+
+                {/* Grid wipe mask */}
+                <mask id={`${svgId}-grid-wipe-mask-${i}`}>
+                  <rect
+                    x={paddingX + line.left}
+                    y={paddingTop + line.top}
+                    width={line.width}
+                    height={line.height + descenderHeight}
+                    fill="white"
+                    className={`${svgId}-grid-mask-rect-${i} ${
+                      shouldAnimate ? "animate" : ""
+                    }`}
+                  />
+                </mask>
+              </React.Fragment>
+            );
+          })}
 
           <style>
-            {`
-              /* Grid line draw-in animation (left to right) */
-              @keyframes ${svgId}-draw-grid {
-                from { stroke-dashoffset: var(--grid-length); }
+            {metrics.lines
+              .map((line, i) => {
+                const lineGridDelay = gridDelay + i * lineDelay;
+                const lineStrokeDelay =
+                  lineGridDelay + (showGrid ? gridDuration : 0);
+                const lineFillDelay = lineStrokeDelay + strokeDuration;
+                const lineGridFadeOutDelay = lineFillDelay + fillDuration + 0.2;
+
+                return `
+              /* Line ${i} animations */
+              @keyframes ${svgId}-draw-grid-${i} {
+                from { stroke-dashoffset: ${line.width}; }
                 to { stroke-dashoffset: 0; }
               }
               
-              .${svgId}-grid-line {
-                stroke-dasharray: var(--grid-length);
-                stroke-dashoffset: var(--grid-length);
+              .${svgId}-grid-line-${i} {
+                stroke-dasharray: ${line.width};
+                stroke-dashoffset: ${line.width};
                 will-change: stroke-dashoffset;
               }
               
-              .${svgId}-grid-line.animate {
-                animation: ${svgId}-draw-grid ${gridDuration}s ease-out forwards;
+              .${svgId}-grid-line-${i}.animate {
+                animation: ${svgId}-draw-grid-${i} ${gridDuration}s ease-out forwards;
+                animation-delay: ${lineGridDelay}s;
               }
               
-              /* Grid mask wipe-out animation (left to right) */
-              @keyframes ${svgId}-grid-wipe-out {
+              @keyframes ${svgId}-grid-wipe-out-${i} {
                 from { transform: translateX(0); }
                 to { transform: translateX(100%); }
               }
               
-              .${svgId}-grid-mask-rect {
+              .${svgId}-grid-mask-rect-${i} {
                 will-change: transform;
               }
               
-              .${svgId}-grid-mask-rect.animate {
-                animation: ${svgId}-grid-wipe-out ${gridFadeOutDuration}s ease-in-out ${gridFadeOutDelay}s forwards;
+              .${svgId}-grid-mask-rect-${i}.animate {
+                animation: ${svgId}-grid-wipe-out-${i} ${gridFadeOutDuration}s ease-in-out ${lineGridFadeOutDelay}s forwards;
               }
               
-              /* Text stroke reveal mask animation */
-              @keyframes ${svgId}-reveal-mask {
+              @keyframes ${svgId}-reveal-mask-${i} {
                 from { transform: scaleX(0); }
                 to { transform: scaleX(1); }
               }
               
-              /* Fill fade-in animation */
-              @keyframes ${svgId}-fill-in {
-                from { opacity: 0; }
-                to { opacity: 1; }
-              }
-              
-              .${svgId}-mask-rect {
+              .${svgId}-mask-rect-${i} {
                 transform-origin: left center;
                 transform: scaleX(0);
               }
               
-              .${svgId}-mask-rect.animate {
-                animation: ${svgId}-reveal-mask ${strokeDuration}s cubic-bezier(0.22, 1, 0.36, 1) ${strokeDelay}s forwards;
+              .${svgId}-mask-rect-${i}.animate {
+                animation: ${svgId}-reveal-mask-${i} ${strokeDuration}s cubic-bezier(0.22, 1, 0.36, 1) ${lineStrokeDelay}s forwards;
               }
               
-              .${svgId}-text-stroke {
-                fill-opacity: 0;
-                will-change: fill-opacity;
+              @keyframes ${svgId}-fill-in-${i} {
+                from { opacity: 0; }
+                to { opacity: 1; }
               }
               
-              .${svgId}-text-fill {
+              .${svgId}-text-fill-${i} {
                 opacity: 0;
                 will-change: opacity;
               }
               
-              .${svgId}-text-fill.animate {
-                animation: ${svgId}-fill-in ${fillDuration}s ease-out ${fillDelay}s forwards;
+              .${svgId}-text-fill-${i}.animate {
+                animation: ${svgId}-fill-in-${i} ${fillDuration}s ease-out ${lineFillDelay}s forwards;
               }
-            `}
+            `;
+              })
+              .join("\n")}
           </style>
         </defs>
 
-        {/* Grid lines */}
-        {showGrid && (
-          <g className="grid-lines" mask={`url(#${svgId}-grid-wipe-mask)`}>
-            {/* Baseline */}
-            <line
-              x1={paddingX}
-              y1={paddingTop + metrics.baseline}
-              x2={paddingX + metrics.width}
-              y2={paddingTop + metrics.baseline}
-              stroke={gridColor}
-              strokeWidth={gridStrokeWidth}
-              className={`${svgId}-grid-line ${shouldAnimate ? "animate" : ""}`}
-              style={
-                {
-                  "--grid-length": metrics.width,
-                  animationDelay: `${gridDelay}s`,
-                } as React.CSSProperties
-              }
-            />
+        {/* Render each line */}
+        {metrics.lines.map((line, i) => {
+          const y = paddingTop + line.top + line.baseline;
+          const x = paddingX + line.left;
 
-            {/* x-height line */}
-            <line
-              x1={paddingX}
-              y1={paddingTop + metrics.xHeight}
-              x2={paddingX + metrics.width}
-              y2={paddingTop + metrics.xHeight}
-              stroke={gridColor}
-              strokeWidth={gridStrokeWidth}
-              className={`${svgId}-grid-line ${shouldAnimate ? "animate" : ""}`}
-              style={
-                {
-                  "--grid-length": metrics.width,
-                  animationDelay: `${gridDelay + 0.1}s`,
-                } as React.CSSProperties
-              }
-            />
+          return (
+            <g key={i}>
+              {/* Grid lines for this line */}
+              {showGrid && (
+                <g mask={`url(#${svgId}-grid-wipe-mask-${i})`}>
+                  {/* Baseline */}
+                  <line
+                    x1={x}
+                    y1={paddingTop + line.top + line.baseline}
+                    x2={x + line.width}
+                    y2={paddingTop + line.top + line.baseline}
+                    stroke={gridColor}
+                    strokeWidth={gridStrokeWidth}
+                    className={`${svgId}-grid-line-${i} ${
+                      shouldAnimate ? "animate" : ""
+                    }`}
+                  />
+                  {/* x-height line */}
+                  <line
+                    x1={x}
+                    y1={paddingTop + line.top + line.xHeight}
+                    x2={x + line.width}
+                    y2={paddingTop + line.top + line.xHeight}
+                    stroke={gridColor}
+                    strokeWidth={gridStrokeWidth}
+                    className={`${svgId}-grid-line-${i} ${
+                      shouldAnimate ? "animate" : ""
+                    }`}
+                    style={{
+                      animationDelay: `${gridDelay + i * lineDelay + 0.1}s`,
+                    }}
+                  />
+                  {/* Cap-height line */}
+                  <line
+                    x1={x}
+                    y1={paddingTop + line.top + line.capHeight}
+                    x2={x + line.width}
+                    y2={paddingTop + line.top + line.capHeight}
+                    stroke={gridColor}
+                    strokeWidth={gridStrokeWidth}
+                    className={`${svgId}-grid-line-${i} ${
+                      shouldAnimate ? "animate" : ""
+                    }`}
+                    style={{
+                      animationDelay: `${gridDelay + i * lineDelay + 0.2}s`,
+                    }}
+                  />
+                  {/* Top line (ascender) */}
+                  <line
+                    x1={x}
+                    y1={paddingTop + line.top + 2}
+                    x2={x + line.width}
+                    y2={paddingTop + line.top + 2}
+                    stroke={gridColor}
+                    strokeWidth={gridStrokeWidth}
+                    className={`${svgId}-grid-line-${i} ${
+                      shouldAnimate ? "animate" : ""
+                    }`}
+                    style={{
+                      animationDelay: `${gridDelay + i * lineDelay + 0.3}s`,
+                    }}
+                  />
+                </g>
+              )}
 
-            {/* Cap-height line */}
-            <line
-              x1={paddingX}
-              y1={paddingTop + metrics.capHeight}
-              x2={paddingX + metrics.width}
-              y2={paddingTop + metrics.capHeight}
-              stroke={gridColor}
-              strokeWidth={gridStrokeWidth}
-              className={`${svgId}-grid-line ${shouldAnimate ? "animate" : ""}`}
-              style={
-                {
-                  "--grid-length": metrics.width,
-                  animationDelay: `${gridDelay + 0.2}s`,
-                } as React.CSSProperties
-              }
-            />
+              {/* Stroke layer with inner stroke (clipped to text shape) */}
+              <g
+                clipPath={`url(#${svgId}-text-clip-${i})`}
+                mask={`url(#${svgId}-reveal-mask-${i})`}
+              >
+                <text
+                  x={x}
+                  y={y}
+                  style={{ font: "inherit" }}
+                  stroke={strokeColor}
+                  strokeWidth={strokeWidth * 2}
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  {line.text}
+                </text>
+              </g>
 
-            {/* Top line (ascender) */}
-            <line
-              x1={paddingX}
-              y1={paddingTop + 2}
-              x2={paddingX + metrics.width}
-              y2={paddingTop + 2}
-              stroke={gridColor}
-              strokeWidth={gridStrokeWidth}
-              className={`${svgId}-grid-line ${shouldAnimate ? "animate" : ""}`}
-              style={
-                {
-                  "--grid-length": metrics.width,
-                  animationDelay: `${gridDelay + 0.3}s`,
-                } as React.CSSProperties
-              }
-            />
-          </g>
-        )}
-
-        {/* Stroke layer with reveal mask */}
-        <text
-          x={paddingX}
-          y={paddingTop + metrics.baseline}
-          className={`${svgId}-text-stroke`}
-          style={{ font: "inherit" }}
-          stroke={strokeColor}
-          strokeWidth={strokeWidth}
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          mask={`url(#${svgId}-reveal-mask)`}
-        >
-          {children}
-        </text>
-
-        {/* Fill layer that fades in after stroke */}
-        <text
-          x={paddingX}
-          y={paddingTop + metrics.baseline}
-          className={`${svgId}-text-fill ${shouldAnimate ? "animate" : ""}`}
-          style={{ font: "inherit" }}
-          fill={fillColor}
-        >
-          {children}
-        </text>
+              {/* Fill layer that fades in after stroke */}
+              <text
+                x={x}
+                y={y}
+                className={`${svgId}-text-fill-${i} ${
+                  shouldAnimate ? "animate" : ""
+                }`}
+                style={{ font: "inherit" }}
+                fill={fillColor}
+              >
+                {line.text}
+              </text>
+            </g>
+          );
+        })}
       </svg>
     </Tag>
-  );
-};
-
-// Variant for multi-line headlines
-interface DrawingHeadlineMultilineProps
-  extends Omit<DrawingHeadlineProps, "children"> {
-  lines: string[];
-  lineDelay?: number; // Delay between each line
-}
-
-export const DrawingHeadlineMultiline: React.FC<
-  DrawingHeadlineMultilineProps
-> = ({ lines, lineDelay = 0.3, gridDelay = 0, ...props }) => {
-  return (
-    <div className="flex flex-col">
-      {lines.map((line, index) => (
-        <DrawingHeadline
-          key={index}
-          {...props}
-          gridDelay={gridDelay + index * lineDelay}
-        >
-          {line}
-        </DrawingHeadline>
-      ))}
-    </div>
   );
 };
 

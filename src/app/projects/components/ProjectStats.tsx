@@ -28,25 +28,25 @@ export const ProjectStats: React.FC<ProjectStatsProps> = ({
 }) => {
   return (
     <section
-      className={`w-full max-w-site mx-auto flex flex-col gap-6 md:gap-8 ${className}`}
+      className={`flex flex-col gap-6 md:gap-8 ${className}`}
     >
       {/* Row 1: Stats */}
-      <div className="w-full">
+      <div className="w-full max-w-site mx-auto">
         <StatsRow stats={stats} className="px-8 md:px-12" />
       </div>
 
       {/* Divider */}
-      <div className="w-full overflow-hidden px-8 md:px-12">
+      <div className="w-full max-w-site mx-auto overflow-hidden px-8 md:px-12">
         <PencilStroke className="w-full" opacity={0.1} strokeWidth={3} />
       </div>
 
       {/* Row 2: Tech Stack Patches */}
       <div className="w-full">
-        <PatchesRow patches={tools} className="px-8 md:px-12" />
+        <PatchesRow patches={tools}/>
       </div>
 
       {/* Divider */}
-      <div className="w-full overflow-hidden px-8 md:px-12">
+      <div className="w-full max-w-site mx-auto overflow-hidden px-8 md:px-12">
         <PencilStroke className="w-full" opacity={0.1} strokeWidth={3} />
       </div>
     </section>

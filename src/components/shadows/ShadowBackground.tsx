@@ -317,7 +317,7 @@ export const getRandomShadowImage = (): ShadowImage => {
  */
 export default function ShadowBackground({
   image,
-  backgroundColor = "#F4F4F4",
+  backgroundColor = "#F8F8F8",
   shadowColor = "#000000",
   intensity = 1.0,
   contrast = 1.0,

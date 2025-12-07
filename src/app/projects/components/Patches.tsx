@@ -46,13 +46,22 @@ export const PatchesRow: React.FC<PatchesRowProps> = ({
       containScroll: "trimSnaps",
       dragFree: true,
     },
-    [Autoplay({ delay: 2000, stopOnMouseEnter: true })]
+    [Autoplay({ delay: 2000})]
   );
 
   return (
-    <div className={`w-full ${className}`}>
-      <div className="overflow-hidden cursor-grab" ref={emblaRef}>
-        <div className="flex items-center gap-4 md:gap-8 max-w-site mx-auto justify-center">
+    <div className={`w-full max-w-site mx-auto px-8 md:px-12 ${className}`}>
+      <div
+        className="overflow-hidden cursor-grab"
+        ref={emblaRef}
+        style={{
+          maskImage:
+            "linear-gradient(to right, transparent, black 2%, black 98%, transparent)",
+          WebkitMaskImage:
+            "linear-gradient(to right, transparent, black 2%, black 98%, transparent)",
+        }}
+      >
+        <div className="flex items-center gap-4 md:gap-8">
           {patches.map((patch, index) => (
             <Patch
               key={index}

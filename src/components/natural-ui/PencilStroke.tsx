@@ -1,5 +1,6 @@
 "use client";
 
+import { createSeededRandom, stringToSeed } from "@/lib/utils";
 import React, { useEffect, useId, useMemo, useRef, useState } from "react";
 
 interface PencilStrokeProps {
@@ -14,29 +15,6 @@ interface PencilStrokeProps {
   seed?: number;
   as?: React.ElementType;
 }
-
-// Simple Linear Congruential Generator for stable random numbers
-const createLCG = (seed: number) => {
-  const m = 2147483648;
-  const a = 1103515245;
-  const c = 12345;
-  let state = seed;
-
-  return () => {
-    state = (a * state + c) % m;
-    return state / m;
-  };
-};
-
-const stringToSeed = (str: string) => {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash |= 0;
-  }
-  return Math.abs(hash);
-};
 
 // Dumb SVG component that just renders the stroke for a given width
 const PencilStrokeRenderer: React.FC<PencilStrokeProps & { id: string }> = ({
@@ -62,7 +40,7 @@ const PencilStrokeRenderer: React.FC<PencilStrokeProps & { id: string }> = ({
     const segments = Math.max(2, Math.floor(width * frequency));
     const points: [number, number][] = [];
 
-    const random = createLCG(effectiveSeed);
+    const random = createSeededRandom(effectiveSeed);
 
     const centerY = height / 2;
 

@@ -8,6 +8,7 @@ import {
   ProjectSubHeading,
   ProjectText,
   ProjectTextBlock,
+  ProjectUnorderedList,
 } from "@/app/projects/components/ProjectContent";
 import { ProjectStats } from "@/app/projects/components/ProjectStats";
 import Header from "@/components/Header";
@@ -115,7 +116,7 @@ export default function LMUAppPage() {
           <div className="w-full max-w-site mx-auto p-8 md:p-12 flex flex-wrap gap-8 items-center justify-between">
             <StarRating rating={4.9} className="w-full max-w-[400px]" />
             <Link
-              href="https://apps.apple.com/us/app/convert-compress/id6752861983"
+              href="https://apps.apple.com/de/app/lmu-students/id6505039729"
               target="_blank"
               className="block h-[80px] md:h-[80px] w-auto hover:scale-105 transition-transform duration-300"
             >
@@ -395,7 +396,8 @@ export default function LMUAppPage() {
                   oklch-palette.vercel.app
                 </PencilUnderline>
                 . This ensured accessibility and contrast over all colors for
-                the same value. E.g. a <InlineCode>yellow-10</InlineCode> has the same contrast as
+                the same value. E.g. a <InlineCode>yellow-10</InlineCode> has
+                the same contrast as
                 <InlineCode>red-10</InlineCode>.
               </ProjectText>
               <GridSection className="w-full mx-auto flex items-center justify-center py-8">
@@ -535,7 +537,11 @@ export default function LMUAppPage() {
                 returns the dish likes for that user.
               </ProjectText>
               <ProjectText>
-                Available endpoints can be found in the <PencilUnderline href="http://api.lmu-dev.org/docs">API documentation</PencilUnderline>.
+                Available endpoints can be found in the{" "}
+                <PencilUnderline href="http://api.lmu-dev.org/docs">
+                  API documentation
+                </PencilUnderline>
+                .
               </ProjectText>
               <ProjectText>
                 To make the API more responsive we would like to add a Redis
@@ -555,9 +561,8 @@ export default function LMUAppPage() {
                 planning. Issues were always connected to branches.
               </ProjectText>
               <ProjectText>
-                We also used{" "}
-                <TextMarker>GitHub Actions</TextMarker> to automatically deploy
-                the{" "}
+                We also used <TextMarker>GitHub Actions</TextMarker> to
+                automatically deploy the{" "}
                 <TextureIcon
                   src="/images/texture-icons/docker.webp"
                   alt="Docker"
@@ -629,26 +634,31 @@ export default function LMUAppPage() {
         <ProjectSection>
           <ProjectHeading>What I Learned</ProjectHeading>
           <ProjectSectionContent>
-            <ProjectText>
-              <TextMarker>UX and backend are a powerful combination</TextMarker>
-              , because when you know how a UI should look like you also know
-              exactly which data needs to be provided to the frontend.
-            </ProjectText>
-            <ProjectText>
-              Onboarding new people in a long-running project takes a lot of
-              time and is sometimes not worth it.
-            </ProjectText>
-            <ProjectText>
-              <TextMarker>
-                Working with skilled people is really a blessing
-              </TextMarker>
-              . Especially if they have an eye for the details. Thanks to the
-              best 2 frontend devs I know, Paul and Lukas ❤️
-            </ProjectText>
-            <ProjectText>
-              Building an effective channel for user feedback is really
-              important.
-            </ProjectText>
+            <ProjectUnorderedList>
+              <li>
+                <TextMarker>
+                  UX and backend are a powerful combination
+                </TextMarker>
+                , because when you know how a UI should look like you also know
+                exactly which data needs to be provided to the frontend.
+              </li>
+              <li>
+                Onboarding new people in a long-running project takes a lot of
+                time and is sometimes not worth it.
+              </li>
+              <li>
+                {" "}
+                <TextMarker>
+                  Working with skilled people is really a blessing
+                </TextMarker>
+                . Especially if they have an eye for the details. Thanks to the
+                best 2 frontend devs I know, Paul and Lukas ❤️
+              </li>
+              <li>
+                Building an effective channel for user feedback is really
+                important.
+              </li>
+            </ProjectUnorderedList>
           </ProjectSectionContent>
         </ProjectSection>
       </ProjectContent>

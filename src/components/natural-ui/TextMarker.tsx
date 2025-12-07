@@ -1,5 +1,6 @@
 "use client";
 
+import { createSeededRandom, stringToSeed } from "@/lib/utils";
 import React, {
   useEffect,
   useId,
@@ -20,29 +21,6 @@ interface TextMarkerProps {
   paddingY?: number; // Vertical padding (negative to shrink height)
   rotations?: number; // Max rotation angle for the whole stroke
 }
-
-// Simple Linear Congruential Generator for stable random numbers
-const createLCG = (seed: number) => {
-  const m = 2147483648;
-  const a = 1103515245;
-  const c = 12345;
-  let state = seed;
-
-  return () => {
-    state = (a * state + c) % m;
-    return state / m;
-  };
-};
-
-const stringToSeed = (str: string) => {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash |= 0;
-  }
-  return Math.abs(hash);
-};
 
 interface MarkerSVGRendererProps {
   width: number;
@@ -66,7 +44,7 @@ const MarkerSVGRenderer: React.FC<MarkerSVGRendererProps> = ({
   }, [seed, id]);
 
   const { pathD, transform } = useMemo(() => {
-    const random = createLCG(effectiveSeed);
+    const random = createSeededRandom(effectiveSeed);
 
     // Chisel tip logic:
     // We want a shape that is roughly a rectangle but with angled ends.

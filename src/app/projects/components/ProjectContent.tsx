@@ -1,6 +1,7 @@
 "use client";
 
 import DrawingHeadline from "@/components/natural-ui/DrawingHeadline";
+import { PencilUnorderedList } from "@/components/natural-ui/PencilList";
 import { cn } from "@/lib/utils";
 import React from "react";
 
@@ -148,5 +149,23 @@ export function ProjectText({
     >
       {children}
     </p>
+  );
+}
+
+export function ProjectUnorderedList({
+  children,
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLUListElement>) {
+  return (
+    <PencilUnorderedList
+      className={cn(
+        "text-xl leading-relaxed text-zinc-700 w-full max-w-text-content mx-auto",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </PencilUnorderedList>
   );
 }

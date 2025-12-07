@@ -27,6 +27,9 @@ export const PencilCircle: React.FC<PencilCircleProps> = ({
   const size = CIRCLE_SIZE;
 
   const pathD = useMemo(() => {
+    // Round to avoid tiny cross-engine float diffs that break hydration
+    const round = (value: number) => Math.round(value * 1e4) / 1e4;
+
     const random = createSeededRandom(seed);
     const strokeWidth = size * 0.1;
 
@@ -50,8 +53,8 @@ export const PencilCircle: React.FC<PencilCircleProps> = ({
       const wobbleAmount = wobble * radius;
       const radiusVariation = radius + (random() - 0.5) * wobbleAmount * 2;
       const angleVariation = angle + (random() - 0.5) * 0.15;
-      const x = cx + radiusVariation * Math.cos(angleVariation + tilt);
-      const y = cy + radiusVariation * Math.sin(angleVariation + tilt);
+      const x = round(cx + radiusVariation * Math.cos(angleVariation + tilt));
+      const y = round(cy + radiusVariation * Math.sin(angleVariation + tilt));
       points.push([x, y]);
     }
 
@@ -62,8 +65,8 @@ export const PencilCircle: React.FC<PencilCircleProps> = ({
     for (let i = 1; i < points.length - 1; i++) {
       const curr = points[i];
       const next = points[i + 1];
-      const endX = (curr[0] + next[0]) / 2;
-      const endY = (curr[1] + next[1]) / 2;
+      const endX = round((curr[0] + next[0]) / 2);
+      const endY = round((curr[1] + next[1]) / 2);
       d += ` Q ${curr[0]} ${curr[1]}, ${endX} ${endY}`;
     }
 
@@ -178,7 +181,7 @@ export const PencilUnorderedList: React.FC<PencilUnorderedListProps> = ({
   return (
     <ul
       className={`space-y-[0.25em] ${className}`}
-      style={{ listStyle: "none", paddingLeft: 0}}
+      style={{ listStyle: "none", paddingLeft: 0 }}
     >
       {React.Children.map(children, (child, index) => {
         if (!React.isValidElement(child)) return child;

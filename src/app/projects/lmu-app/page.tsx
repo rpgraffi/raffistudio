@@ -17,13 +17,14 @@ import { PencilUnderline } from "@/components/natural-ui/PencilStroke";
 import { RuledText } from "@/components/natural-ui/RuledText";
 import { TextMarker } from "@/components/natural-ui/TextMarker";
 import ShadowBackground from "@/components/shadows/ShadowBackground";
+import { InlineCode } from "@/components/ui/Code";
+import { GridSection } from "@/components/ui/GridSection";
+import { IPhoneCarousel } from "@/components/ui/IPhoneCarousel";
 import { StarRating } from "@/components/ui/StarRating";
 import { TextureIcon } from "@/components/ui/TextureIcon";
 import { TextureSection } from "@/components/ui/TextureSection";
-import Link from "next/link";
 import Image from "next/image";
-import { GridSection } from "@/components/ui/GridSection";
-import { InlineCode } from "@/components/ui/Code";
+import Link from "next/link";
 
 export default function LMUAppPage() {
   return (
@@ -32,16 +33,77 @@ export default function LMUAppPage() {
         <Header />
 
         {/* Hero Content */}
-        <div className="flex-1 w-full max-w-site min-h-screen mx-auto flex flex-col gap-8 px-8 md:px-12 pb-20 pt-32 md:pt-32">
+        <div className="flex-1 w-full min-h-screen mx-auto flex flex-col gap-8 pb-20 pt-32 md:pt-32">
           {/* Top Content Area */}
           <div className="flex-1 flex justify-center items-center min-h-[400px] z-10">
-            <div className="font-serif text-3xl md:text-4xl text-zinc-800">
-              content slot
-            </div>
+            <IPhoneCarousel
+              images={[
+                {
+                  src: "/images/projects/lmu-app/phones/phone-1.webp",
+                  alt: "LMU App Screenshot 1",
+                },
+                {
+                  src: "/images/projects/lmu-app/phones/phone-2.webp",
+                  alt: "LMU App Screenshot 2",
+                },
+                {
+                  src: "/images/projects/lmu-app/phones/phone-3.webp",
+                  alt: "LMU App Screenshot 3",
+                },
+                {
+                  src: "/images/projects/lmu-app/phones/phone-4.webp",
+                  alt: "LMU App Screenshot 4",
+                },
+                {
+                  src: "/images/projects/lmu-app/phones/phone-5.webp",
+                  alt: "LMU App Screenshot 5",
+                },
+                {
+                  src: "/images/projects/lmu-app/phones/phone-6.webp",
+                  alt: "LMU App Screenshot 6",
+                },
+                {
+                  src: "/images/projects/lmu-app/phones/phone-7.webp",
+                  alt: "LMU App Screenshot 7",
+                },
+                {
+                  src: "/images/projects/lmu-app/phones/phone-8.webp",
+                  alt: "LMU App Screenshot 8",
+                },
+                {
+                  src: "/images/projects/lmu-app/phones/phone-9.webp",
+                  alt: "LMU App Screenshot 9",
+                },
+                {
+                  src: "/images/projects/lmu-app/phones/phone-10.webp",
+                  alt: "LMU App Screenshot 10",
+                },
+                {
+                  src: "/images/projects/lmu-app/phones/phone-11.webp",
+                  alt: "LMU App Screenshot 11",
+                },
+                {
+                  src: "/images/projects/lmu-app/phones/phone-12.webp",
+                  alt: "LMU App Screenshot 12",
+                },
+                {
+                  src: "/images/projects/lmu-app/phones/phone-13.webp",
+                  alt: "LMU App Screenshot 13",
+                },
+                {
+                  src: "/images/projects/lmu-app/phones/phone-14.webp",
+                  alt: "LMU App Screenshot 14",
+                },
+                {
+                  src: "/images/projects/lmu-app/phones/phone-15.webp",
+                  alt: "LMU App Screenshot 15",
+                },
+              ]}
+            />
           </div>
 
           {/* Bottom Split View */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end z-10">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end z-10 max-w-site mx-auto px-8 md:px-12">
             {/* Left: Title & Links */}
             <div className="md:col-span-5 flex flex-col gap-8">
               <DrawingHeadline
@@ -142,8 +204,8 @@ export default function LMUAppPage() {
               We&apos;re writing the year 2024 and the{" "}
               <TextMarker>biggest university in Germany</TextMarker>, the LMU,
               still has no app for students. No easy way to check the canteen
-              menu, available libraries, grades, lectures — and services
-              cluttered around 20 different websites.
+              menu, available libraries, grades, lectures and services cluttered
+              around 20 different websites.
             </ProjectText>
           </ProjectSectionContent>
         </ProjectSection>
@@ -158,14 +220,22 @@ export default function LMUAppPage() {
               <TextMarker>
                 Suffering together created a strong connection
               </TextMarker>
-              . So Paul Walter, Lukas Plenk, me and some other LMU students
-              started the vision and began the work.
+              . So{" "}
+              <PencilUnderline href="https://www.linkedin.com/in/paul-walter-74009224b/">
+                Paul Walter
+              </PencilUnderline>
+              ,{" "}
+              <PencilUnderline href="https://www.linkedin.com/in/lukasplenk/">
+                Lukas Plenk
+              </PencilUnderline>
+              , me and some other LMU students started the vision and began the
+              work.
             </ProjectText>
 
             <ProjectTextBlock>
               <ProjectSubHeading>University Course</ProjectSubHeading>
               <ProjectText>
-                At one point we thought, why limit the capacity to us — there
+                At one point we thought, why limit the capacity to us? There
                 should be more students taking part in creating their own
                 solution. <TextMarker>From students, for students</TextMarker>.
                 So we talked to professors and PhDs and were able to host our
@@ -206,7 +276,7 @@ export default function LMUAppPage() {
                 to look up information but also for our system to access it.
                 There were <TextMarker>no clean APIs and interfaces</TextMarker>{" "}
                 to access the information. So it was evident we had to build
-                that ourselves — store the data on our side to not overwhelm the
+                that ourselves, store the data on our side to not overwhelm the
                 old system and bring the information into a new structure that
                 can be used to populate a UI with information. This way we would
                 have the whole data pipeline in control.
@@ -233,7 +303,7 @@ export default function LMUAppPage() {
               <ProjectText>
                 It was clear that the first release was missing some essential
                 student features like checking available courses, calendar and
-                news — due to lack of APIs and infrastructure from LMU. So we
+                news, due to lack of APIs and infrastructure from LMU. So we
                 needed a way to show what the app can do, what is missing and
                 actually give users a way to communicate their needs.
               </ProjectText>
@@ -285,7 +355,9 @@ export default function LMUAppPage() {
             <ProjectText>
               Special thanks goes to <TextMarker>Prof. Florian Alt</TextMarker>{" "}
               and <TextMarker>Dr. Florian Behmann</TextMarker> who supported our
-              journey.
+              journey enabling us offer a class for students to learn about app
+              development. Other honorable mentions go to the Student Council,
+              the IT department at LMU and all the students who supported us.
             </ProjectText>
           </ProjectSectionContent>
         </ProjectSection>
@@ -359,7 +431,7 @@ export default function LMUAppPage() {
                   src="/images/texture-icons/figma.webp"
                   alt="Figma"
                 />{" "}
-                Figma — with auto layout, variables, components and variants.
+                Figma, with auto layout, variables, components and variants.
                 Supporting light and dark mode and{" "}
                 <TextMarker>over 100 custom components</TextMarker>.
               </ProjectText>
@@ -403,7 +475,7 @@ export default function LMUAppPage() {
               <GridSection className="w-full mx-auto flex items-center justify-center py-8">
                 <Image
                   src="/images/projects/lmu-app/oklab.gif"
-                  alt="App Icon Light"
+                  alt="OkLCH Color Space"
                   unoptimized
                   width={384}
                   height={384}
@@ -411,8 +483,8 @@ export default function LMUAppPage() {
               </GridSection>
               <ProjectText>
                 Since our brand color is green, we chose it as our accent color
-                — which isn&apos;t ideal because it can get confusing with
-                success states. The gray palette was also derived from that and
+                which isn&apos;t ideal because it can get confusing with success
+                states. The gray palette was also derived from that and
                 inherited a greenish tint.
               </ProjectText>
               <ProjectText>
@@ -424,6 +496,15 @@ export default function LMUAppPage() {
                 Figma as primary color tokens and built a second semantic layer
                 on top that was exposed to our design files.
               </ProjectText>
+              <GridSection className="w-full mx-auto flex items-center justify-center py-8">
+                <Image
+                  src="/images/projects/lmu-app/designsystem-color-variables.png"
+                  alt="Design System Color Variables"
+                  unoptimized
+                  width={1024}
+                  height={1024}
+                />
+              </GridSection>
             </ProjectTextBlock>
           </ProjectSectionContent>
         </ProjectSection>
@@ -498,7 +579,7 @@ export default function LMUAppPage() {
                 were so cluttered it wasn&apos;t possible to solve with regex.
               </ProjectText>
               <ProjectText>
-                For the canteen menus we did a similar thing — they were
+                For the canteen menus we did a similar thing, they were
                 automatically translated with DeepL. Generally our approach was
                 to improve the data quality we got with other APIs. We also did
                 that for the movies: we added information like IMDb ratings,
@@ -509,7 +590,7 @@ export default function LMUAppPage() {
             <ProjectTextBlock>
               <ProjectSubHeading>Database</ProjectSubHeading>
               <ProjectText>
-                This was probably the hardest part —{" "}
+                This was probably the hardest part,{" "}
                 <TextMarker>getting the relations right</TextMarker>. Especially
                 when you deal with translations, it isn&apos;t enough to just
                 put a „title" column. We needed to create a new translation
@@ -605,7 +686,7 @@ export default function LMUAppPage() {
               />{" "}
               <TextureIcon src="/images/texture-icons/dart.webp" alt="Dart" />{" "}
               <TextMarker>Flutter/Dart</TextMarker>, this was an obvious choice
-              — also to support multi-platform development for iOS and Android.
+              also to support multi-platform development for iOS and Android.
             </ProjectText>
             <ProjectText>
               Working tightly in a cross-functional team was fantastic. This

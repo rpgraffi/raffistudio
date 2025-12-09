@@ -11,7 +11,7 @@ export function IPhoneFrame({ src, alt, className = "" }: IPhoneFrameProps) {
   return (
     <div
       className={cn(
-        "relative h-full w-auto aspect-[430/932] md:rounded-[52px] rounded-4xl border-4 border-zinc-700 overflow-hidden",
+        "relative h-full w-auto aspect-430/932 md:rounded-[44px] rounded-4xl border-4 border-zinc-700 overflow-hidden",
         className
       )}
       style={{

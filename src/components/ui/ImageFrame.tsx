@@ -15,7 +15,7 @@ export function ImageFrame({
   ...props
 }: ImageFrameProps) {
   return (
-    <div className={cn("relative inline-block", className)}>
+    <div className={cn("relative inline-block py-4", className)}>
       <Image
         alt={alt}
         className={cn("w-full h-auto block", imageClassName)}

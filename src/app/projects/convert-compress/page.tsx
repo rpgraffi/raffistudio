@@ -22,84 +22,167 @@ import { StarRating } from "@/components/ui/StarRating";
 import { TextureIcon } from "@/components/ui/TextureIcon";
 import { TextureSection } from "@/components/ui/TextureSection";
 import { VideoFrame } from "@/components/ui/VideoFrame";
+import { useProjectIntro } from "@/hooks/useProjectIntro";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function ConvertCompressPage() {
+  const {
+    startDrawing,
+    showBackground,
+    headlineOffset,
+    hasInitialPosition,
+    isIntroComplete,
+    isHeadlineCentered,
+    headlineRef,
+    springConfig,
+  } = useProjectIntro();
+
   return (
-    <main className="min-h-screen font-sans relative">
-      <ShadowBackground className="min-h-screen flex flex-col">
+    <main className="min-h-screen font-sans relative overflow-x-clip">
+      {/* Shadow Background - fades in once loaded */}
+      <motion.div
+        className="fixed inset-0 -z-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: showBackground ? 1 : 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        <ShadowBackground className="w-full h-full" />
+      </motion.div>
+
+      {/* Background overlay - fades out when shadow background is ready */}
+      <motion.div
+        className="fixed inset-0 z-40 bg-stone-100 pointer-events-none"
+        initial={{ opacity: 1 }}
+        animate={{ opacity: showBackground ? 0 : 1 }}
+        transition={{ duration: 0.8 }}
+      />
+
+      {/* Header with fade-in */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{
+          opacity: isIntroComplete ? 1 : 0,
+          y: isIntroComplete ? 0 : -20,
+        }}
+        transition={springConfig}
+      >
         <Header />
+      </motion.div>
 
-        {/* Hero Content */}
-        <div className="flex-1 w-full max-w-site min-h-screen mx-auto flex flex-col gap-8 px-8 md:px-12 pb-20 pt-32 md:pt-32">
-          {/* Top Content Area */}
-          <div className="flex-1 min-h-[200px] flex justify-center items-center z-10">
-            <Image
-              src="/projects/convert-compress/images/hero.webp"
-              alt="Convert & Compress"
-              width={1200}
-              height={800}
-              className="w-full h-auto object-contain"
-              priority
-            />
-          </div>
+      {/* Hero Content - z-50 to ensure headline is above bg-overlay during intro */}
+      <div className="flex-1 w-full max-w-site min-h-screen mx-auto flex flex-col gap-8 px-8 md:px-12 pb-20 pt-32 md:pt-32 relative z-50">
+        {/* Top Content Area */}
+        <motion.div
+          className="flex-1 min-h-[200px] flex justify-center items-center z-10"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{
+            opacity: isIntroComplete ? 1 : 0,
+            y: isIntroComplete ? 0 : 40,
+          }}
+          transition={{ ...springConfig, delay: 0.1 }}
+        >
+          <Image
+            src="/projects/convert-compress/images/hero.webp"
+            alt="Convert & Compress"
+            width={1200}
+            height={800}
+            className="w-full h-auto object-contain"
+            priority
+          />
+        </motion.div>
 
-          {/* Bottom Split View */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 z-10">
-            {/* Left: Title & Links */}
-            <div className="md:col-span-5 flex flex-col justify-between gap-8">
-              <DrawingHeadline
-                className="text-5xl md:text-7xl text-zinc-900 font-sentient"
-                triggerOnView={false}
-                animate={true}
-                lineDelay={0.5}
-                as="h1"
+        {/* Bottom Split View */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 z-10">
+          {/* Left: Title & Links */}
+          <div className="md:col-span-5 flex flex-col justify-between gap-8">
+            {/* Single Headline - positioned via wrapper, animated via framer-motion */}
+            <div
+              ref={headlineRef}
+              className="relative"
+              style={{ visibility: headlineOffset ? "visible" : "hidden" }}
+            >
+              <motion.div
+                className="relative z-50"
+                initial={false}
+                animate={{
+                  x:
+                    isHeadlineCentered && headlineOffset ? headlineOffset.x : 0,
+                  y:
+                    isHeadlineCentered && headlineOffset ? headlineOffset.y : 0,
+                }}
+                transition={hasInitialPosition ? springConfig : { duration: 0 }}
               >
-                Convert &<br />
-                Compress
-              </DrawingHeadline>
-
-              <div className="flex gap-6">
-                <PencilUnderline
-                  href="https://apps.apple.com/us/app/convert-compress/id6752861983"
-                  className="text-lg text-zinc-800"
+                <DrawingHeadline
+                  className="text-5xl md:text-7xl text-zinc-900 font-sentient"
+                  triggerOnView={false}
+                  animate={startDrawing}
+                  lineDelay={0.5}
+                  as="h1"
                 >
-                  App Store
-                </PencilUnderline>
-                <PencilUnderline
-                  href="https://convert-compress.com"
-                  className="text-lg text-zinc-800"
-                >
-                  Website
-                </PencilUnderline>
-                <PencilUnderline
-                  href="https://github.com/rpgraffi/convert-compress"
-                  className="text-lg text-zinc-800"
-                >
-                  GitHub
-                </PencilUnderline>
-              </div>
+                  Convert &<br />
+                  Compress
+                </DrawingHeadline>
+              </motion.div>
             </div>
 
-            {/* Spacer */}
-            <div className="md:col-span-2 hidden md:block"></div>
-
-            {/* Right: Description */}
-            <div className="md:col-span-5">
-              <div className="text-xl md:text-2xl text-zinc-800 leading-10 font-normal">
-                <RuledText className="leading-10">
-                  An open source, small, and native tool for macOS that
-                  converts, compresses, and resizes images in batches.
-                  <br />
-                  All in one pipeline. With a live preview. Native, local &
-                  private. Written in swift for macOS.
-                </RuledText>
-              </div>
-            </div>
+            {/* Links fade in after complete */}
+            <motion.div
+              className="flex gap-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{
+                opacity: isIntroComplete ? 1 : 0,
+                y: isIntroComplete ? 0 : 20,
+              }}
+              transition={{ ...springConfig, delay: 0.2 }}
+            >
+              <PencilUnderline
+                href="https://apps.apple.com/us/app/convert-compress/id6752861983"
+                className="text-lg text-zinc-800"
+              >
+                App Store
+              </PencilUnderline>
+              <PencilUnderline
+                href="https://convert-compress.com"
+                className="text-lg text-zinc-800"
+              >
+                Website
+              </PencilUnderline>
+              <PencilUnderline
+                href="https://github.com/rpgraffi/convert-compress"
+                className="text-lg text-zinc-800"
+              >
+                GitHub
+              </PencilUnderline>
+            </motion.div>
           </div>
+
+          {/* Spacer */}
+          <div className="md:col-span-2 hidden md:block"></div>
+
+          {/* Right: Description */}
+          <motion.div
+            className="md:col-span-5"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{
+              opacity: isIntroComplete ? 1 : 0,
+              y: isIntroComplete ? 0 : 20,
+            }}
+            transition={{ ...springConfig, delay: 0.3 }}
+          >
+            <div className="text-xl md:text-2xl text-zinc-800 leading-10 font-normal">
+              <RuledText className="leading-10">
+                An open source, small, and native tool for macOS that converts,
+                compresses, and resizes images in batches.
+                <br />
+                All in one pipeline. With a live preview. Native, local &
+                private. Written in swift for macOS.
+              </RuledText>
+            </div>
+          </motion.div>
         </div>
-      </ShadowBackground>
+      </div>
       <TextureSection>
         <div className="py-20 md:py-32">
           <ProjectStats
@@ -459,8 +542,10 @@ export default function ConvertCompressPage() {
                 post
               </PencilUnderline>{" "}
               in r/SwiftUI became the subreddit&apos;s{" "}
-              <TextMarker>top-voted post of all time</TextMarker>. On Product Hunt, the app{" "}
-              <TextMarker>hit the top 10 with 112 upvotes</TextMarker> without any special marketing for the launch. Collectively,{" "}
+              <TextMarker>top-voted post of all time</TextMarker>. On Product
+              Hunt, the app{" "}
+              <TextMarker>hit the top 10 with 112 upvotes</TextMarker> without
+              any special marketing for the launch. Collectively,{" "}
               <TextMarker>over 300,000 people</TextMarker> viewed the posts.
             </ProjectText>
             <ImageFrame

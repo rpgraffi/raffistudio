@@ -12,6 +12,7 @@ import {
 } from "@/app/projects/components/ProjectContent";
 import { ProjectStats } from "@/app/projects/components/ProjectStats";
 import Header from "@/components/Header";
+import { AnimatedDoodle } from "@/components/natural-ui/AnimatedDoodle";
 import DrawingHeadline from "@/components/natural-ui/DrawingHeadline";
 import { PencilUnderline } from "@/components/natural-ui/PencilStroke";
 import { RuledText } from "@/components/natural-ui/RuledText";
@@ -24,134 +25,220 @@ import { IPhoneCarousel } from "@/components/ui/IPhoneCarousel";
 import { StarRating } from "@/components/ui/StarRating";
 import { TextureIcon } from "@/components/ui/TextureIcon";
 import { TextureSection } from "@/components/ui/TextureSection";
+import { VideoFrame } from "@/components/ui/VideoFrame";
+import { useProjectIntro } from "@/hooks/useProjectIntro";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function LMUAppPage() {
+  const {
+    startDrawing,
+    showBackground,
+    headlineOffset,
+    hasInitialPosition,
+    isIntroComplete,
+    isHeadlineCentered,
+    headlineRef,
+    springConfig,
+  } = useProjectIntro();
+
   return (
-    <main className="min-h-screen font-sans relative">
-      <ShadowBackground className="min-h-screen flex flex-col">
+    <main className="min-h-screen font-sans relative overflow-x-clip">
+      {/* Shadow Background - fades in once loaded */}
+      <motion.div
+        className="fixed inset-0 -z-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: showBackground ? 1 : 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        <ShadowBackground className="w-full h-full" />
+      </motion.div>
+
+      {/* Background overlay - fades out when shadow background is ready */}
+      <motion.div
+        className="fixed inset-0 z-40 bg-stone-100 pointer-events-none"
+        initial={{ opacity: 1 }}
+        animate={{ opacity: showBackground ? 0 : 1 }}
+        transition={{ duration: 0.8 }}
+        style={{ pointerEvents: showBackground ? "none" : "auto" }}
+      />
+
+      {/* Header with fade-in */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{
+          opacity: isIntroComplete ? 1 : 0,
+          y: isIntroComplete ? 0 : -20,
+        }}
+        transition={springConfig}
+      >
         <Header />
+      </motion.div>
 
-        {/* Hero Content */}
-        <div className="flex-1 w-full min-h-screen mx-auto flex flex-col gap-8 pb-20 pt-32 md:pt-32">
-          {/* Top Content Area */}
-          <div className="flex-1 flex justify-center items-center min-h-[400px] z-10">
-            <IPhoneCarousel
-              images={[
-                {
-                  src: "/projects/lmu-app/images/phones/phone-1.webp",
-                  alt: "LMU App Screenshot 1",
-                },
-                {
-                  src: "/projects/lmu-app/images/phones/phone-2.webp",
-                  alt: "LMU App Screenshot 2",
-                },
-                {
-                  src: "/projects/lmu-app/images/phones/phone-3.webp",
-                  alt: "LMU App Screenshot 3",
-                },
-                {
-                  src: "/projects/lmu-app/images/phones/phone-4.webp",
-                  alt: "LMU App Screenshot 4",
-                },
-                {
-                  src: "/projects/lmu-app/images/phones/phone-5.webp",
-                  alt: "LMU App Screenshot 5",
-                },
-                {
-                  src: "/projects/lmu-app/images/phones/phone-6.webp",
-                  alt: "LMU App Screenshot 6",
-                },
-                {
-                  src: "/projects/lmu-app/images/phones/phone-7.webp",
-                  alt: "LMU App Screenshot 7",
-                },
-                {
-                  src: "/projects/lmu-app/images/phones/phone-8.webp",
-                  alt: "LMU App Screenshot 8",
-                },
-                {
-                  src: "/projects/lmu-app/images/phones/phone-9.webp",
-                  alt: "LMU App Screenshot 9",
-                },
-                {
-                  src: "/projects/lmu-app/images/phones/phone-10.webp",
-                  alt: "LMU App Screenshot 10",
-                },
-                {
-                  src: "/projects/lmu-app/images/phones/phone-11.webp",
-                  alt: "LMU App Screenshot 11",
-                },
-                {
-                  src: "/projects/lmu-app/images/phones/phone-12.webp",
-                  alt: "LMU App Screenshot 12",
-                },
-                {
-                  src: "/projects/lmu-app/images/phones/phone-13.webp",
-                  alt: "LMU App Screenshot 13",
-                },
-                {
-                  src: "/projects/lmu-app/images/phones/phone-14.webp",
-                  alt: "LMU App Screenshot 14",
-                },
-                {
-                  src: "/projects/lmu-app/images/phones/phone-15.webp",
-                  alt: "LMU App Screenshot 15",
-                },
-              ]}
-            />
-          </div>
+      {/* Hero Content - z-50 to ensure headline is above bg-overlay during intro */}
+      <div className="flex-1 w-full min-h-screen mx-auto flex flex-col gap-8 pb-20 pt-32 md:pt-32 relative z-50">
+        {/* Top Content Area - Phone Carousel */}
+        <motion.div
+          className="flex-1 flex justify-center items-center min-h-[400px] z-10"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{
+            opacity: isIntroComplete ? 1 : 0,
+            y: isIntroComplete ? 0 : 40,
+          }}
+          transition={{ ...springConfig, delay: 0.1 }}
+        >
+          <IPhoneCarousel
+            images={[
+              {
+                src: "/projects/lmu-app/images/phones/phone-1.webp",
+                alt: "LMU App Screenshot 1",
+              },
+              {
+                src: "/projects/lmu-app/images/phones/phone-2.webp",
+                alt: "LMU App Screenshot 2",
+              },
+              {
+                src: "/projects/lmu-app/images/phones/phone-3.webp",
+                alt: "LMU App Screenshot 3",
+              },
+              {
+                src: "/projects/lmu-app/images/phones/phone-4.webp",
+                alt: "LMU App Screenshot 4",
+              },
+              {
+                src: "/projects/lmu-app/images/phones/phone-5.webp",
+                alt: "LMU App Screenshot 5",
+              },
+              {
+                src: "/projects/lmu-app/images/phones/phone-6.webp",
+                alt: "LMU App Screenshot 6",
+              },
+              {
+                src: "/projects/lmu-app/images/phones/phone-7.webp",
+                alt: "LMU App Screenshot 7",
+              },
+              {
+                src: "/projects/lmu-app/images/phones/phone-8.webp",
+                alt: "LMU App Screenshot 8",
+              },
+              {
+                src: "/projects/lmu-app/images/phones/phone-9.webp",
+                alt: "LMU App Screenshot 9",
+              },
+              {
+                src: "/projects/lmu-app/images/phones/phone-10.webp",
+                alt: "LMU App Screenshot 10",
+              },
+              {
+                src: "/projects/lmu-app/images/phones/phone-11.webp",
+                alt: "LMU App Screenshot 11",
+              },
+              {
+                src: "/projects/lmu-app/images/phones/phone-12.webp",
+                alt: "LMU App Screenshot 12",
+              },
+              {
+                src: "/projects/lmu-app/images/phones/phone-13.webp",
+                alt: "LMU App Screenshot 13",
+              },
+              {
+                src: "/projects/lmu-app/images/phones/phone-14.webp",
+                alt: "LMU App Screenshot 14",
+              },
+              {
+                src: "/projects/lmu-app/images/phones/phone-15.webp",
+                alt: "LMU App Screenshot 15",
+              },
+            ]}
+          />
+        </motion.div>
 
-          {/* Bottom Split View */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end z-10 max-w-site mx-auto px-8 md:px-12">
-            {/* Left: Title & Links */}
-            <div className="md:col-span-5 flex flex-col gap-8">
-              <DrawingHeadline
-                className="text-5xl md:text-7xl text-zinc-900 font-sentient"
-                triggerOnView={false}
-                animate={true}
-                lineDelay={0.5}
-                as="h1"
+        {/* Bottom Split View */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end z-10 max-w-site mx-auto px-8 md:px-12">
+          {/* Left: Title & Links */}
+          <div className="md:col-span-5 flex flex-col gap-8">
+            {/* Single Headline - positioned via wrapper, animated via framer-motion */}
+            <div
+              ref={headlineRef}
+              className="relative"
+              style={{ visibility: headlineOffset ? "visible" : "hidden" }}
+            >
+              <motion.div
+                className="relative z-50"
+                initial={false}
+                animate={{
+                  x:
+                    isHeadlineCentered && headlineOffset ? headlineOffset.x : 0,
+                  y:
+                    isHeadlineCentered && headlineOffset ? headlineOffset.y : 0,
+                }}
+                // Instant for initial positioning, spring for the move back
+                transition={hasInitialPosition ? springConfig : { duration: 0 }}
               >
-                LMU
-                <br />
-                Students
-              </DrawingHeadline>
-
-              <div className="flex flex-wrap gap-6 text-lg text-zinc-800">
-                <PencilUnderline href="https://apps.apple.com/de/app/lmu-students/id6505039729">
-                  App Store
-                </PencilUnderline>
-                <PencilUnderline href="https://play.google.com/store/apps/details?id=com.lmu_dev.lmu_app">
-                  Play Store
-                </PencilUnderline>
-                <PencilUnderline href="https://github.com/lmu-devs/">
-                  GitHub
-                </PencilUnderline>
-                <PencilUnderline href="https://lmu-dev.org">
-                  Website
-                </PencilUnderline>
-              </div>
-            </div>
-
-            {/* Spacer */}
-            <div className="md:col-span-2 hidden md:block"></div>
-
-            {/* Right: Description */}
-            <div className="md:col-span-5">
-              <div className="text-xl md:text-2xl text-zinc-800 leading-10 font-normal">
-                <RuledText className="leading-10">
-                  An open source mobile app for students of the Ludwig
-                  Maximilian University of Munich.
+                <DrawingHeadline
+                  className="text-5xl md:text-7xl text-zinc-900 font-sentient"
+                  triggerOnView={false}
+                  animate={startDrawing}
+                  lineDelay={0.5}
+                  as="h1"
+                >
+                  LMU
                   <br />
-                  From students, for students. Available on iOS and Android.
-                </RuledText>
-              </div>
+                  Students
+                </DrawingHeadline>
+              </motion.div>
             </div>
+
+            {/* Links fade in after complete */}
+            <motion.div
+              className="flex flex-wrap gap-6 text-lg text-zinc-800"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{
+                opacity: isIntroComplete ? 1 : 0,
+                y: isIntroComplete ? 0 : 20,
+              }}
+              transition={{ ...springConfig, delay: 0.2 }}
+            >
+              <PencilUnderline href="https://apps.apple.com/de/app/lmu-students/id6505039729">
+                App Store
+              </PencilUnderline>
+              <PencilUnderline href="https://play.google.com/store/apps/details?id=com.lmu_dev.lmu_app">
+                Play Store
+              </PencilUnderline>
+              <PencilUnderline href="https://github.com/lmu-devs/">
+                GitHub
+              </PencilUnderline>
+              <PencilUnderline href="https://lmu-dev.org">
+                Website
+              </PencilUnderline>
+            </motion.div>
           </div>
+
+          {/* Spacer */}
+          <div className="md:col-span-2 hidden md:block"></div>
+
+          {/* Right: Description */}
+          <motion.div
+            className="md:col-span-5"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{
+              opacity: isIntroComplete ? 1 : 0,
+              y: isIntroComplete ? 0 : 20,
+            }}
+            transition={{ ...springConfig, delay: 0.3 }}
+          >
+            <div className="text-xl md:text-2xl text-zinc-800 leading-10 font-normal">
+              <RuledText className="leading-10">
+                An open source mobile app for students of the Ludwig Maximilian
+                University of Munich.
+                <br />
+                From students, for students. Available on iOS and Android.
+              </RuledText>
+            </div>
+          </motion.div>
         </div>
-      </ShadowBackground>
+      </div>
 
       <TextureSection>
         <div className="py-20 md:py-32">
@@ -395,14 +482,14 @@ export default function LMUAppPage() {
               </PencilUnderline>{" "}
               of the Media Informatics Group.
             </ProjectText>
-              <ImageFrame
-                src="/projects/lmu-app/images/beta-release.webp"
-                alt="Beta Release"
-                width={1024}
-                height={1024}
-                description="Beta Release Exhibition"
-                className="w-full h-auto max-w-text-content mx-auto"
-              />
+            <ImageFrame
+              src="/projects/lmu-app/images/beta-release.webp"
+              alt="Beta Release"
+              width={1024}
+              height={1024}
+              description="Beta Release Exhibition"
+              className="w-full h-auto max-w-text-content mx-auto"
+            />
             <ProjectText>
               Fresh to the start of the Summer Semester 25 we painted the final
               strokes and <TextMarker>released the app officially</TextMarker>.
@@ -437,14 +524,14 @@ export default function LMUAppPage() {
                 Supporting light and dark mode and{" "}
                 <TextMarker>over 100 custom components</TextMarker>.
               </ProjectText>
-                <ImageFrame
-                  src="/projects/lmu-app/images/designsystem_cover.webp"
-                  alt="Design System Cover"
-                  width={1024}
-                  height={1024}
-                  description="Design System Cover"
-                  className="w-full h-auto max-w-text-content mx-auto"
-                />
+              <ImageFrame
+                src="/projects/lmu-app/images/designsystem_cover.webp"
+                alt="Design System Cover"
+                width={1024}
+                height={1024}
+                description="Design System Cover"
+                className="w-full h-auto max-w-text-content mx-auto"
+              />
               <ProjectText>
                 The system was built in a way that can also be reproduced in
                 code in our{" "}
@@ -473,15 +560,15 @@ export default function LMUAppPage() {
                 the same contrast as
                 <InlineCode>red-10</InlineCode>.
               </ProjectText>
-                <ImageFrame
-                  src="/projects/lmu-app/images/oklab.gif"
-                  alt="OkLCH Color Space"
-                  unoptimized
-                  width={384}
-                  height={384}
-                  description="Color Space Comparison"
-                  className="w-full h-auto max-w-text-content mx-auto"
-                />
+              <ImageFrame
+                src="/projects/lmu-app/images/oklab.gif"
+                alt="OkLCH Color Space"
+                unoptimized
+                width={384}
+                height={384}
+                description="Color Space Comparison (from Wikipedia)"
+                className="w-full h-auto max-w-text-content mx-auto"
+              />
               <ProjectText>
                 Since our brand color is green, we chose it as our accent color
                 which isn&apos;t ideal because it can get confusing with success
@@ -497,14 +584,41 @@ export default function LMUAppPage() {
                 Figma as primary color tokens and built a second semantic layer
                 on top that was exposed to our design files.
               </ProjectText>
-                <ImageFrame
-                  src="/projects/lmu-app/images/designsystem-color-variables.png"
-                  alt="Design System Color Variables"
-                  unoptimized
-                  width={1024}
-                  height={1024}
-                  description="Design System Color Variables"
-                />
+              <ImageFrame
+                src="/projects/lmu-app/images/designsystem-color-variables.png"
+                alt="Design System Color Variables"
+                unoptimized
+                width={1024}
+                height={1024}
+                description="Design System Color Variables"
+              />
+            </ProjectTextBlock>
+            <ProjectTextBlock>
+              <ProjectSubHeading>Animations</ProjectSubHeading>
+              <ProjectText>
+                Animations are a great way to enhance the user experience. We
+                used the design system to create a set of animations that are
+                used throughout the app. Since simple easing functions
+                don&apos;t reflect natural motions i decided to use{" "}
+                <TextMarker>spring animations</TextMarker>. Those are based on
+                the physics of a spring and feel more natural and organic.
+              </ProjectText>
+              <GridSection>
+                <div className="grid grid-cols-2 gap-16 p-8">
+                  <VideoFrame
+                    src="/projects/lmu-app/videos/spring-animation.webm"
+                    description="Spring Animation"
+                    className="w-full"
+                    showTesaStripes={false}
+                  />
+                  <VideoFrame
+                    src="/projects/lmu-app/videos/spring-animation-v2.webm"
+                    description="Spring Animation"
+                    className="w-full"
+                    showTesaStripes={false}
+                  />
+                </div>
+              </GridSection>
             </ProjectTextBlock>
           </ProjectSectionContent>
         </ProjectSection>
@@ -735,7 +849,11 @@ export default function LMUAppPage() {
                   Working with skilled people is really a blessing
                 </TextMarker>
                 . Especially if they have an eye for the details. Thanks to the
-                best 2 frontend devs I know, Paul and Lukas ❤️
+                best 2 frontend devs I know, Paul and Lukas{" "}
+                <AnimatedDoodle
+                  shape="heart"
+                  className="w-5 h-5 -translate-y-0.5 align-middle"
+                />
               </li>
               <li>
                 Building an effective channel for user feedback is really

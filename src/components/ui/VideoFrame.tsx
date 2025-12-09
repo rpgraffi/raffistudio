@@ -26,10 +26,10 @@ const CORNER_COMBOS: Corner[][] = [
 ];
 
 const CORNER_STYLES: Record<Corner, string> = {
-  "top-left": "-top-16 -left-10 -rotate-[35deg] opacity-95",
-  "top-right": "-top-16 -right-10 rotate-[35deg] opacity-95",
-  "bottom-left": "-bottom-6 -left-10 rotate-[35deg] opacity-95",
-  "bottom-right": "-bottom-6 -right-10 -rotate-[35deg] opacity-95",
+  "top-left": "-top-16 -left-12 -rotate-[35deg] opacity-95",
+  "top-right": "-top-16 -right-12 rotate-[35deg] opacity-95",
+  "bottom-left": "-bottom-6 -left-12 rotate-[35deg] opacity-95",
+  "bottom-right": "-bottom-6 -right-12 -rotate-[35deg] opacity-95",
 };
 
 // Simple hash from string
@@ -70,6 +70,7 @@ interface VideoFrameProps extends React.HTMLAttributes<HTMLDivElement> {
   muted?: boolean;
   playsInline?: boolean;
   poster?: string;
+  showTesaStripes?: boolean;
 }
 
 export function VideoFrame({
@@ -81,6 +82,7 @@ export function VideoFrame({
   playsInline = true,
   poster,
   className,
+  showTesaStripes = true,
   ...props
 }: VideoFrameProps) {
   // Initialize with deterministic hash for server-side rendering
@@ -96,16 +98,17 @@ export function VideoFrame({
   return (
     <div className={cn("relative inline-block", className)} {...props}>
       {/* Tesa stripes at selected corners */}
-      {corners.map((corner, i) => (
-        <TesaStripe
-          key={corner}
-          position={corner}
-          stripeIndex={(seed + i) % TESA_STRIPES.length}
-        />
-      ))}
+      {showTesaStripes &&
+        corners.map((corner, i) => (
+          <TesaStripe
+            key={corner}
+            position={corner}
+            stripeIndex={(seed + i) % TESA_STRIPES.length}
+          />
+        ))}
 
       {/* Video container with white border/frame effect */}
-      <div className="relative  md:p-4">
+      <div className="relative">
         <video
           src={src}
           autoPlay={autoPlay}
@@ -119,7 +122,7 @@ export function VideoFrame({
 
       {/* Optional description */}
       {description && (
-        <p className="mt-4 text-sm text-zinc-500 italic text-center font-serif">
+        <p className="mt-4 text-sm text-zinc-500 text-center font-mono">
           {description}
         </p>
       )}

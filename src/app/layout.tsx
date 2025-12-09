@@ -29,12 +29,10 @@ const caveat = Caveat({
   subsets: ["latin"],
 });
 
-
 const heebo = Heebo({
   variable: "--font-heebo",
   subsets: ["latin"],
 });
-
 
 export const metadata: Metadata = {
   title: "Raphael Wennmacher • Portfolio",

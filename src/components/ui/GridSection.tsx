@@ -24,6 +24,7 @@ export function GridSection({
           linear-gradient(to bottom, ${gridColor} 1px, transparent 1px)
         `,
         backgroundSize: `${gridSize}px ${gridSize}px`,
+        backgroundPosition: `${gridSize - 0.5}px ${gridSize - 0.5}px`,
         ...style,
       }}
       {...props}

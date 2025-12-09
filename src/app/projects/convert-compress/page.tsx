@@ -11,12 +11,15 @@ import {
 } from "@/app/projects/components/ProjectContent";
 import { ProjectStats } from "@/app/projects/components/ProjectStats";
 import Header from "@/components/Header";
+import DrawingHeadline from "@/components/natural-ui/DrawingHeadline";
 import { PencilUnderline } from "@/components/natural-ui/PencilStroke";
 import { RuledText } from "@/components/natural-ui/RuledText";
 import { TextMarker } from "@/components/natural-ui/TextMarker";
 import ShadowBackground from "@/components/shadows/ShadowBackground";
 import { GridSection } from "@/components/ui/GridSection";
+import { ImageFrame } from "@/components/ui/ImageFrame";
 import { StarRating } from "@/components/ui/StarRating";
+import { TextureIcon } from "@/components/ui/TextureIcon";
 import { TextureSection } from "@/components/ui/TextureSection";
 import { VideoFrame } from "@/components/ui/VideoFrame";
 import Image from "next/image";
@@ -33,7 +36,7 @@ export default function ConvertCompressPage() {
           {/* Top Content Area */}
           <div className="flex-1 min-h-[200px] flex justify-center items-center z-10">
             <Image
-              src="/images/projects/convert-compress/hero.webp"
+              src="/projects/convert-compress/images/hero.webp"
               alt="Convert & Compress"
               width={1200}
               height={800}
@@ -46,11 +49,16 @@ export default function ConvertCompressPage() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 z-10">
             {/* Left: Title & Links */}
             <div className="md:col-span-5 flex flex-col justify-between gap-8">
-              <h1 className="text-5xl md:text-7xl text-zinc-900 leading-[1.1] font-sentient">
-                Convert &
-                <br />
+              <DrawingHeadline
+                className="text-5xl md:text-7xl text-zinc-900 font-sentient"
+                triggerOnView={false}
+                animate={true}
+                lineDelay={0.5}
+                as="h1"
+              >
+                Convert &<br />
                 Compress
-              </h1>
+              </DrawingHeadline>
 
               <div className="flex gap-6">
                 <PencilUnderline
@@ -96,10 +104,10 @@ export default function ConvertCompressPage() {
         <div className="py-20 md:py-32">
           <ProjectStats
             stats={[
-              { value: "2.000", label: "Downloads" },
+              { value: "2.200", label: "Downloads" },
               { value: "4,9", label: "Stars" },
               { value: "22", label: "Reviews" },
-              { value: "100", label: "GitHub Stars" },
+              { value: "110", label: "GitHub Stars" },
             ]}
             tools={[
               { src: "/images/texture-icons/swift.webp", alt: "Swift" },
@@ -136,8 +144,9 @@ export default function ConvertCompressPage() {
         <div className="w-full max-w-site mx-auto px-8 md:px-12">
           <VideoFrame
             src="https://media.raffi.studio/videos/projects/convert-compress/Convert_Compress_Hero_v2.mp4"
-            description="Product Demo"
+            description="Convert & Compress in action"
             className="w-full mx-auto"
+            showTesaStripes={false}
           />
         </div>
       </GridSection>
@@ -240,8 +249,9 @@ export default function ConvertCompressPage() {
           <ProjectSectionContent>
             <ProjectText>
               I wanted the app to feel <TextMarker>native to macOS</TextMarker>,
-              so I chose Swift for development. This allowed for the
-              implementation of{" "}
+              so I chose{" "}
+              <TextureIcon src="/images/texture-icons/swift.webp" alt="Swift" />{" "}
+              Swift for development. This allowed for the implementation of{" "}
               <TextMarker>
                 physics-based animations, trackpad gestures, and haptic feedback
               </TextMarker>
@@ -270,6 +280,14 @@ export default function ConvertCompressPage() {
                 along a specific side are rarely done simultaneously, I used a
                 switch to toggle between these two modes.
               </ProjectText>
+              <div className="w-full mx-auto">
+                <VideoFrame
+                  src="/projects/convert-compress/videos/resize.webm"
+                  description="Resize Width, Height or on shorter side. Switch between cropping and scaling."
+                  className="w-full mx-auto"
+                  showTesaStripes={false}
+                />
+              </div>
             </ProjectTextBlock>
 
             <ProjectTextBlock>
@@ -306,6 +324,12 @@ export default function ConvertCompressPage() {
                 the view to 100%. Parameters can be adjusted while viewing the
                 comparison for <TextMarker>immediate feedback</TextMarker>.
               </ProjectText>
+              <VideoFrame
+                src="/projects/convert-compress/videos/comparison.webm"
+                description="Comparison view"
+                className="w-full mx-auto"
+                showTesaStripes={false}
+              />
             </ProjectTextBlock>
 
             <ProjectTextBlock>
@@ -329,13 +353,43 @@ export default function ConvertCompressPage() {
               <ProjectSubHeading>App Icon</ProjectSubHeading>
               <ProjectText>
                 For the app icon, I used Apple&apos;s new{" "}
-                <TextMarker>Icon Composer in Xcode</TextMarker>, which allows
-                layered, dynamic icons that adapt to light and dark mode. I
-                prepared the individual layers in Figma, then imported them into
-                Icon Composer. The tool limits you to 5 layers which required
-                some fiddling to achieve the depth and hierarchy I had in mind
-                while keeping the icon readable across both appearance modes.
+                <TextMarker>
+                  Icon Composer in{" "}
+                  <TextureIcon
+                    src="/images/texture-icons/xcode.webp"
+                    alt="Xcode"
+                  />{" "}
+                  Xcode
+                </TextMarker>
+                , which allows layered, dynamic icons that adapt to light and
+                dark mode. I prepared the individual layers in{" "}
+                <TextureIcon
+                  src="/images/texture-icons/figma.webp"
+                  alt="Figma"
+                />{" "}
+                Figma, then imported them into Icon Composer. The tool limits
+                you to 5 layers which required some fiddling to achieve the
+                depth and hierarchy I had in mind while keeping the icon
+                readable across both appearance modes.
               </ProjectText>
+              <GridSection>
+                <div className="grid grid-cols-2 gap-16">
+                  <ImageFrame
+                    src="/projects/convert-compress/images/appicon-light.webp"
+                    alt="App Icon Light"
+                    width={500}
+                    height={500}
+                    description="Light mode"
+                  />
+                  <ImageFrame
+                    src="/projects/convert-compress/images/appicon-dark.webp"
+                    alt="App Icon Dark"
+                    width={500}
+                    height={500}
+                    description="Dark mode"
+                  />
+                </div>
+              </GridSection>
             </ProjectTextBlock>
           </ProjectSectionContent>
         </ProjectSection>
@@ -345,8 +399,11 @@ export default function ConvertCompressPage() {
           <ProjectHeading>Release</ProjectHeading>
           <ProjectSectionContent>
             <ProjectText>
-              Preparing for the App Store involved creating assets and
-              translating the app into{" "}
+              Preparing for the{" "}
+              <PencilUnderline href="https://apps.apple.com/us/app/convert-compress/id6752861983">
+                App Store
+              </PencilUnderline>{" "}
+              involved creating assets and translating the app into{" "}
               <TextMarker>over 17 languages</TextMarker>. I released the app on
               October 1, 2025. The process wasn&apos;t entirely smooth; I
               initially requested permission to access the Downloads folder to
@@ -380,21 +437,40 @@ export default function ConvertCompressPage() {
           <ProjectSectionContent>
             <ProjectText>
               Marketing took place almost exclusively on Reddit, with additional
-              launches on Product Hunt and BetaList. I also designed a landing
-              page at{" "}
+              launches on{" "}
+              <PencilUnderline href="https://www.producthunt.com/products/convert-compress">
+                Product Hunt
+              </PencilUnderline>{" "}
+              and{" "}
+              <PencilUnderline href="https://betalist.com/startups/convert-compress">
+                BetaList
+              </PencilUnderline>
+              . I also designed a landing page at{" "}
               <PencilUnderline href="https://convert-compress.com">
                 convert-compress.com
               </PencilUnderline>
-              . Since the tool is <TextMarker>open source</TextMarker>, I could
-              post in developer communities like r/SwiftUI and r/WebDev, though
-              most users came from r/MacApps. My{" "}
+              . Since the tool is{" "}
+              <PencilUnderline href="https://github.com/rpgraffi/convert-compress">
+                open source
+              </PencilUnderline>
+              , I could post in developer communities like r/SwiftUI and
+              r/WebDev, though most users came from r/MacApps. My{" "}
               <PencilUnderline href="https://www.reddit.com/r/SwiftUI/comments/1nzov5y/for_my_first_swift_app_i_built_a_native_macos/">
                 post
               </PencilUnderline>{" "}
               in r/SwiftUI became the subreddit&apos;s{" "}
-              <TextMarker>top-voted post of all time</TextMarker>. Collectively,{" "}
+              <TextMarker>top-voted post of all time</TextMarker>. On Product Hunt, the app{" "}
+              <TextMarker>hit the top 10 with 112 upvotes</TextMarker> without any special marketing for the launch. Collectively,{" "}
               <TextMarker>over 300,000 people</TextMarker> viewed the posts.
             </ProjectText>
+            <ImageFrame
+              src="/projects/convert-compress/images/apple-stats.webp"
+              alt="Apple Connect Stats 29. September 2025 - 7. December 2025"
+              width={1000}
+              height={1000}
+              description="Apple Connect Stats 29. September 2025 - 7. December 2025"
+              className="mix-blend-multiply max-w-text-content mx-auto"
+            />
           </ProjectSectionContent>
         </ProjectSection>
 
@@ -403,7 +479,20 @@ export default function ConvertCompressPage() {
           <ProjectHeading>Development</ProjectHeading>
           <ProjectSectionContent>
             <ProjectText>
-              As this was my <TextMarker>first Swift project</TextMarker>, using
+              As this was my{" "}
+              <TextMarker>
+                first{" "}
+                <TextureIcon
+                  src="/images/texture-icons/swift.webp"
+                  alt="Swift"
+                />{" "}
+                Swift project
+              </TextMarker>
+              , using
+              <TextureIcon
+                src="/images/texture-icons/xcode.webp"
+                alt="Xcode"
+              />{" "}
               Xcode with Cursor helped significantly with understanding the
               syntax. I used Claude Sonnet 4.5 and Gemini 3 to assist with the
               code. The focus was on utilizing{" "}

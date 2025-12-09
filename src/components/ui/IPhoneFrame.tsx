@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 interface IPhoneFrameProps {
@@ -9,7 +10,10 @@ interface IPhoneFrameProps {
 export function IPhoneFrame({ src, alt, className = "" }: IPhoneFrameProps) {
   return (
     <div
-      className={`relative h-full w-auto aspect-430/932 rounded-[52px] border-4 border-zinc-700 overflow-hidden ${className}`}
+      className={cn(
+        "relative h-full w-auto aspect-[430/932] md:rounded-[52px] rounded-4xl border-4 border-zinc-700 overflow-hidden",
+        className
+      )}
       style={{
         // @ts-expect-error -- corner-shape is not yet in CSSProperties
         cornerShape: "superellipse(1.6)",

@@ -28,14 +28,20 @@ export const IPhoneCarousel: React.FC<IPhoneCarouselProps> = ({
 
   return (
     <div className={`w-full ${className}`}>
-      <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex items-center">
+      <div
+        className="overflow-hidden h-[55vh] md:h-auto [mask-image:linear-gradient(to_bottom,black_60%,transparent)] md:[mask-image:none]"
+        ref={emblaRef}
+      >
+        <div className="flex items-start md:items-center">
           {images.map((image, index) => (
-            <div key={index} className="shrink-0 pl-4 md:pl-8">
+            <div
+              key={index}
+              className="shrink-0 grow-0 basis-[70%] md:basis-auto pl-4 md:pl-8 min-w-0"
+            >
               <IPhoneFrame
                 src={image.src}
                 alt={image.alt}
-                className={`h-[400px] md:h-[500px] ${phoneClassName}`}
+                className={`w-full h-auto md:w-auto md:h-[500px] ${phoneClassName}`}
               />
             </div>
           ))}

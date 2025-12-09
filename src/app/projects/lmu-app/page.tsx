@@ -19,6 +19,7 @@ import { TextMarker } from "@/components/natural-ui/TextMarker";
 import ShadowBackground from "@/components/shadows/ShadowBackground";
 import { InlineCode } from "@/components/ui/Code";
 import { GridSection } from "@/components/ui/GridSection";
+import { ImageFrame } from "@/components/ui/ImageFrame";
 import { IPhoneCarousel } from "@/components/ui/IPhoneCarousel";
 import { StarRating } from "@/components/ui/StarRating";
 import { TextureIcon } from "@/components/ui/TextureIcon";
@@ -39,63 +40,63 @@ export default function LMUAppPage() {
             <IPhoneCarousel
               images={[
                 {
-                  src: "/images/projects/lmu-app/phones/phone-1.webp",
+                  src: "/projects/lmu-app/images/phones/phone-1.webp",
                   alt: "LMU App Screenshot 1",
                 },
                 {
-                  src: "/images/projects/lmu-app/phones/phone-2.webp",
+                  src: "/projects/lmu-app/images/phones/phone-2.webp",
                   alt: "LMU App Screenshot 2",
                 },
                 {
-                  src: "/images/projects/lmu-app/phones/phone-3.webp",
+                  src: "/projects/lmu-app/images/phones/phone-3.webp",
                   alt: "LMU App Screenshot 3",
                 },
                 {
-                  src: "/images/projects/lmu-app/phones/phone-4.webp",
+                  src: "/projects/lmu-app/images/phones/phone-4.webp",
                   alt: "LMU App Screenshot 4",
                 },
                 {
-                  src: "/images/projects/lmu-app/phones/phone-5.webp",
+                  src: "/projects/lmu-app/images/phones/phone-5.webp",
                   alt: "LMU App Screenshot 5",
                 },
                 {
-                  src: "/images/projects/lmu-app/phones/phone-6.webp",
+                  src: "/projects/lmu-app/images/phones/phone-6.webp",
                   alt: "LMU App Screenshot 6",
                 },
                 {
-                  src: "/images/projects/lmu-app/phones/phone-7.webp",
+                  src: "/projects/lmu-app/images/phones/phone-7.webp",
                   alt: "LMU App Screenshot 7",
                 },
                 {
-                  src: "/images/projects/lmu-app/phones/phone-8.webp",
+                  src: "/projects/lmu-app/images/phones/phone-8.webp",
                   alt: "LMU App Screenshot 8",
                 },
                 {
-                  src: "/images/projects/lmu-app/phones/phone-9.webp",
+                  src: "/projects/lmu-app/images/phones/phone-9.webp",
                   alt: "LMU App Screenshot 9",
                 },
                 {
-                  src: "/images/projects/lmu-app/phones/phone-10.webp",
+                  src: "/projects/lmu-app/images/phones/phone-10.webp",
                   alt: "LMU App Screenshot 10",
                 },
                 {
-                  src: "/images/projects/lmu-app/phones/phone-11.webp",
+                  src: "/projects/lmu-app/images/phones/phone-11.webp",
                   alt: "LMU App Screenshot 11",
                 },
                 {
-                  src: "/images/projects/lmu-app/phones/phone-12.webp",
+                  src: "/projects/lmu-app/images/phones/phone-12.webp",
                   alt: "LMU App Screenshot 12",
                 },
                 {
-                  src: "/images/projects/lmu-app/phones/phone-13.webp",
+                  src: "/projects/lmu-app/images/phones/phone-13.webp",
                   alt: "LMU App Screenshot 13",
                 },
                 {
-                  src: "/images/projects/lmu-app/phones/phone-14.webp",
+                  src: "/projects/lmu-app/images/phones/phone-14.webp",
                   alt: "LMU App Screenshot 14",
                 },
                 {
-                  src: "/images/projects/lmu-app/phones/phone-15.webp",
+                  src: "/projects/lmu-app/images/phones/phone-15.webp",
                   alt: "LMU App Screenshot 15",
                 },
               ]}
@@ -118,7 +119,7 @@ export default function LMUAppPage() {
                 Students
               </DrawingHeadline>
 
-              <div className="flex gap-6 text-lg text-zinc-800">
+              <div className="flex flex-wrap gap-6 text-lg text-zinc-800">
                 <PencilUnderline href="https://apps.apple.com/de/app/lmu-students/id6505039729">
                   App Store
                 </PencilUnderline>
@@ -239,8 +240,11 @@ export default function LMUAppPage() {
                 should be more students taking part in creating their own
                 solution. <TextMarker>From students, for students</TextMarker>.
                 So we talked to professors and PhDs and were able to host our
-                own official class called „Full Stack App Development" for the
-                winter and summer semester 2025.
+                own official class called{" "}
+                <PencilUnderline href="https://www.medien.ifi.lmu.de/lehre/arbeiten/detail.xhtml-php?pub=alt_lmustudentsapp">
+                  „Full Stack App Development"
+                </PencilUnderline>{" "}
+                for the winter and summer semester 2025.
               </ProjectText>
               <ProjectText>
                 We received over 30 applications from students to take the class
@@ -248,15 +252,14 @@ export default function LMUAppPage() {
                 progress, teaching concepts of modern frontend architecture,
                 color theory and more.
               </ProjectText>
-              <GridSection className="max-w-text-content mx-auto flex items-center justify-center py-8">
-                <Image
-                  src="/images/projects/lmu-app/class-team.webp"
-                  alt="Class Team"
-                  width={1024}
-                  height={1024}
-                  className="w-full h-auto"
-                />
-              </GridSection>
+              <ImageFrame
+                src="/projects/lmu-app/images/class-team.webp"
+                alt="Class Team"
+                width={1024}
+                height={1024}
+                description="Full Stack App Development Class Summer Semester 2025"
+                className="w-full h-auto max-w-text-content mx-auto"
+              />
             </ProjectTextBlock>
           </ProjectSectionContent>
         </ProjectSection>
@@ -392,15 +395,14 @@ export default function LMUAppPage() {
               </PencilUnderline>{" "}
               of the Media Informatics Group.
             </ProjectText>
-            <GridSection className="max-w-text-content mx-auto flex items-center justify-center py-8">
-              <Image
-                src="/images/projects/lmu-app/beta-release.webp"
+              <ImageFrame
+                src="/projects/lmu-app/images/beta-release.webp"
                 alt="Beta Release"
                 width={1024}
                 height={1024}
-                className="w-full h-auto"
+                description="Beta Release Exhibition"
+                className="w-full h-auto max-w-text-content mx-auto"
               />
-            </GridSection>
             <ProjectText>
               Fresh to the start of the Summer Semester 25 we painted the final
               strokes and <TextMarker>released the app officially</TextMarker>.
@@ -435,15 +437,14 @@ export default function LMUAppPage() {
                 Supporting light and dark mode and{" "}
                 <TextMarker>over 100 custom components</TextMarker>.
               </ProjectText>
-              <GridSection className="max-w-text-content mx-auto flex items-center justify-center py-8">
-                <Image
-                  src="/images/projects/lmu-app/designsystem_cover.webp"
-                  alt="Beta Release"
+                <ImageFrame
+                  src="/projects/lmu-app/images/designsystem_cover.webp"
+                  alt="Design System Cover"
                   width={1024}
                   height={1024}
-                  className="w-full h-auto"
+                  description="Design System Cover"
+                  className="w-full h-auto max-w-text-content mx-auto"
                 />
-              </GridSection>
               <ProjectText>
                 The system was built in a way that can also be reproduced in
                 code in our{" "}
@@ -472,15 +473,15 @@ export default function LMUAppPage() {
                 the same contrast as
                 <InlineCode>red-10</InlineCode>.
               </ProjectText>
-              <GridSection className="w-full mx-auto flex items-center justify-center py-8">
-                <Image
-                  src="/images/projects/lmu-app/oklab.gif"
+                <ImageFrame
+                  src="/projects/lmu-app/images/oklab.gif"
                   alt="OkLCH Color Space"
                   unoptimized
                   width={384}
                   height={384}
+                  description="Color Space Comparison"
+                  className="w-full h-auto max-w-text-content mx-auto"
                 />
-              </GridSection>
               <ProjectText>
                 Since our brand color is green, we chose it as our accent color
                 which isn&apos;t ideal because it can get confusing with success
@@ -496,15 +497,14 @@ export default function LMUAppPage() {
                 Figma as primary color tokens and built a second semantic layer
                 on top that was exposed to our design files.
               </ProjectText>
-              <GridSection className="w-full mx-auto flex items-center justify-center py-8">
-                <Image
-                  src="/images/projects/lmu-app/designsystem-color-variables.png"
+                <ImageFrame
+                  src="/projects/lmu-app/images/designsystem-color-variables.png"
                   alt="Design System Color Variables"
                   unoptimized
                   width={1024}
                   height={1024}
+                  description="Design System Color Variables"
                 />
-              </GridSection>
             </ProjectTextBlock>
           </ProjectSectionContent>
         </ProjectSection>
@@ -556,11 +556,12 @@ export default function LMUAppPage() {
               forwarding.
             </ProjectText>
             <GridSection className="max-w-text-content mx-auto flex items-center justify-center py-8">
-              <Image
-                src="/images/projects/lmu-app/backend-structure.png"
+              <ImageFrame
+                src="/projects/lmu-app/images/backend-structure.png"
                 alt="Backend Structure"
                 width={1024}
                 height={1024}
+                description="Backend Structure"
                 className="w-full h-auto"
               />
             </GridSection>
@@ -700,12 +701,13 @@ export default function LMUAppPage() {
               some would even call it over-engineering.
             </ProjectText>
             <GridSection className="max-w-text-content mx-auto flex items-center justify-center py-8">
-              <Image
-                src="/images/projects/lmu-app/frontendmvvm.png"
+              <ImageFrame
+                src="/projects/lmu-app/images/frontendmvvm.png"
                 alt="Frontend MVVM"
                 width={1024}
                 height={1024}
-                className="w-full h-auto"
+                description="Frontend MVVM"
+                className="w-full h-auto max-w-text-content mx-auto"
               />
             </GridSection>
           </ProjectSectionContent>

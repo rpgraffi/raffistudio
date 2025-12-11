@@ -17,7 +17,7 @@ import DrawingHeadline from "@/components/natural-ui/DrawingHeadline";
 import { PencilUnderline } from "@/components/natural-ui/PencilStroke";
 import { RuledText } from "@/components/natural-ui/RuledText";
 import { TextMarker } from "@/components/natural-ui/TextMarker";
-import ShadowBackground from "@/components/shadows/ShadowBackground";
+import { PageTransitionWrapper } from "@/components/PageTransition";
 import { InlineCode } from "@/components/ui/Code";
 import { GridSection } from "@/components/ui/GridSection";
 import { ImageFrame } from "@/components/ui/ImageFrame";
@@ -44,825 +44,828 @@ export default function LMUAppPage() {
   } = useProjectIntro();
 
   return (
-    <main className="min-h-screen font-sans relative overflow-x-clip">
-      {/* Shadow Background - fades in once loaded */}
-      <motion.div
-        className="fixed inset-0 -z-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: showBackground ? 1 : 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        <ShadowBackground className="w-full h-full" />
-      </motion.div>
-
-      {/* Background overlay - fades out when shadow background is ready */}
-      <motion.div
-        className="fixed inset-0 z-40 bg-stone-100 pointer-events-none"
-        initial={{ opacity: 1 }}
-        animate={{ opacity: showBackground ? 0 : 1 }}
-        transition={{ duration: 0.8 }}
-        style={{ pointerEvents: showBackground ? "none" : "auto" }}
-      />
-
-      {/* Header with fade-in */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{
-          opacity: isIntroComplete ? 1 : 0,
-          y: isIntroComplete ? 0 : -20,
-        }}
-        transition={springConfig}
-      >
-        <Header />
-      </motion.div>
-
-      {/* Hero Content - z-50 to ensure headline is above bg-overlay during intro */}
-      <div className="flex-1 w-full min-h-screen mx-auto flex flex-col gap-8 pb-20 pt-32 md:pt-32 relative z-50">
-        {/* Top Content Area - Phone Carousel */}
+    <PageTransitionWrapper>
+      <main className="min-h-screen font-sans relative overflow-x-clip">
+        {/* Header with fade-in */}
         <motion.div
-          className="flex-1 flex justify-center items-center min-h-[400px] z-10"
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{
             opacity: isIntroComplete ? 1 : 0,
-            y: isIntroComplete ? 0 : 40,
+            y: isIntroComplete ? 0 : -20,
           }}
-          transition={{ ...springConfig, delay: 0.1 }}
+          transition={springConfig}
         >
-          <IPhoneCarousel
-            images={[
-              {
-                src: "/projects/lmu-app/images/phones/phone-1.webp",
-                alt: "LMU App Screenshot 1",
-              },
-              {
-                src: "/projects/lmu-app/images/phones/phone-2.webp",
-                alt: "LMU App Screenshot 2",
-              },
-              {
-                src: "/projects/lmu-app/images/phones/phone-3.webp",
-                alt: "LMU App Screenshot 3",
-              },
-              {
-                src: "/projects/lmu-app/images/phones/phone-4.webp",
-                alt: "LMU App Screenshot 4",
-              },
-              {
-                src: "/projects/lmu-app/images/phones/phone-5.webp",
-                alt: "LMU App Screenshot 5",
-              },
-              {
-                src: "/projects/lmu-app/images/phones/phone-6.webp",
-                alt: "LMU App Screenshot 6",
-              },
-              {
-                src: "/projects/lmu-app/images/phones/phone-7.webp",
-                alt: "LMU App Screenshot 7",
-              },
-              {
-                src: "/projects/lmu-app/images/phones/phone-8.webp",
-                alt: "LMU App Screenshot 8",
-              },
-              {
-                src: "/projects/lmu-app/images/phones/phone-9.webp",
-                alt: "LMU App Screenshot 9",
-              },
-              {
-                src: "/projects/lmu-app/images/phones/phone-10.webp",
-                alt: "LMU App Screenshot 10",
-              },
-              {
-                src: "/projects/lmu-app/images/phones/phone-11.webp",
-                alt: "LMU App Screenshot 11",
-              },
-              {
-                src: "/projects/lmu-app/images/phones/phone-12.webp",
-                alt: "LMU App Screenshot 12",
-              },
-              {
-                src: "/projects/lmu-app/images/phones/phone-13.webp",
-                alt: "LMU App Screenshot 13",
-              },
-              {
-                src: "/projects/lmu-app/images/phones/phone-14.webp",
-                alt: "LMU App Screenshot 14",
-              },
-              {
-                src: "/projects/lmu-app/images/phones/phone-15.webp",
-                alt: "LMU App Screenshot 15",
-              },
-            ]}
-          />
+          <Header />
         </motion.div>
 
-        {/* Bottom Split View */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end z-10 max-w-site mx-auto px-8 md:px-12">
-          {/* Left: Title & Links */}
-          <div className="md:col-span-5 flex flex-col gap-8">
-            {/* Single Headline - positioned via wrapper, animated via framer-motion */}
-            <div
-              ref={headlineRef}
-              className="relative"
-              style={{ visibility: headlineOffset ? "visible" : "hidden" }}
-            >
-              <motion.div
-                className="relative z-50"
-                initial={false}
-                animate={{
-                  x:
-                    isHeadlineCentered && headlineOffset ? headlineOffset.x : 0,
-                  y:
-                    isHeadlineCentered && headlineOffset ? headlineOffset.y : 0,
-                }}
-                // Instant for initial positioning, spring for the move back
-                transition={hasInitialPosition ? springConfig : { duration: 0 }}
+        {/* Hero Content - z-50 to ensure headline is above bg-overlay during intro */}
+        <div className="flex-1 w-full min-h-screen mx-auto flex flex-col gap-8 pb-20 pt-32 md:pt-32 relative z-50">
+          {/* Top Content Area - Phone Carousel */}
+          <motion.div
+            className="flex-1 flex justify-center items-center min-h-[400px] z-10"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{
+              opacity: isIntroComplete ? 1 : 0,
+              y: isIntroComplete ? 0 : 40,
+            }}
+            transition={{ ...springConfig, delay: 0.1 }}
+          >
+            <IPhoneCarousel
+              images={[
+                {
+                  src: "/projects/lmu-app/images/phones/phone-1.webp",
+                  alt: "LMU App Screenshot 1",
+                },
+                {
+                  src: "/projects/lmu-app/images/phones/phone-2.webp",
+                  alt: "LMU App Screenshot 2",
+                },
+                {
+                  src: "/projects/lmu-app/images/phones/phone-3.webp",
+                  alt: "LMU App Screenshot 3",
+                },
+                {
+                  src: "/projects/lmu-app/images/phones/phone-4.webp",
+                  alt: "LMU App Screenshot 4",
+                },
+                {
+                  src: "/projects/lmu-app/images/phones/phone-5.webp",
+                  alt: "LMU App Screenshot 5",
+                },
+                {
+                  src: "/projects/lmu-app/images/phones/phone-6.webp",
+                  alt: "LMU App Screenshot 6",
+                },
+                {
+                  src: "/projects/lmu-app/images/phones/phone-7.webp",
+                  alt: "LMU App Screenshot 7",
+                },
+                {
+                  src: "/projects/lmu-app/images/phones/phone-8.webp",
+                  alt: "LMU App Screenshot 8",
+                },
+                {
+                  src: "/projects/lmu-app/images/phones/phone-9.webp",
+                  alt: "LMU App Screenshot 9",
+                },
+                {
+                  src: "/projects/lmu-app/images/phones/phone-10.webp",
+                  alt: "LMU App Screenshot 10",
+                },
+                {
+                  src: "/projects/lmu-app/images/phones/phone-11.webp",
+                  alt: "LMU App Screenshot 11",
+                },
+                {
+                  src: "/projects/lmu-app/images/phones/phone-12.webp",
+                  alt: "LMU App Screenshot 12",
+                },
+                {
+                  src: "/projects/lmu-app/images/phones/phone-13.webp",
+                  alt: "LMU App Screenshot 13",
+                },
+                {
+                  src: "/projects/lmu-app/images/phones/phone-14.webp",
+                  alt: "LMU App Screenshot 14",
+                },
+                {
+                  src: "/projects/lmu-app/images/phones/phone-15.webp",
+                  alt: "LMU App Screenshot 15",
+                },
+              ]}
+            />
+          </motion.div>
+
+          {/* Bottom Split View */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end z-10 max-w-site mx-auto px-8 md:px-12">
+            {/* Left: Title & Links */}
+            <div className="md:col-span-5 flex flex-col gap-8">
+              {/* Single Headline - positioned via wrapper, animated via framer-motion */}
+              <div
+                ref={headlineRef}
+                className="relative"
+                style={{ visibility: headlineOffset ? "visible" : "hidden" }}
               >
-                <DrawingHeadline
-                  className="text-5xl md:text-7xl text-zinc-900 font-sentient"
-                  triggerOnView={false}
-                  animate={startDrawing}
-                  lineDelay={0.5}
-                  as="h1"
+                <motion.div
+                  className="relative z-50"
+                  initial={false}
+                  animate={{
+                    x:
+                      isHeadlineCentered && headlineOffset
+                        ? headlineOffset.x
+                        : 0,
+                    y:
+                      isHeadlineCentered && headlineOffset
+                        ? headlineOffset.y
+                        : 0,
+                  }}
+                  // Instant for initial positioning, spring for the move back
+                  transition={
+                    hasInitialPosition ? springConfig : { duration: 0 }
+                  }
                 >
-                  LMU
-                  <br />
-                  Students
-                </DrawingHeadline>
+                  <DrawingHeadline
+                    className="text-5xl md:text-7xl text-zinc-900 font-sentient"
+                    triggerOnView={false}
+                    animate={startDrawing}
+                    lineDelay={0.5}
+                    as="h1"
+                  >
+                    LMU
+                    <br />
+                    Students
+                  </DrawingHeadline>
+                </motion.div>
+              </div>
+
+              {/* Links fade in after complete */}
+              <motion.div
+                className="flex flex-wrap gap-6 text-lg text-zinc-800"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{
+                  opacity: isIntroComplete ? 1 : 0,
+                  y: isIntroComplete ? 0 : 20,
+                }}
+                transition={{ ...springConfig, delay: 0.2 }}
+              >
+                <PencilUnderline href="https://apps.apple.com/de/app/lmu-students/id6505039729">
+                  App Store
+                </PencilUnderline>
+                <PencilUnderline href="https://play.google.com/store/apps/details?id=com.lmu_dev.lmu_app">
+                  Play Store
+                </PencilUnderline>
+                <PencilUnderline href="https://github.com/lmu-devs/">
+                  GitHub
+                </PencilUnderline>
+                <PencilUnderline href="https://lmu-dev.org">
+                  Website
+                </PencilUnderline>
               </motion.div>
             </div>
 
-            {/* Links fade in after complete */}
+            {/* Spacer */}
+            <div className="md:col-span-2 hidden md:block"></div>
+
+            {/* Right: Description */}
             <motion.div
-              className="flex flex-wrap gap-6 text-lg text-zinc-800"
+              className="md:col-span-5"
               initial={{ opacity: 0, y: 20 }}
               animate={{
                 opacity: isIntroComplete ? 1 : 0,
                 y: isIntroComplete ? 0 : 20,
               }}
-              transition={{ ...springConfig, delay: 0.2 }}
+              transition={{ ...springConfig, delay: 0.3 }}
             >
-              <PencilUnderline href="https://apps.apple.com/de/app/lmu-students/id6505039729">
-                App Store
-              </PencilUnderline>
-              <PencilUnderline href="https://play.google.com/store/apps/details?id=com.lmu_dev.lmu_app">
-                Play Store
-              </PencilUnderline>
-              <PencilUnderline href="https://github.com/lmu-devs/">
-                GitHub
-              </PencilUnderline>
-              <PencilUnderline href="https://lmu-dev.org">
-                Website
-              </PencilUnderline>
+              <div className="text-xl md:text-2xl text-zinc-800 leading-10 font-normal">
+                <RuledText className="leading-10">
+                  An open source mobile app for students of the Ludwig
+                  Maximilian University of Munich.
+                  <br />
+                  From students, for students. Available on iOS and Android.
+                </RuledText>
+              </div>
             </motion.div>
           </div>
-
-          {/* Spacer */}
-          <div className="md:col-span-2 hidden md:block"></div>
-
-          {/* Right: Description */}
-          <motion.div
-            className="md:col-span-5"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{
-              opacity: isIntroComplete ? 1 : 0,
-              y: isIntroComplete ? 0 : 20,
-            }}
-            transition={{ ...springConfig, delay: 0.3 }}
-          >
-            <div className="text-xl md:text-2xl text-zinc-800 leading-10 font-normal">
-              <RuledText className="leading-10">
-                An open source mobile app for students of the Ludwig Maximilian
-                University of Munich.
-                <br />
-                From students, for students. Available on iOS and Android.
-              </RuledText>
-            </div>
-          </motion.div>
         </div>
-      </div>
 
-      <TextureSection>
-        <div className="py-20 md:py-32">
-          <ProjectStats
-            stats={[
-              { value: "12.000", label: "Downloads" },
-              { value: "4,9", label: "Stars" },
-              { value: "122", label: "Reviews" },
-              { value: "14", label: "GitHub Stars" },
-            ]}
-            tools={[
-              { src: "/images/texture-icons/figma.webp", alt: "Figma" },
-              { src: "/images/texture-icons/dart.webp", alt: "Dart" },
-              { src: "/images/texture-icons/flutter.webp", alt: "Flutter" },
-              { src: "/images/texture-icons/git.webp", alt: "Git" },
-              { src: "/images/texture-icons/github.webp", alt: "GitHub" },
-              { src: "/images/texture-icons/docker.webp", alt: "Docker" },
-              { src: "/images/texture-icons/python.webp", alt: "Python" },
-              { src: "/images/texture-icons/fastapi.webp", alt: "FastAPI" },
-              { src: "/images/texture-icons/graphql.webp", alt: "GraphQL" },
-              { src: "/images/texture-icons/nginx.webp", alt: "Nginx" },
-              { src: "/images/texture-icons/postgres.webp", alt: "PostgreSQL" },
-            ]}
-          />
-          <div className="w-full max-w-site mx-auto p-8 md:p-12 flex flex-wrap gap-8 items-center justify-between">
-            <StarRating rating={4.9} className="w-full max-w-[400px]" />
-            <Link
-              href="https://apps.apple.com/de/app/lmu-students/id6505039729"
-              target="_blank"
-              className="block h-[80px] md:h-[80px] w-auto hover:scale-105 transition-transform duration-300"
-            >
-              <Image
-                src="/images/texture-icons/download_app_store.webp"
-                alt="Download from App Store"
-                width={800}
-                height={200}
-                className="w-full md:w-auto md:h-full object-contain"
-              />
-            </Link>
-          </div>
-        </div>
-      </TextureSection>
-
-      {/* Content Section */}
-      <ProjectContent>
-        {/* Motivation */}
-        <ProjectSection>
-          <ProjectHeading>Motivation</ProjectHeading>
-          <ProjectSectionContent>
-            <ProjectText>
-              We&apos;re writing the year 2024 and the{" "}
-              <TextMarker>biggest university in Germany</TextMarker>, the LMU,
-              still has no app for students. No easy way to check the canteen
-              menu, available libraries, grades, lectures and services cluttered
-              around 20 different websites.
-            </ProjectText>
-          </ProjectSectionContent>
-        </ProjectSection>
-
-        {/* The Team */}
-        <ProjectSection>
-          <ProjectHeading>The Team</ProjectHeading>
-          <ProjectSectionContent>
-            <ProjectText>
-              I wasn&apos;t alone with this thought. One night at Café Cosmos we
-              forged plans to solve this ourselves.{" "}
-              <TextMarker>
-                Suffering together created a strong connection
-              </TextMarker>
-              . So{" "}
-              <PencilUnderline href="https://www.linkedin.com/in/paul-walter-74009224b/">
-                Paul Walter
-              </PencilUnderline>
-              ,{" "}
-              <PencilUnderline href="https://www.linkedin.com/in/lukasplenk/">
-                Lukas Plenk
-              </PencilUnderline>
-              , me and some other LMU students started the vision and began the
-              work.
-            </ProjectText>
-
-            <ProjectTextBlock>
-              <ProjectSubHeading>University Course</ProjectSubHeading>
-              <ProjectText>
-                At one point we thought, why limit the capacity to us? There
-                should be more students taking part in creating their own
-                solution. <TextMarker>From students, for students</TextMarker>.
-                So we talked to professors and PhDs and were able to host our
-                own official class called{" "}
-                <PencilUnderline href="https://www.medien.ifi.lmu.de/lehre/arbeiten/detail.xhtml-php?pub=alt_lmustudentsapp">
-                  „Full Stack App Development"
-                </PencilUnderline>{" "}
-                for the winter and summer semester 2025.
-              </ProjectText>
-              <ProjectText>
-                We received over 30 applications from students to take the class
-                and chose 8 to join the team. We had weekly meetings discussing
-                progress, teaching concepts of modern frontend architecture,
-                color theory and more.
-              </ProjectText>
-              <ImageFrame
-                src="/projects/lmu-app/images/class-team.webp"
-                alt="Class Team"
-                width={1024}
-                height={1024}
-                description="Full Stack App Development Class Summer Semester 2025"
-                className="w-full h-auto max-w-text-content mx-auto"
-              />
-            </ProjectTextBlock>
-          </ProjectSectionContent>
-        </ProjectSection>
-
-        {/* Challenges */}
-        <ProjectSection>
-          <ProjectHeading>Challenges</ProjectHeading>
-          <ProjectSectionContent>
-            <ProjectText>
-              The whole project had several obstacles, to name some:
-            </ProjectText>
-
-            <ProjectTextBlock>
-              <ProjectSubHeading>Legacy Infrastructure</ProjectSubHeading>
-              <ProjectText>
-                The outdated system doesn&apos;t only make it hard for students
-                to look up information but also for our system to access it.
-                There were <TextMarker>no clean APIs and interfaces</TextMarker>{" "}
-                to access the information. So it was evident we had to build
-                that ourselves, store the data on our side to not overwhelm the
-                old system and bring the information into a new structure that
-                can be used to populate a UI with information. This way we would
-                have the whole data pipeline in control.
-              </ProjectText>
-            </ProjectTextBlock>
-
-            <ProjectTextBlock>
-              <ProjectSubHeading>
-                Learning Backend Development
-              </ProjectSubHeading>
-              <ProjectText>
-                Nobody on our team had ever written a backend. So the whole
-                hosting, server, database, scraping, API thing was new to us.
-                Even though my background is more on the UX side,{" "}
-                <TextMarker>
-                  I jumped head first into the topic and took responsibility
-                </TextMarker>{" "}
-                of it since then.
-              </ProjectText>
-            </ProjectTextBlock>
-
-            <ProjectTextBlock>
-              <ProjectSubHeading>User Communication</ProjectSubHeading>
-              <ProjectText>
-                It was clear that the first release was missing some essential
-                student features like checking available courses, calendar and
-                news, due to lack of APIs and infrastructure from LMU. So we
-                needed a way to show what the app can do, what is missing and
-                actually give users a way to communicate their needs.
-              </ProjectText>
-              <ProjectText>
-                For this we added a <TextMarker>wishlist</TextMarker>, where
-                they were able to see and vote on current ideas. This addressed
-                the high expectations students have for an app, and also gave us
-                a way to prioritize what we would implement next.
-              </ProjectText>
-            </ProjectTextBlock>
-          </ProjectSectionContent>
-        </ProjectSection>
-
-        {/* Making it Official */}
-        <ProjectSection>
-          <ProjectHeading>Making it Official</ProjectHeading>
-          <ProjectSectionContent>
-            <ProjectText>
-              We definitely wanted to make the app look, feel and appear
-              official. So we needed a legal way to call it the{" "}
-              <TextMarker>„LMU Students" App</TextMarker>, which we decided to
-              be the name after a long brainstorming session.
-            </ProjectText>
-            <ProjectText>
-              This and other reasons led us to first found the university group{" "}
-              <TextMarker>LMU Developers</TextMarker> and afterwards the student
-              organization „Technik Referat" of the Student Council. I was
-              officially elected to be the leader of those organizations, but we
-              shared that role equally in our team. Everyone leads so everyone
-              takes responsibility and has the ability to decide.
-            </ProjectText>
-          </ProjectSectionContent>
-        </ProjectSection>
-
-        {/* Stakeholders */}
-        <ProjectSection>
-          <ProjectHeading>Stakeholders</ProjectHeading>
-          <ProjectSectionContent>
-            <ProjectText>
-              Over the course of 2 years we met a lot of people. Something they
-              had in common was they really loved what we were doing so far.
-              Students (of course), but{" "}
-              <TextMarker>
-                also professors, the head of IT, and the new vice presidents
-                Julia Dittrich and Philip Baaske
-              </TextMarker>
-              .
-            </ProjectText>
-            <ProjectText>
-              Special thanks goes to <TextMarker>Prof. Florian Alt</TextMarker>{" "}
-              and <TextMarker>Dr. Florian Behmann</TextMarker> who supported our
-              journey enabling us offer a class for students to learn about app
-              development. Other honorable mentions go to the Student Council,
-              the IT department at LMU and all the students who supported us.
-            </ProjectText>
-          </ProjectSectionContent>
-        </ProjectSection>
-
-        {/* Competition */}
-        <ProjectSection>
-          <ProjectHeading>Competition</ProjectHeading>
-          <ProjectSectionContent>
-            <ProjectText>
-              In every step of our journey we compared ourselves to other
-              companies or student organizations. To name some: UniNow, Studo,
-              TUM Campus, Ingolstadt Neuland, ETH Zurich, TU Berlin, Stanford
-              and more. The goal was clear:{" "}
-              <TextMarker>
-                extracting what works &amp; building it better
-              </TextMarker>
-              .
-            </ProjectText>
-          </ProjectSectionContent>
-        </ProjectSection>
-
-        {/* Release */}
-        <ProjectSection>
-          <ProjectHeading>Release</ProjectHeading>
-          <ProjectSectionContent>
-            <ProjectText>
-              After half a year, on 03.02.2025, we released our first internal
-              beta version to the App Store and Play Store. We invited many
-              friends and students who visited our official university{" "}
-              <PencilUnderline href="https://www.linkedin.com/feed/update/urn:li:activity:7292482113751187457">
-                exhibition
-              </PencilUnderline>{" "}
-              of the Media Informatics Group.
-            </ProjectText>
-            <ImageFrame
-              src="/projects/lmu-app/images/beta-release.webp"
-              alt="Beta Release"
-              width={1024}
-              height={1024}
-              description="Beta Release Exhibition"
-              className="w-full h-auto max-w-text-content mx-auto"
+        <TextureSection>
+          <div className="py-20 md:py-32">
+            <ProjectStats
+              stats={[
+                { value: "12.000", label: "Downloads" },
+                { value: "4,9", label: "Stars" },
+                { value: "122", label: "Reviews" },
+                { value: "14", label: "GitHub Stars" },
+              ]}
+              tools={[
+                { src: "/images/texture-icons/figma.webp", alt: "Figma" },
+                { src: "/images/texture-icons/dart.webp", alt: "Dart" },
+                { src: "/images/texture-icons/flutter.webp", alt: "Flutter" },
+                { src: "/images/texture-icons/git.webp", alt: "Git" },
+                { src: "/images/texture-icons/github.webp", alt: "GitHub" },
+                { src: "/images/texture-icons/docker.webp", alt: "Docker" },
+                { src: "/images/texture-icons/python.webp", alt: "Python" },
+                { src: "/images/texture-icons/fastapi.webp", alt: "FastAPI" },
+                { src: "/images/texture-icons/graphql.webp", alt: "GraphQL" },
+                { src: "/images/texture-icons/nginx.webp", alt: "Nginx" },
+                {
+                  src: "/images/texture-icons/postgres.webp",
+                  alt: "PostgreSQL",
+                },
+              ]}
             />
-            <ProjectText>
-              Fresh to the start of the Summer Semester 25 we painted the final
-              strokes and <TextMarker>released the app officially</TextMarker>.
-            </ProjectText>
-          </ProjectSectionContent>
-        </ProjectSection>
+            <div className="w-full max-w-site mx-auto p-8 md:p-12 flex flex-wrap gap-8 items-center justify-between">
+              <StarRating rating={4.9} className="w-full max-w-[400px]" />
+              <Link
+                href="https://apps.apple.com/de/app/lmu-students/id6505039729"
+                target="_blank"
+                className="block h-[80px] md:h-[80px] w-auto hover:scale-105 transition-transform duration-300"
+              >
+                <Image
+                  src="/images/texture-icons/download_app_store.webp"
+                  alt="Download from App Store"
+                  width={800}
+                  height={200}
+                  className="w-full md:w-auto md:h-full object-contain"
+                />
+              </Link>
+            </div>
+          </div>
+        </TextureSection>
 
-        {/* Design */}
-        <ProjectSection>
-          <ProjectHeading>Design</ProjectHeading>
-          <ProjectSectionContent>
-            <ProjectTextBlock>
-              <ProjectSubHeading>Language</ProjectSubHeading>
+        {/* Content Section */}
+        <ProjectContent>
+          {/* Motivation */}
+          <ProjectSection>
+            <ProjectHeading>Motivation</ProjectHeading>
+            <ProjectSectionContent>
               <ProjectText>
-                The style I aimed for was{" "}
-                <TextMarker>modern, simple and mobile friendly</TextMarker>. I
-                took inspiration from other apps I very much enjoy using, like
-                Revolut.
+                We&apos;re writing the year 2024 and the{" "}
+                <TextMarker>biggest university in Germany</TextMarker>, the LMU,
+                still has no app for students. No easy way to check the canteen
+                menu, available libraries, grades, lectures and services
+                cluttered around 20 different websites.
               </ProjectText>
-            </ProjectTextBlock>
+            </ProjectSectionContent>
+          </ProjectSection>
 
-            <ProjectTextBlock>
-              <ProjectSubHeading>Design System</ProjectSubHeading>
+          {/* The Team */}
+          <ProjectSection>
+            <ProjectHeading>The Team</ProjectHeading>
+            <ProjectSectionContent>
               <ProjectText>
-                The fundament of all designs: our design system. It was
-                handcrafted by myself in{" "}
-                <TextureIcon
-                  src="/images/texture-icons/figma.webp"
-                  alt="Figma"
-                />{" "}
-                Figma, with auto layout, variables, components and variants.
-                Supporting light and dark mode and{" "}
-                <TextMarker>over 100 custom components</TextMarker>.
-              </ProjectText>
-              <ImageFrame
-                src="/projects/lmu-app/images/designsystem_cover.webp"
-                alt="Design System Cover"
-                width={1024}
-                height={1024}
-                description="Design System Cover"
-                className="w-full h-auto max-w-text-content mx-auto"
-              />
-              <ProjectText>
-                The system was built in a way that can also be reproduced in
-                code in our{" "}
-                <TextureIcon
-                  src="/images/texture-icons/flutter.webp"
-                  alt="Flutter"
-                />{" "}
-                Flutter frontend. So when Paul and Lukas started with the
-                frontend, the first step was to translate all the elements like
-                colors, components etc. into a mirrored Flutter design system.
-                This made designing and building UIs very fast.
-              </ProjectText>
-            </ProjectTextBlock>
-
-            <ProjectTextBlock>
-              <ProjectSubHeading>Colors</ProjectSubHeading>
-              <ProjectText>
-                All color palettes were custom created with a{" "}
-                <TextMarker>perceptually uniform colorspace</TextMarker> called
-                OkLCH on{" "}
-                <PencilUnderline href="https://oklch-palette.vercel.app/#70,0.1,134,100">
-                  oklch-palette.vercel.app
+                I wasn&apos;t alone with this thought. One night at Café Cosmos
+                we forged plans to solve this ourselves.{" "}
+                <TextMarker>
+                  Suffering together created a strong connection
+                </TextMarker>
+                . So{" "}
+                <PencilUnderline href="https://www.linkedin.com/in/paul-walter-74009224b/">
+                  Paul Walter
                 </PencilUnderline>
-                . This ensured accessibility and contrast over all colors for
-                the same value. E.g. a <InlineCode>yellow-10</InlineCode> has
-                the same contrast as
-                <InlineCode>red-10</InlineCode>.
+                ,{" "}
+                <PencilUnderline href="https://www.linkedin.com/in/lukasplenk/">
+                  Lukas Plenk
+                </PencilUnderline>
+                , me and some other LMU students started the vision and began
+                the work.
+              </ProjectText>
+
+              <ProjectTextBlock>
+                <ProjectSubHeading>University Course</ProjectSubHeading>
+                <ProjectText>
+                  At one point we thought, why limit the capacity to us? There
+                  should be more students taking part in creating their own
+                  solution. <TextMarker>From students, for students</TextMarker>
+                  . So we talked to professors and PhDs and were able to host
+                  our own official class called{" "}
+                  <PencilUnderline href="https://www.medien.ifi.lmu.de/lehre/arbeiten/detail.xhtml-php?pub=alt_lmustudentsapp">
+                    „Full Stack App Development"
+                  </PencilUnderline>{" "}
+                  for the winter and summer semester 2025.
+                </ProjectText>
+                <ProjectText>
+                  We received over 30 applications from students to take the
+                  class and chose 8 to join the team. We had weekly meetings
+                  discussing progress, teaching concepts of modern frontend
+                  architecture, color theory and more.
+                </ProjectText>
+                <ImageFrame
+                  src="/projects/lmu-app/images/class-team.webp"
+                  alt="Class Team"
+                  width={1024}
+                  height={1024}
+                  description="Full Stack App Development Class Summer Semester 2025"
+                  className="w-full h-auto max-w-text-content mx-auto"
+                />
+              </ProjectTextBlock>
+            </ProjectSectionContent>
+          </ProjectSection>
+
+          {/* Challenges */}
+          <ProjectSection>
+            <ProjectHeading>Challenges</ProjectHeading>
+            <ProjectSectionContent>
+              <ProjectText>
+                The whole project had several obstacles, to name some:
+              </ProjectText>
+
+              <ProjectTextBlock>
+                <ProjectSubHeading>Legacy Infrastructure</ProjectSubHeading>
+                <ProjectText>
+                  The outdated system doesn&apos;t only make it hard for
+                  students to look up information but also for our system to
+                  access it. There were{" "}
+                  <TextMarker>no clean APIs and interfaces</TextMarker> to
+                  access the information. So it was evident we had to build that
+                  ourselves, store the data on our side to not overwhelm the old
+                  system and bring the information into a new structure that can
+                  be used to populate a UI with information. This way we would
+                  have the whole data pipeline in control.
+                </ProjectText>
+              </ProjectTextBlock>
+
+              <ProjectTextBlock>
+                <ProjectSubHeading>
+                  Learning Backend Development
+                </ProjectSubHeading>
+                <ProjectText>
+                  Nobody on our team had ever written a backend. So the whole
+                  hosting, server, database, scraping, API thing was new to us.
+                  Even though my background is more on the UX side,{" "}
+                  <TextMarker>
+                    I jumped head first into the topic and took responsibility
+                  </TextMarker>{" "}
+                  of it since then.
+                </ProjectText>
+              </ProjectTextBlock>
+
+              <ProjectTextBlock>
+                <ProjectSubHeading>User Communication</ProjectSubHeading>
+                <ProjectText>
+                  It was clear that the first release was missing some essential
+                  student features like checking available courses, calendar and
+                  news, due to lack of APIs and infrastructure from LMU. So we
+                  needed a way to show what the app can do, what is missing and
+                  actually give users a way to communicate their needs.
+                </ProjectText>
+                <ProjectText>
+                  For this we added a <TextMarker>wishlist</TextMarker>, where
+                  they were able to see and vote on current ideas. This
+                  addressed the high expectations students have for an app, and
+                  also gave us a way to prioritize what we would implement next.
+                </ProjectText>
+              </ProjectTextBlock>
+            </ProjectSectionContent>
+          </ProjectSection>
+
+          {/* Making it Official */}
+          <ProjectSection>
+            <ProjectHeading>Making it Official</ProjectHeading>
+            <ProjectSectionContent>
+              <ProjectText>
+                We definitely wanted to make the app look, feel and appear
+                official. So we needed a legal way to call it the{" "}
+                <TextMarker>„LMU Students" App</TextMarker>, which we decided to
+                be the name after a long brainstorming session.
+              </ProjectText>
+              <ProjectText>
+                This and other reasons led us to first found the university
+                group <TextMarker>LMU Developers</TextMarker> and afterwards the
+                student organization „Technik Referat" of the Student Council. I
+                was officially elected to be the leader of those organizations,
+                but we shared that role equally in our team. Everyone leads so
+                everyone takes responsibility and has the ability to decide.
+              </ProjectText>
+            </ProjectSectionContent>
+          </ProjectSection>
+
+          {/* Stakeholders */}
+          <ProjectSection>
+            <ProjectHeading>Stakeholders</ProjectHeading>
+            <ProjectSectionContent>
+              <ProjectText>
+                Over the course of 2 years we met a lot of people. Something
+                they had in common was they really loved what we were doing so
+                far. Students (of course), but{" "}
+                <TextMarker>
+                  also professors, the head of IT, and the new vice presidents
+                  Julia Dittrich and Philip Baaske
+                </TextMarker>
+                .
+              </ProjectText>
+              <ProjectText>
+                Special thanks goes to{" "}
+                <TextMarker>Prof. Florian Alt</TextMarker> and{" "}
+                <TextMarker>Dr. Florian Behmann</TextMarker> who supported our
+                journey enabling us offer a class for students to learn about
+                app development. Other honorable mentions go to the Student
+                Council, the IT department at LMU and all the students who
+                supported us.
+              </ProjectText>
+            </ProjectSectionContent>
+          </ProjectSection>
+
+          {/* Competition */}
+          <ProjectSection>
+            <ProjectHeading>Competition</ProjectHeading>
+            <ProjectSectionContent>
+              <ProjectText>
+                In every step of our journey we compared ourselves to other
+                companies or student organizations. To name some: UniNow, Studo,
+                TUM Campus, Ingolstadt Neuland, ETH Zurich, TU Berlin, Stanford
+                and more. The goal was clear:{" "}
+                <TextMarker>
+                  extracting what works &amp; building it better
+                </TextMarker>
+                .
+              </ProjectText>
+            </ProjectSectionContent>
+          </ProjectSection>
+
+          {/* Release */}
+          <ProjectSection>
+            <ProjectHeading>Release</ProjectHeading>
+            <ProjectSectionContent>
+              <ProjectText>
+                After half a year, on 03.02.2025, we released our first internal
+                beta version to the App Store and Play Store. We invited many
+                friends and students who visited our official university{" "}
+                <PencilUnderline href="https://www.linkedin.com/feed/update/urn:li:activity:7292482113751187457">
+                  exhibition
+                </PencilUnderline>{" "}
+                of the Media Informatics Group.
               </ProjectText>
               <ImageFrame
-                src="/projects/lmu-app/images/oklab.gif"
-                alt="OkLCH Color Space"
-                unoptimized
-                width={384}
-                height={384}
-                description="Color Space Comparison (from Wikipedia)"
+                src="/projects/lmu-app/images/beta-release.webp"
+                alt="Beta Release"
+                width={1024}
+                height={1024}
+                description="Beta Release Exhibition"
                 className="w-full h-auto max-w-text-content mx-auto"
               />
               <ProjectText>
-                Since our brand color is green, we chose it as our accent color
-                which isn&apos;t ideal because it can get confusing with success
-                states. The gray palette was also derived from that and
-                inherited a greenish tint.
+                Fresh to the start of the Summer Semester 25 we painted the
+                final strokes and{" "}
+                <TextMarker>released the app officially</TextMarker>.
               </ProjectText>
+            </ProjectSectionContent>
+          </ProjectSection>
+
+          {/* Design */}
+          <ProjectSection>
+            <ProjectHeading>Design</ProjectHeading>
+            <ProjectSectionContent>
+              <ProjectTextBlock>
+                <ProjectSubHeading>Language</ProjectSubHeading>
+                <ProjectText>
+                  The style I aimed for was{" "}
+                  <TextMarker>modern, simple and mobile friendly</TextMarker>. I
+                  took inspiration from other apps I very much enjoy using, like
+                  Revolut.
+                </ProjectText>
+              </ProjectTextBlock>
+
+              <ProjectTextBlock>
+                <ProjectSubHeading>Design System</ProjectSubHeading>
+                <ProjectText>
+                  The fundament of all designs: our design system. It was
+                  handcrafted by myself in{" "}
+                  <TextureIcon
+                    src="/images/texture-icons/figma.webp"
+                    alt="Figma"
+                  />{" "}
+                  Figma, with auto layout, variables, components and variants.
+                  Supporting light and dark mode and{" "}
+                  <TextMarker>over 100 custom components</TextMarker>.
+                </ProjectText>
+                <ImageFrame
+                  src="/projects/lmu-app/images/designsystem_cover.webp"
+                  alt="Design System Cover"
+                  width={1024}
+                  height={1024}
+                  description="Design System Cover"
+                  className="w-full h-auto max-w-text-content mx-auto"
+                />
+                <ProjectText>
+                  The system was built in a way that can also be reproduced in
+                  code in our{" "}
+                  <TextureIcon
+                    src="/images/texture-icons/flutter.webp"
+                    alt="Flutter"
+                  />{" "}
+                  Flutter frontend. So when Paul and Lukas started with the
+                  frontend, the first step was to translate all the elements
+                  like colors, components etc. into a mirrored Flutter design
+                  system. This made designing and building UIs very fast.
+                </ProjectText>
+              </ProjectTextBlock>
+
+              <ProjectTextBlock>
+                <ProjectSubHeading>Colors</ProjectSubHeading>
+                <ProjectText>
+                  All color palettes were custom created with a{" "}
+                  <TextMarker>perceptually uniform colorspace</TextMarker>{" "}
+                  called OkLCH on{" "}
+                  <PencilUnderline href="https://oklch-palette.vercel.app/#70,0.1,134,100">
+                    oklch-palette.vercel.app
+                  </PencilUnderline>
+                  . This ensured accessibility and contrast over all colors for
+                  the same value. E.g. a <InlineCode>yellow-10</InlineCode> has
+                  the same contrast as
+                  <InlineCode>red-10</InlineCode>.
+                </ProjectText>
+                <ImageFrame
+                  src="/projects/lmu-app/images/oklab.gif"
+                  alt="OkLCH Color Space"
+                  unoptimized
+                  width={384}
+                  height={384}
+                  description="Color Space Comparison (from Wikipedia)"
+                  className="w-full h-auto max-w-text-content mx-auto"
+                />
+                <ProjectText>
+                  Since our brand color is green, we chose it as our accent
+                  color which isn&apos;t ideal because it can get confusing with
+                  success states. The gray palette was also derived from that
+                  and inherited a greenish tint.
+                </ProjectText>
+                <ProjectText>
+                  We added those palettes in a variable collection in{" "}
+                  <TextureIcon
+                    src="/images/texture-icons/figma.webp"
+                    alt="Figma"
+                  />{" "}
+                  Figma as primary color tokens and built a second semantic
+                  layer on top that was exposed to our design files.
+                </ProjectText>
+                <ImageFrame
+                  src="/projects/lmu-app/images/designsystem-color-variables.png"
+                  alt="Design System Color Variables"
+                  unoptimized
+                  width={1024}
+                  height={1024}
+                  description="Design System Color Variables"
+                />
+              </ProjectTextBlock>
+              <ProjectTextBlock>
+                <ProjectSubHeading>Animations</ProjectSubHeading>
+                <ProjectText>
+                  Animations are a great way to enhance the user experience. We
+                  used the design system to create a set of animations that are
+                  used throughout the app. Since simple easing functions
+                  don&apos;t reflect natural motions i decided to use{" "}
+                  <TextMarker>spring animations</TextMarker>. Those are based on
+                  the physics of a spring and feel more natural and organic.
+                </ProjectText>
+                <GridSection>
+                  <div className="grid grid-cols-2 gap-16 p-8">
+                    <VideoFrame
+                      src="/projects/lmu-app/videos/spring-animation.webm"
+                      description="Spring Animation"
+                      className="w-full"
+                      showTesaStripes={false}
+                    />
+                    <VideoFrame
+                      src="/projects/lmu-app/videos/spring-animation-v2.webm"
+                      description="Spring Animation"
+                      className="w-full"
+                      showTesaStripes={false}
+                    />
+                  </div>
+                </GridSection>
+              </ProjectTextBlock>
+            </ProjectSectionContent>
+          </ProjectSection>
+
+          {/* Backend */}
+          <ProjectSection>
+            <ProjectHeading>Backend</ProjectHeading>
+            <ProjectSectionContent>
               <ProjectText>
-                We added those palettes in a variable collection in{" "}
+                After talking to the head of IT at LMU, we knew they were using{" "}
                 <TextureIcon
-                  src="/images/texture-icons/figma.webp"
-                  alt="Figma"
+                  src="/images/texture-icons/python.webp"
+                  alt="Python"
                 />{" "}
-                Figma as primary color tokens and built a second semantic layer
-                on top that was exposed to our design files.
-              </ProjectText>
-              <ImageFrame
-                src="/projects/lmu-app/images/designsystem-color-variables.png"
-                alt="Design System Color Variables"
-                unoptimized
-                width={1024}
-                height={1024}
-                description="Design System Color Variables"
-              />
-            </ProjectTextBlock>
-            <ProjectTextBlock>
-              <ProjectSubHeading>Animations</ProjectSubHeading>
-              <ProjectText>
-                Animations are a great way to enhance the user experience. We
-                used the design system to create a set of animations that are
-                used throughout the app. Since simple easing functions
-                don&apos;t reflect natural motions i decided to use{" "}
-                <TextMarker>spring animations</TextMarker>. Those are based on
-                the physics of a spring and feel more natural and organic.
-              </ProjectText>
-              <GridSection>
-                <div className="grid grid-cols-2 gap-16 p-8">
-                  <VideoFrame
-                    src="/projects/lmu-app/videos/spring-animation.webm"
-                    description="Spring Animation"
-                    className="w-full"
-                    showTesaStripes={false}
-                  />
-                  <VideoFrame
-                    src="/projects/lmu-app/videos/spring-animation-v2.webm"
-                    description="Spring Animation"
-                    className="w-full"
-                    showTesaStripes={false}
-                  />
-                </div>
-              </GridSection>
-            </ProjectTextBlock>
-          </ProjectSectionContent>
-        </ProjectSection>
-
-        {/* Backend */}
-        <ProjectSection>
-          <ProjectHeading>Backend</ProjectHeading>
-          <ProjectSectionContent>
-            <ProjectText>
-              After talking to the head of IT at LMU, we knew they were using{" "}
-              <TextureIcon
-                src="/images/texture-icons/python.webp"
-                alt="Python"
-              />{" "}
-              Python,{" "}
-              <TextureIcon
-                src="/images/texture-icons/fastapi.webp"
-                alt="FastAPI"
-              />{" "}
-              FastAPI,{" "}
-              <TextureIcon
-                src="/images/texture-icons/docker.webp"
-                alt="Docker"
-              />{" "}
-              Docker and{" "}
-              <TextureIcon
-                src="/images/texture-icons/postgres.webp"
-                alt="Postgres"
-              />{" "}
-              Postgres. This answered the question which tech stack to use,
-              since it also seemed pretty modern and easy to use.
-            </ProjectText>
-            <ProjectText>
-              We started by connecting our domain{" "}
-              <PencilUnderline href="http://api.lmu-dev.org">
-                api.lmu-dev.org
-              </PencilUnderline>{" "}
-              to a Linux server hosted on Digital Ocean. Same for the staging
-              environment. Our backend currently sits in a mono repo which spins
-              up different{" "}
-              <TextureIcon
-                src="/images/texture-icons/docker.webp"
-                alt="Docker"
-              />{" "}
-              Docker containers for the data_fetcher and the API, as well as the
-              database and{" "}
-              <TextureIcon src="/images/texture-icons/nginx.webp" alt="Nginx" />{" "}
-              nginx as a proxy which we use for SSL management and port
-              forwarding.
-            </ProjectText>
-            <GridSection className="max-w-text-content mx-auto flex items-center justify-center py-8">
-              <ImageFrame
-                src="/projects/lmu-app/images/backend-structure.png"
-                alt="Backend Structure"
-                width={1024}
-                height={1024}
-                description="Backend Structure"
-                className="w-full h-auto"
-              />
-            </GridSection>
-
-            <ProjectTextBlock>
-              <ProjectSubHeading>Data Fetcher</ProjectSubHeading>
-              <ProjectText>
-                For each topic like food, cinema etc. we added a{" "}
-                <TextMarker>time-scheduled scraper</TextMarker> to the container
-                which then collected the data and saved it in our database.
-              </ProjectText>
-              <ProjectText>
-                For some content like the libraries we had to deal with
-                unstructured data, so we used LLMs to interpret what the website
-                gave us and put it into a format we could save. Some websites
-                were so cluttered it wasn&apos;t possible to solve with regex.
-              </ProjectText>
-              <ProjectText>
-                For the canteen menus we did a similar thing, they were
-                automatically translated with DeepL. Generally our approach was
-                to improve the data quality we got with other APIs. We also did
-                that for the movies: we added information like IMDb ratings,
-                movie posters, trailers etc.
-              </ProjectText>
-            </ProjectTextBlock>
-
-            <ProjectTextBlock>
-              <ProjectSubHeading>Database</ProjectSubHeading>
-              <ProjectText>
-                This was probably the hardest part,{" "}
-                <TextMarker>getting the relations right</TextMarker>. Especially
-                when you deal with translations, it isn&apos;t enough to just
-                put a „title" column. We needed to create a new translation
-                table with all fields that needed localization.
-              </ProjectText>
-            </ProjectTextBlock>
-
-            <ProjectTextBlock>
-              <ProjectSubHeading>API</ProjectSubHeading>
-              <ProjectText>
-                To implement the API fast I went with{" "}
+                Python,{" "}
                 <TextureIcon
                   src="/images/texture-icons/fastapi.webp"
                   alt="FastAPI"
                 />{" "}
-                FastAPI. Each endpoint had its own Pydantic model which was also
-                used as a response model, as well as a service layer to get the
-                information from the DB and the router.
-              </ProjectText>
-              <ProjectText>
-                Some endpoints were protected and only accessible with API keys
-                of different scopes. Some endpoints have a soft protection. For
-                example, getting canteen dishes will return a result
-                authenticated or not, but when a user is recognized it also
-                returns the dish likes for that user.
-              </ProjectText>
-              <ProjectText>
-                Available endpoints can be found in the{" "}
-                <PencilUnderline href="http://api.lmu-dev.org/docs">
-                  API documentation
-                </PencilUnderline>
-                .
-              </ProjectText>
-              <ProjectText>
-                To make the API more responsive we would like to add a Redis
-                cache database.
-              </ProjectText>
-            </ProjectTextBlock>
-
-            <ProjectTextBlock>
-              <ProjectSubHeading>GitHub</ProjectSubHeading>
-              <ProjectText>
-                We used{" "}
-                <TextureIcon
-                  src="/images/texture-icons/github.webp"
-                  alt="GitHub"
-                />{" "}
-                GitHub not only as a version control tool but also for project
-                planning. Issues were always connected to branches.
-              </ProjectText>
-              <ProjectText>
-                We also used <TextMarker>GitHub Actions</TextMarker> to
-                automatically deploy the{" "}
+                FastAPI,{" "}
                 <TextureIcon
                   src="/images/texture-icons/docker.webp"
                   alt="Docker"
                 />{" "}
-                Docker containers and spin them up on staging/prod. This
-                significantly improved our workflow since once something was
-                merged with staging it would get deployed. To push to prod,
-                another action took the staging Docker container, renamed it and
-                published it over SSL on the prod server.
-              </ProjectText>
-            </ProjectTextBlock>
-
-            <ProjectTextBlock>
-              <ProjectSubHeading>Content Management</ProjectSubHeading>
-              <ProjectText>
-                There is some data you can&apos;t crawl... so you have to
-                manage. We started content management with writing hardcoded
-                values in the backend, then switched to API endpoints and
-                finally settled on a CMS system. After some research we chose{" "}
+                Docker and{" "}
                 <TextureIcon
-                  src="/images/texture-icons/directus.webp"
-                  alt="Directus"
+                  src="/images/texture-icons/postgres.webp"
+                  alt="Postgres"
                 />{" "}
-                <TextMarker>Directus</TextMarker> (over Strapi) because it could
-                be integrated into our current database.
+                Postgres. This answered the question which tech stack to use,
+                since it also seemed pretty modern and easy to use.
               </ProjectText>
-            </ProjectTextBlock>
-          </ProjectSectionContent>
-        </ProjectSection>
-
-        {/* Frontend */}
-        <ProjectSection>
-          <ProjectHeading>Frontend</ProjectHeading>
-          <ProjectSectionContent>
-            <ProjectText>
-              Since Lukas and Paul are very familiar with{" "}
-              <TextureIcon
-                src="/images/texture-icons/flutter.webp"
-                alt="Flutter"
-              />{" "}
-              <TextureIcon src="/images/texture-icons/dart.webp" alt="Dart" />{" "}
-              <TextMarker>Flutter/Dart</TextMarker>, this was an obvious choice
-              also to support multi-platform development for iOS and Android.
-            </ProjectText>
-            <ProjectText>
-              Working tightly in a cross-functional team was fantastic. This
-              ensured the UI was set up exactly how it was intended. It really
-              helped knowing how to code.
-            </ProjectText>
-            <ProjectText>
-              The frontend was set up with each feature encapsulated as its own
-              package. The design system was the core package used everywhere.
-              This provided a very <TextMarker>clean architecture</TextMarker> —
-              some would even call it over-engineering.
-            </ProjectText>
-            <GridSection className="max-w-text-content mx-auto flex items-center justify-center py-8">
-              <ImageFrame
-                src="/projects/lmu-app/images/frontendmvvm.png"
-                alt="Frontend MVVM"
-                width={1024}
-                height={1024}
-                description="Frontend MVVM"
-                className="w-full h-auto max-w-text-content mx-auto"
-              />
-            </GridSection>
-          </ProjectSectionContent>
-        </ProjectSection>
-
-        {/* What I Learned */}
-        <ProjectSection>
-          <ProjectHeading>What I Learned</ProjectHeading>
-          <ProjectSectionContent>
-            <ProjectUnorderedList>
-              <li>
-                <TextMarker>
-                  UX and backend are a powerful combination
-                </TextMarker>
-                , because when you know how a UI should look like you also know
-                exactly which data needs to be provided to the frontend.
-              </li>
-              <li>
-                Onboarding new people in a long-running project takes a lot of
-                time and is sometimes not worth it.
-              </li>
-              <li>
-                {" "}
-                <TextMarker>
-                  Working with skilled people is really a blessing
-                </TextMarker>
-                . Especially if they have an eye for the details. Thanks to the
-                best 2 frontend devs I know, Paul and Lukas{" "}
-                <AnimatedDoodle
-                  shape="heart"
-                  className="w-5 h-5 -translate-y-0.5 align-middle"
+              <ProjectText>
+                We started by connecting our domain{" "}
+                <PencilUnderline href="http://api.lmu-dev.org">
+                  api.lmu-dev.org
+                </PencilUnderline>{" "}
+                to a Linux server hosted on Digital Ocean. Same for the staging
+                environment. Our backend currently sits in a mono repo which
+                spins up different{" "}
+                <TextureIcon
+                  src="/images/texture-icons/docker.webp"
+                  alt="Docker"
+                />{" "}
+                Docker containers for the data_fetcher and the API, as well as
+                the database and{" "}
+                <TextureIcon
+                  src="/images/texture-icons/nginx.webp"
+                  alt="Nginx"
+                />{" "}
+                nginx as a proxy which we use for SSL management and port
+                forwarding.
+              </ProjectText>
+              <GridSection className="max-w-text-content mx-auto flex items-center justify-center py-8">
+                <ImageFrame
+                  src="/projects/lmu-app/images/backend-structure.png"
+                  alt="Backend Structure"
+                  width={1024}
+                  height={1024}
+                  description="Backend Structure"
+                  className="w-full h-auto"
                 />
-              </li>
-              <li>
-                Building an effective channel for user feedback is really
-                important.
-              </li>
-            </ProjectUnorderedList>
-          </ProjectSectionContent>
-        </ProjectSection>
-      </ProjectContent>
-    </main>
+              </GridSection>
+
+              <ProjectTextBlock>
+                <ProjectSubHeading>Data Fetcher</ProjectSubHeading>
+                <ProjectText>
+                  For each topic like food, cinema etc. we added a{" "}
+                  <TextMarker>time-scheduled scraper</TextMarker> to the
+                  container which then collected the data and saved it in our
+                  database.
+                </ProjectText>
+                <ProjectText>
+                  For some content like the libraries we had to deal with
+                  unstructured data, so we used LLMs to interpret what the
+                  website gave us and put it into a format we could save. Some
+                  websites were so cluttered it wasn&apos;t possible to solve
+                  with regex.
+                </ProjectText>
+                <ProjectText>
+                  For the canteen menus we did a similar thing, they were
+                  automatically translated with DeepL. Generally our approach
+                  was to improve the data quality we got with other APIs. We
+                  also did that for the movies: we added information like IMDb
+                  ratings, movie posters, trailers etc.
+                </ProjectText>
+              </ProjectTextBlock>
+
+              <ProjectTextBlock>
+                <ProjectSubHeading>Database</ProjectSubHeading>
+                <ProjectText>
+                  This was probably the hardest part,{" "}
+                  <TextMarker>getting the relations right</TextMarker>.
+                  Especially when you deal with translations, it isn&apos;t
+                  enough to just put a „title" column. We needed to create a new
+                  translation table with all fields that needed localization.
+                </ProjectText>
+              </ProjectTextBlock>
+
+              <ProjectTextBlock>
+                <ProjectSubHeading>API</ProjectSubHeading>
+                <ProjectText>
+                  To implement the API fast I went with{" "}
+                  <TextureIcon
+                    src="/images/texture-icons/fastapi.webp"
+                    alt="FastAPI"
+                  />{" "}
+                  FastAPI. Each endpoint had its own Pydantic model which was
+                  also used as a response model, as well as a service layer to
+                  get the information from the DB and the router.
+                </ProjectText>
+                <ProjectText>
+                  Some endpoints were protected and only accessible with API
+                  keys of different scopes. Some endpoints have a soft
+                  protection. For example, getting canteen dishes will return a
+                  result authenticated or not, but when a user is recognized it
+                  also returns the dish likes for that user.
+                </ProjectText>
+                <ProjectText>
+                  Available endpoints can be found in the{" "}
+                  <PencilUnderline href="http://api.lmu-dev.org/docs">
+                    API documentation
+                  </PencilUnderline>
+                  .
+                </ProjectText>
+                <ProjectText>
+                  To make the API more responsive we would like to add a Redis
+                  cache database.
+                </ProjectText>
+              </ProjectTextBlock>
+
+              <ProjectTextBlock>
+                <ProjectSubHeading>GitHub</ProjectSubHeading>
+                <ProjectText>
+                  We used{" "}
+                  <TextureIcon
+                    src="/images/texture-icons/github.webp"
+                    alt="GitHub"
+                  />{" "}
+                  GitHub not only as a version control tool but also for project
+                  planning. Issues were always connected to branches.
+                </ProjectText>
+                <ProjectText>
+                  We also used <TextMarker>GitHub Actions</TextMarker> to
+                  automatically deploy the{" "}
+                  <TextureIcon
+                    src="/images/texture-icons/docker.webp"
+                    alt="Docker"
+                  />{" "}
+                  Docker containers and spin them up on staging/prod. This
+                  significantly improved our workflow since once something was
+                  merged with staging it would get deployed. To push to prod,
+                  another action took the staging Docker container, renamed it
+                  and published it over SSL on the prod server.
+                </ProjectText>
+              </ProjectTextBlock>
+
+              <ProjectTextBlock>
+                <ProjectSubHeading>Content Management</ProjectSubHeading>
+                <ProjectText>
+                  There is some data you can&apos;t crawl... so you have to
+                  manage. We started content management with writing hardcoded
+                  values in the backend, then switched to API endpoints and
+                  finally settled on a CMS system. After some research we chose{" "}
+                  <TextureIcon
+                    src="/images/texture-icons/directus.webp"
+                    alt="Directus"
+                  />{" "}
+                  <TextMarker>Directus</TextMarker> (over Strapi) because it
+                  could be integrated into our current database.
+                </ProjectText>
+              </ProjectTextBlock>
+            </ProjectSectionContent>
+          </ProjectSection>
+
+          {/* Frontend */}
+          <ProjectSection>
+            <ProjectHeading>Frontend</ProjectHeading>
+            <ProjectSectionContent>
+              <ProjectText>
+                Since Lukas and Paul are very familiar with{" "}
+                <TextureIcon
+                  src="/images/texture-icons/flutter.webp"
+                  alt="Flutter"
+                />{" "}
+                <TextureIcon src="/images/texture-icons/dart.webp" alt="Dart" />{" "}
+                <TextMarker>Flutter/Dart</TextMarker>, this was an obvious
+                choice also to support multi-platform development for iOS and
+                Android.
+              </ProjectText>
+              <ProjectText>
+                Working tightly in a cross-functional team was fantastic. This
+                ensured the UI was set up exactly how it was intended. It really
+                helped knowing how to code.
+              </ProjectText>
+              <ProjectText>
+                The frontend was set up with each feature encapsulated as its
+                own package. The design system was the core package used
+                everywhere. This provided a very{" "}
+                <TextMarker>clean architecture</TextMarker> — some would even
+                call it over-engineering.
+              </ProjectText>
+              <GridSection className="max-w-text-content mx-auto flex items-center justify-center py-8">
+                <ImageFrame
+                  src="/projects/lmu-app/images/frontendmvvm.png"
+                  alt="Frontend MVVM"
+                  width={1024}
+                  height={1024}
+                  description="Frontend MVVM"
+                  className="w-full h-auto max-w-text-content mx-auto"
+                />
+              </GridSection>
+            </ProjectSectionContent>
+          </ProjectSection>
+
+          {/* What I Learned */}
+          <ProjectSection>
+            <ProjectHeading>What I Learned</ProjectHeading>
+            <ProjectSectionContent>
+              <ProjectUnorderedList>
+                <li>
+                  <TextMarker>
+                    UX and backend are a powerful combination
+                  </TextMarker>
+                  , because when you know how a UI should look like you also
+                  know exactly which data needs to be provided to the frontend.
+                </li>
+                <li>
+                  Onboarding new people in a long-running project takes a lot of
+                  time and is sometimes not worth it.
+                </li>
+                <li>
+                  {" "}
+                  <TextMarker>
+                    Working with skilled people is really a blessing
+                  </TextMarker>
+                  . Especially if they have an eye for the details. Thanks to
+                  the best 2 frontend devs I know, Paul and Lukas{" "}
+                  <AnimatedDoodle
+                    shape="heart"
+                    className="w-5 h-5 -translate-y-0.5 align-middle"
+                  />
+                </li>
+                <li>
+                  Building an effective channel for user feedback is really
+                  important.
+                </li>
+              </ProjectUnorderedList>
+            </ProjectSectionContent>
+          </ProjectSection>
+        </ProjectContent>
+      </main>
+    </PageTransitionWrapper>
   );
 }

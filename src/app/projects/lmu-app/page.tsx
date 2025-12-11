@@ -34,7 +34,6 @@ import Link from "next/link";
 export default function LMUAppPage() {
   const {
     startDrawing,
-    showBackground,
     headlineOffset,
     hasInitialPosition,
     isIntroComplete,

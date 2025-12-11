@@ -338,9 +338,9 @@ export default function ShadowBackground({
 
   return (
     <div className={`relative ${className}`}>
-      {/* Canvas background - force GPU layer to reduce scroll throttling */}
+      {/* Canvas overlay - force GPU layer to reduce scroll throttling */}
       <div
-        className="absolute inset-0 -z-10"
+        className="absolute inset-0 opacity-70 z-500 mix-blend-multiply pointer-events-none"
         style={{
           willChange: "transform",
           transform: "translateZ(0)",
@@ -352,6 +352,7 @@ export default function ShadowBackground({
           camera={{ zoom: 1, position: [0, 0, 1] }}
           frameloop="always"
           gl={{ antialias: false, powerPreference: "high-performance" }}
+          style={{ pointerEvents: "none" }}
         >
           <ShadowPlane
             image={finalImage}

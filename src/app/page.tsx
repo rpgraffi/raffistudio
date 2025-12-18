@@ -1,11 +1,13 @@
+"use client";
+
 import { LightProvider } from "@/components/light/LightContext";
-import { Analytics } from "@vercel/analytics/next"
 import { Mail } from "@/components/mail/Mail";
-import { PencilUnderline } from "@/components/natural-ui/PencilStroke";
-import { GridSection } from "@/components/ui/GridSection";
-import { TextureSection } from "@/components/ui/TextureSection";
-import Image from "next/image";
 import DrawingHeadline from "@/components/natural-ui/DrawingHeadline";
+import { PencilUnderline } from "@/components/natural-ui/PencilStroke";
+import { PageTransitionWrapper } from "@/components/PageTransition";
+import { TextureSection } from "@/components/ui/TextureSection";
+import { Analytics } from "@vercel/analytics/next";
+import Image from "next/image";
 
 const polaroidItems = [
   {
@@ -54,68 +56,70 @@ const textureIcons = [
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-background flex flex-col gap-12 items-center justify-center">
-      <Analytics />
-      <LightProvider>
-        <div className="min-h-screen flex flex-col py-12 gap-8 items-center justify-center">
-        <DrawingHeadline
-            className="text-6xl md:text-8xl text-zinc-800 font-sentient"
-            triggerOnView={false}
-            animate={true}
-            as="h1"
-          >
-            Hey, I'm Raffi!
-          </DrawingHeadline>
-          <p className="text-lg text-center">
-            and love to design and develop digital products.
-          </p>
-          <div className="flex gap-4">
-            <PencilUnderline href="https://www.linkedin.com/in/raphael-wennmacher/">
-              LinkedIn
-            </PencilUnderline>
-            <PencilUnderline href="https://github.com/rpgraffi">
-              {" "}
-              GitHub
-            </PencilUnderline>
-            <PencilUnderline href="https://www.instagram.com/raffis.insta/">
-              Instagram
-            </PencilUnderline>
+    <PageTransitionWrapper>
+      <main className="min-h-screen relative flex flex-col gap-12 items-center justify-center">
+        <Analytics />
+        <LightProvider>
+          <div className="min-h-screen flex flex-col py-12 gap-8 items-center justify-center">
+            <DrawingHeadline
+              className="text-6xl md:text-8xl text-zinc-800 font-sentient"
+              triggerOnView={false}
+              animate={true}
+              as="h1"
+            >
+              Hey, I'm Raffi!
+            </DrawingHeadline>
+            <p className="text-lg text-center">
+              and love to design and develop digital products.
+            </p>
+            <div className="flex gap-4">
+              <PencilUnderline href="https://www.linkedin.com/in/raphael-wennmacher/">
+                LinkedIn
+              </PencilUnderline>
+              <PencilUnderline href="https://github.com/rpgraffi">
+                {" "}
+                GitHub
+              </PencilUnderline>
+              <PencilUnderline href="https://www.instagram.com/raffis.insta/">
+                Instagram
+              </PencilUnderline>
+            </div>
+
+            <div className="flex flex-col md:flex-row gap-12 items-center mt-8">
+              <Mail width={100} url="mailto:hello@raphaelwennmacher.com" />
+            </div>
+            <div className="flex gap-4">
+              <PencilUnderline href="/projects/convert-compress">
+                Convert & Compress
+              </PencilUnderline>
+              <PencilUnderline href="/projects/lmu-app">
+                LMU Students
+              </PencilUnderline>
+            </div>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-12 items-center mt-8">
-            <Mail width={100} url="mailto:hello@raphaelwennmacher.com" />
-          </div>
-          <div className="flex gap-4">
-            <PencilUnderline href="/projects/convert-compress">
-              Convert & Compress
-            </PencilUnderline>
-            <PencilUnderline href="/projects/lmu-app">
-              LMU Students
-            </PencilUnderline>
-          </div>
-        </div>
-
-        <TextureSection className="py-12 my-12 flex flex-col items-center justify-center text-center gap-8">
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-8 p-4 max-w-5xl w-full">
-            {textureIcons.map((icon, index) => (
-              <div
-                key={icon}
-                className="relative w-24 h-24 md:w-32 md:h-32 mx-auto"
-                style={{
-                  transform: `rotate(${((index * 137) % 15) - 7}deg)`,
-                }}
-              >
-                <Image
-                  src={`/images/texture-icons/${icon}.webp`}
-                  alt={icon}
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            ))}
-          </div>
-        </TextureSection>
-      </LightProvider>
-    </main>
+          <TextureSection className="py-12 my-12 flex flex-col items-center justify-center text-center gap-8">
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-8 p-4 max-w-5xl w-full">
+              {textureIcons.map((icon, index) => (
+                <div
+                  key={icon}
+                  className="relative w-24 h-24 md:w-32 md:h-32 mx-auto"
+                  style={{
+                    transform: `rotate(${((index * 137) % 15) - 7}deg)`,
+                  }}
+                >
+                  <Image
+                    src={`/images/texture-icons/${icon}.webp`}
+                    alt={icon}
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+              ))}
+            </div>
+          </TextureSection>
+        </LightProvider>
+      </main>
+    </PageTransitionWrapper>
   );
 }

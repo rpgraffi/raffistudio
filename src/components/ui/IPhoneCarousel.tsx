@@ -29,7 +29,7 @@ export const IPhoneCarousel: React.FC<IPhoneCarouselProps> = ({
   return (
     <div className={`w-full ${className}`}>
       <div
-        className="overflow-hidden h-[55vh] md:h-auto [mask-image:linear-gradient(to_bottom,black_60%,transparent)] md:[mask-image:none]"
+        className="overflow-hidden h-[55vh] md:h-auto mask-[linear-gradient(to_bottom,black_60%,transparent)] md:mask-none"
         ref={emblaRef}
       >
         <div className="flex items-start md:items-center">

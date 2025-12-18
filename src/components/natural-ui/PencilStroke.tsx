@@ -1,5 +1,6 @@
 "use client";
 
+import { usePageTransition } from "@/components/PageTransition";
 import { createSeededRandom, stringToSeed } from "@/lib/utils";
 import React, { useEffect, useId, useMemo, useRef, useState } from "react";
 
@@ -319,6 +320,21 @@ export const PencilUnderline: React.FC<PencilUnderlineProps> = ({
     </>
   );
 
+  const { navigateTo } = usePageTransition();
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!href) return;
+
+    // Allow cmd/ctrl click for new tab
+    if (e.metaKey || e.ctrlKey) return;
+
+    // Only handle internal links (starting with /)
+    if (href.startsWith("/")) {
+      e.preventDefault();
+      navigateTo(href);
+    }
+  };
+
   if (href) {
     return (
       <a
@@ -328,6 +344,7 @@ export const PencilUnderline: React.FC<PencilUnderlineProps> = ({
         style={{ textDecoration: "none" }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        onClick={handleClick}
       >
         {content}
       </a>

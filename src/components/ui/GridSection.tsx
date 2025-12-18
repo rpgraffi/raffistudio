@@ -17,7 +17,7 @@ export function GridSection({
 }: GridSectionProps) {
   return (
     <section
-      className={cn("relative w-full overflow-hidden bg-background", className)}
+      className={cn("relative w-full overflow-hidden", className)}
       style={{
         backgroundImage: `
           linear-gradient(to right, ${gridColor} 1px, transparent 1px),

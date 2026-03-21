@@ -1,10 +1,12 @@
 "use client";
 
+import { Patch } from "@/app/projects/components/Patches";
 import { LightProvider } from "@/components/light/LightContext";
 import { Mail } from "@/components/mail/Mail";
 import DrawingHeadline from "@/components/natural-ui/DrawingHeadline";
 import { PencilUnderline } from "@/components/natural-ui/PencilStroke";
 import { PageTransitionWrapper } from "@/components/PageTransition";
+import { Folder } from "@/components/ui/Folder";
 import { TextureSection } from "@/components/ui/TextureSection";
 import { Analytics } from "@vercel/analytics/next";
 import Image from "next/image";
@@ -88,15 +90,160 @@ export default function Home() {
             <div className="flex flex-col md:flex-row gap-12 items-center mt-8">
               <Mail width={100} url="mailto:hello@raphaelwennmacher.com" />
             </div>
-            <div className="flex gap-4">
-              <PencilUnderline href="/projects/convert-compress">
-                Convert & Compress
-              </PencilUnderline>
-              <PencilUnderline href="/projects/lmu-app">
-                LMU Students
-              </PencilUnderline>
-            </div>
           </div>
+
+          {/* Projects Section */}
+          <section className="w-full max-w-site mx-auto px-8 py-24">
+            <div className="flex flex-wrap gap-48 justify-center">
+              <Folder
+                className="w-full max-w-[600px]"
+                href="/projects/convert-compress"
+                timeframe="Fall 2025"
+                location="Munich"
+                tags={["UX Design", "Web Design", "Flows", "Rive", "Animation"]}
+                patches={[
+                  <Patch
+                    key="swift"
+                    src="/images/texture-icons/swift.webp"
+                    alt="Swift"
+                    className="w-16 h-16 md:w-20 md:h-20"
+                  />,
+                  <Patch
+                    key="xcode"
+                    src="/images/texture-icons/xcode.webp"
+                    alt="Xcode"
+                    className="w-16 h-16 md:w-20 md:h-20"
+                  />,
+                  <Patch
+                    key="github"
+                    src="/images/texture-icons/github.webp"
+                    alt="GitHub"
+                    className="w-16 h-16 md:w-20 md:h-20"
+                  />,
+                ]}
+                card={
+                  <Image
+                    src="/images/project/work-cards/studio-raffi.webp"
+                    alt="Studio Raffi"
+                    fill
+                    className="object-contain"
+                  />
+                }
+                logo={
+                  <div className="h-20 w-60">
+                    <Image
+                      src="/images/project/logos/convert-compress-logo.svg"
+                      alt="Convert & Compress"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                }
+              />
+              <Folder
+                className="w-full max-w-[600px]"
+                href="/projects/lmu-app"
+                timeframe="Fall 2025"
+                location="Munich"
+                tags={["UX Design", "Web Design", "Flows", "Rive", "Animation"]}
+                patches={[
+                  <Patch
+                    key="flutter"
+                    src="/images/texture-icons/flutter.webp"
+                    alt="Flutter"
+                    className="w-16 h-16 md:w-20 md:h-20"
+                  />,
+                  <Patch
+                    key="dart"
+                    src="/images/texture-icons/dart.webp"
+                    alt="Dart"
+                    className="w-16 h-16 md:w-20 md:h-20"
+                  />,
+                  <Patch
+                    key="github"
+                    src="/images/texture-icons/github.webp"
+                    alt="GitHub"
+                    className="w-16 h-16 md:w-20 md:h-20"
+                  />,
+                  <Patch
+                    key="python"
+                    src="/images/texture-icons/python.webp"
+                    alt="Python"
+                    className="w-16 h-16 md:w-20 md:h-20"
+                  />,
+                  <Patch
+                    key="docker"
+                    src="/images/texture-icons/docker.webp"
+                    alt="Docker"
+                    className="w-16 h-16 md:w-20 md:h-20"
+                  />,
+                ]}
+                card={
+                  <Image
+                    src="/images/project/work-cards/lmu.webp"
+                    alt="LMU App"
+                    fill
+                    className="object-contain"
+                  />
+                }
+                logo={
+                  <div className="h-20 w-60">
+                    <Image
+                      src="/images/project/logos/lmu-logo.svg"
+                      alt="LMU App"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                }
+              />
+              <Folder
+                className="w-full max-w-[600px]"
+                href="/projects/tradar"
+                timeframe="Fall 2025"
+                location="Munich"
+                tags={["UX Design", "Web Design", "Flows", "Rive", "Animation"]}
+                patches={[
+                  <Patch
+                    key="figma"
+                    src="/images/texture-icons/figma.webp"
+                    alt="Figma"
+                    className="w-16 h-16 md:w-20 md:h-20"
+                  />,
+                  <Patch
+                    key="react"
+                    src="/images/texture-icons/react.webp"
+                    alt="React"
+                    className="w-16 h-16 md:w-20 md:h-20"
+                  />,
+                  <Patch
+                    key="github"
+                    src="/images/texture-icons/github.webp"
+                    alt="GitHub"
+                    className="w-16 h-16 md:w-20 md:h-20"
+                  />,
+                ]}
+                card={
+                    <Image
+                      src="/images/project/work-cards/tradar.webp"
+                      alt="TRADAR"
+                      fill
+                      className="object-contain"
+                    />
+                }
+                logo={
+                  <div className="h-20 w-60">
+                    <Image
+                      src="/images/project/logos/tradar-logo.svg"
+                      alt="TRADAR"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                }
+              />
+            </div>
+          </section>
 
           <TextureSection className="py-12 my-12 flex flex-col items-center justify-center text-center gap-8">
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-8 p-4 max-w-5xl w-full">

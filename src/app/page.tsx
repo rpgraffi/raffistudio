@@ -215,9 +215,9 @@ export default function Home() {
                   />
                 }
                 logo={
-                  <div className="h-22 w-60">
+                  <div className="h-20 w-20">
                     <Image
-                      src="/images/project/logos/lmu-logo.svg"
+                      src="/images/project/logos/lmu_app-logo.webp"
                       alt="LMU App"
                       fill
                       className="object-contain"

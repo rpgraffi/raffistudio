@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 
@@ -58,6 +58,13 @@ export function Folder({
   const [isHovered, setIsHovered] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  const isInView = useInView(containerRef, { amount: 0.4 });
+
+  useEffect(() => {
+    setIsTouchDevice(window.matchMedia("(hover: none)").matches);
+  }, []);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -69,11 +76,13 @@ export function Folder({
     return () => observer.disconnect();
   }, []);
 
+  const isOpen = isTouchDevice ? isInView : isHovered;
+
   return (
     <Link
       href={href}
       className={cn(
-        "relative block w-full max-w-[600px] cursor-pointer",
+        "relative block w-[90vh] md:w-full max-w-[600px] cursor-pointer",
         className,
       )}
       onMouseEnter={() => setIsHovered(true)}
@@ -93,7 +102,7 @@ export function Folder({
             transformOrigin: "bottom center",
           }}
           animate={{
-            rotateX: isHovered ? 3 : 0,
+            rotateX: isOpen ? 3 : 0,
           }}
           transition={spring}
         ></motion.div>
@@ -105,7 +114,7 @@ export function Folder({
             boxShadow: "0 0 2px rgba(0,0,0,0.2)",
           }}
           animate={{
-            y: isHovered ? "-28%" : "0%",
+            y: isOpen ? "-28%" : "0%",
           }}
           transition={spring}
         >
@@ -121,13 +130,13 @@ export function Folder({
               className="absolute z-20"
               style={{ left: `${left}%`, top: `${top}%` }}
               animate={{
-                y: isHovered ? -(50 + i * 18) * scale : 0,
-                x: isHovered ? (i % 2 === 0 ? -8 : 8) * scale : 0,
-                rotate: isHovered
+                y: isOpen ? -(50 + i * 18) * scale : 0,
+                x: isOpen ? (i % 2 === 0 ? -8 : 8) * scale : 0,
+                rotate: isOpen
                   ? (i % 2 === 0 ? -12 : 7)
                   : restRotation,
               }}
-              transition={{ ...spring, delay: isHovered ? i * 0.04 : 0 }}
+              transition={{ ...spring, delay: isOpen ? i * 0.04 : 0 }}
             >
               {patch}
             </motion.div>
@@ -139,9 +148,9 @@ export function Folder({
           <motion.div
             className="absolute w-[33%] aspect-7/9 right-[4%] top-[5%] z-20"
             animate={{
-              y: isHovered ? -150 * scale : 0,
-              x: isHovered ? 12 * scale : 0,
-              rotate: isHovered ? 13 : 0,
+              y: isOpen ? -150 * scale : 0,
+              x: isOpen ? 12 * scale : 0,
+              rotate: isOpen ? 13 : 0,
             }}
             transition={spring}
           >
@@ -158,16 +167,24 @@ export function Folder({
           )}
           style={{
             transformOrigin: "bottom center",
-            boxShadow: [
-              "0 -4px 12px rgba(0,0,0,0.06)",
-              "0 -1px 3px rgba(0,0,0,0.08)",
-              "inset 0 8px 8px rgba(255,255,255,0.5)",
-              "inset 0 -4px 4px rgba(0,0,0,0.06)",
-              "inset 0 -12px 12px rgba(0,0,0,0.06)",
-            ].join(", "),
           }}
           animate={{
-            rotateX: isHovered ? -15 : 0,
+            rotateX: isOpen ? -15 : 0,
+            boxShadow: isOpen
+              ? [
+                  "0 -18px 40px rgba(0,0,0,0.12)",
+                  "0 -4px 10px rgba(0,0,0,0.08)",
+                  "inset 0 8px 8px rgba(255,255,255,0.5)",
+                  "inset 0 -4px 4px rgba(0,0,0,0.06)",
+                  "inset 0 -12px 12px rgba(0,0,0,0.06)",
+                ].join(", ")
+              : [
+                  "0 -4px 12px rgba(0,0,0,0.06)",
+                  "0 -1px 3px rgba(0,0,0,0.08)",
+                  "inset 0 8px 8px rgba(255,255,255,0.5)",
+                  "inset 0 -4px 4px rgba(0,0,0,0.06)",
+                  "inset 0 -12px 12px rgba(0,0,0,0.06)",
+                ].join(", "),
           }}
           transition={spring}
         >

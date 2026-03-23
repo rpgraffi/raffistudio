@@ -94,31 +94,31 @@ export default function Home() {
 
           {/* Projects Section */}
           <section className="w-full max-w-site mx-auto px-8 py-24">
-            <div className="flex flex-wrap gap-48 justify-center">
+            <div className="flex flex-wrap gap-24 md:gap-48 justify-center">
               <Folder
-                className="w-full max-w-[600px]"
+                className="w-full"
                 href="/projects/convert-compress"
-                timeframe="Fall 2025"
-                location="Munich"
+                title="Convert & Compress"
+                loc_and_time="Munich • Winter 2025"
                 tags={["UX Design", "Web Design", "Flows", "Rive", "Animation"]}
                 patches={[
                   <Patch
                     key="swift"
                     src="/images/texture-icons/swift.webp"
                     alt="Swift"
-                    className="w-16 h-16 md:w-20 md:h-20"
+                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20"
                   />,
                   <Patch
                     key="xcode"
                     src="/images/texture-icons/xcode.webp"
                     alt="Xcode"
-                    className="w-16 h-16 md:w-20 md:h-20"
+                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20"
                   />,
                   <Patch
                     key="github"
                     src="/images/texture-icons/github.webp"
                     alt="GitHub"
-                    className="w-16 h-16 md:w-20 md:h-20"
+                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20"
                   />,
                 ]}
                 card={
@@ -130,9 +130,9 @@ export default function Home() {
                   />
                 }
                 logo={
-                  <div className="h-20 w-60">
+                  <div className="h-20 w-20">
                     <Image
-                      src="/images/project/logos/convert-compress-logo.svg"
+                      src="/images/project/logos/convert_compress-logo.webp"
                       alt="Convert & Compress"
                       fill
                       className="object-contain"
@@ -141,41 +141,41 @@ export default function Home() {
                 }
               />
               <Folder
-                className="w-full max-w-[600px]"
+                className="w-full"
                 href="/projects/lmu-app"
-                timeframe="Fall 2025"
-                location="Munich"
+                title="LMU Students"
+                loc_and_time="Munich • Fall 2024"
                 tags={["UX Design", "Web Design", "Flows", "Rive", "Animation"]}
                 patches={[
                   <Patch
                     key="flutter"
                     src="/images/texture-icons/flutter.webp"
                     alt="Flutter"
-                    className="w-16 h-16 md:w-20 md:h-20"
+                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20"
                   />,
                   <Patch
                     key="dart"
                     src="/images/texture-icons/dart.webp"
                     alt="Dart"
-                    className="w-16 h-16 md:w-20 md:h-20"
+                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20"
                   />,
                   <Patch
                     key="github"
                     src="/images/texture-icons/github.webp"
                     alt="GitHub"
-                    className="w-16 h-16 md:w-20 md:h-20"
+                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20"
                   />,
                   <Patch
                     key="python"
                     src="/images/texture-icons/python.webp"
                     alt="Python"
-                    className="w-16 h-16 md:w-20 md:h-20"
+                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20"
                   />,
                   <Patch
                     key="docker"
                     src="/images/texture-icons/docker.webp"
                     alt="Docker"
-                    className="w-16 h-16 md:w-20 md:h-20"
+                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20"
                   />,
                 ]}
                 card={
@@ -187,7 +187,7 @@ export default function Home() {
                   />
                 }
                 logo={
-                  <div className="h-20 w-60">
+                  <div className="h-22 w-60">
                     <Image
                       src="/images/project/logos/lmu-logo.svg"
                       alt="LMU App"
@@ -198,38 +198,38 @@ export default function Home() {
                 }
               />
               <Folder
-                className="w-full max-w-[600px]"
+                className="w-full"
                 href="/projects/tradar"
-                timeframe="Fall 2025"
-                location="Munich"
+                title="TRADAR"
+                loc_and_time="Munich • 2023"
                 tags={["UX Design", "Web Design", "Flows", "Rive", "Animation"]}
                 patches={[
                   <Patch
                     key="figma"
                     src="/images/texture-icons/figma.webp"
                     alt="Figma"
-                    className="w-16 h-16 md:w-20 md:h-20"
+                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20"
                   />,
                   <Patch
                     key="react"
                     src="/images/texture-icons/react.webp"
                     alt="React"
-                    className="w-16 h-16 md:w-20 md:h-20"
+                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20"
                   />,
                   <Patch
                     key="github"
                     src="/images/texture-icons/github.webp"
                     alt="GitHub"
-                    className="w-16 h-16 md:w-20 md:h-20"
+                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20"
                   />,
                 ]}
                 card={
-                    <Image
-                      src="/images/project/work-cards/tradar.webp"
-                      alt="TRADAR"
-                      fill
-                      className="object-contain"
-                    />
+                  <Image
+                    src="/images/project/work-cards/tradar.webp"
+                    alt="TRADAR"
+                    fill
+                    className="object-contain"
+                  />
                 }
                 logo={
                   <div className="h-20 w-60">

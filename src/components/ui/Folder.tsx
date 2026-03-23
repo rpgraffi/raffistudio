@@ -3,13 +3,13 @@
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export interface FolderProps {
   href: string;
   logo?: React.ReactNode;
-  timeframe: string;
-  location: string;
+  title: string;
+  loc_and_time: string;
   tags: string[];
   patches?: React.ReactNode[];
   card?: React.ReactNode;
@@ -23,11 +23,32 @@ const spring = {
   damping: 26,
 };
 
+const seededRandom = (seed: number) => {
+  const x = Math.sin(seed * 9301 + 49297) * 233280;
+  return x - Math.floor(x);
+};
+
+function getPatchLayout(index: number, total: number) {
+  const maxPerRow = Math.min(total, 4);
+  const row = Math.floor(index / maxPerRow);
+  const col = index % maxPerRow;
+
+  const availableWidth = 50;
+  const spacing = availableWidth / Math.min(total, maxPerRow);
+  const rand = seededRandom(index + total * 7);
+
+  const left = 4 + col * spacing + rand * spacing * 0.25;
+  const top = 2 + row * 7 + seededRandom(index * 5 + 3) * 3;
+  const restRotation = (seededRandom(index * 3 + 13) - 0.5) * 14;
+
+  return { left, top, restRotation };
+}
+
 export function Folder({
   href,
   logo,
-  timeframe,
-  location,
+  title,
+  loc_and_time,
   tags,
   patches = [],
   card,
@@ -35,18 +56,37 @@ export function Folder({
   className,
 }: FolderProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver(([entry]) => {
+      setScale(Math.min(entry.contentRect.width / 600, 1));
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <Link
       href={href}
-      className={cn("relative block w-full cursor-pointer", className)}
+      className={cn(
+        "relative block w-full max-w-[600px] cursor-pointer",
+        className,
+      )}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative aspect-848/578" style={{ perspective: 1200 }}>
+      <div
+        ref={containerRef}
+        className="relative aspect-848/578"
+        style={{ perspective: 1200 }}
+      >
         {/* Folder Back */}
         <motion.div
-          className="absolute inset-0 rounded-[48px] bg-white"
+          className="absolute inset-0 rounded-3xl sm:rounded-[36px] md:rounded-[48px] bg-white"
           style={{
             boxShadow:
               "0 8px 16px rgba(0,0,0,0.05), 0 16px 32px rgba(0,0,0,0.1)",
@@ -73,42 +113,47 @@ export function Folder({
         </motion.div>
 
         {/* Patches — tool icons floating above, staggered */}
-        {patches.map((patch, i) => (
-          <motion.div
-            key={i}
-            className="absolute z-20"
-            style={{ left: `${5 + i * 24}%`, top: "4%" }}
-            animate={{
-              y: isHovered ? -(50 + i * 20) : 0,
-              x: isHovered ? (i % 2 === 0 ? -6 : 6) : 0,
-              rotate: isHovered ? (i % 2 === 0 ? -10 : 5) : 0,
-            }}
-            transition={{ ...spring, delay: isHovered ? i * 0.04 : 0 }}
-          >
-            {patch}
-          </motion.div>
-        ))}
+        {patches.map((patch, i) => {
+          const { left, top, restRotation } = getPatchLayout(i, patches.length);
+          return (
+            <motion.div
+              key={i}
+              className="absolute z-20"
+              style={{ left: `${left}%`, top: `${top}%` }}
+              animate={{
+                y: isHovered ? -(50 + i * 18) * scale : 0,
+                x: isHovered ? (i % 2 === 0 ? -8 : 8) * scale : 0,
+                rotate: isHovered
+                  ? (i % 2 === 0 ? -12 : 7)
+                  : restRotation,
+              }}
+              transition={{ ...spring, delay: isHovered ? i * 0.04 : 0 }}
+            >
+              {patch}
+            </motion.div>
+          );
+        })}
 
         {/* Card — role card, rotates outward on hover */}
-          {card && (
-            <motion.div
-              className="absolute w-56 h-72 right-[4%] top-[5%] z-20"
-              animate={{
-                y: isHovered ? -150 : 0,
-                x: isHovered ? 12 : 0,
-                rotate: isHovered ? 13 : 0,
-              }}
-              transition={spring}
-            >
-              {card}
-            </motion.div>
-          )}
+        {card && (
+          <motion.div
+            className="absolute w-[33%] aspect-7/9 right-[4%] top-[5%] z-20"
+            animate={{
+              y: isHovered ? -150 * scale : 0,
+              x: isHovered ? 12 * scale : 0,
+              rotate: isHovered ? 13 : 0,
+            }}
+            transition={spring}
+          >
+            {card}
+          </motion.div>
+        )}
 
         {/* Folder Front — frosted glass panel, opens on hover */}
         <motion.div
           className={cn(
             "absolute inset-x-0 bottom-0 top-[15%] z-50",
-            "rounded-[48px] border-t-2 border-white/50",
+            "rounded-3xl sm:rounded-[36px] md:rounded-[48px] border-t-2 border-white/50",
             "bg-white/80 backdrop-blur-lg",
           )}
           style={{
@@ -128,11 +173,11 @@ export function Folder({
         >
           {/* Time & Location */}
           <div className="flex justify-between px-[7%] pt-[7%]">
-            <span className="font-mono text-sm uppercase text-foreground/70 tracking-wide">
-              {timeframe}
+            <span className="font-mono text-[10px] sm:text-xs md:text-sm uppercase text-foreground/70 tracking-wide">
+              {title}
             </span>
-            <span className="font-mono text-sm uppercase text-foreground/70 tracking-wide">
-              {location}
+            <span className="font-mono text-[10px] sm:text-xs md:text-sm uppercase text-foreground/70 tracking-wide">
+              {loc_and_time}
             </span>
           </div>
 
@@ -141,14 +186,22 @@ export function Folder({
 
           {/* Tags */}
           <div className="px-[7%]">
-            <p className="font-mono text-sm uppercase text-foreground/70 tracking-wide">
+            <p className="font-mono text-[10px] sm:text-xs md:text-sm uppercase text-foreground/70 tracking-wide">
               {tags.join("  ")}
             </p>
           </div>
 
           {/* Project Logo */}
           {logo && (
-            <div className="absolute bottom-[10%] left-[7%]">{logo}</div>
+            <div
+              className="absolute bottom-[10%] left-[7%]"
+              style={{
+                transform: `scale(${scale})`,
+                transformOrigin: "bottom left",
+              }}
+            >
+              {logo}
+            </div>
           )}
         </motion.div>
       </div>

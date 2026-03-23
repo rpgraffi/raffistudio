@@ -82,7 +82,7 @@ export function Folder({
     <Link
       href={href}
       className={cn(
-        "relative block w-[90vh] md:w-full max-w-[600px] cursor-pointer",
+        "relative block w-full max-w-[600px] cursor-pointer",
         className,
       )}
       onMouseEnter={() => setIsHovered(true)}
@@ -130,7 +130,7 @@ export function Folder({
               className="absolute z-20"
               style={{ left: `${left}%`, top: `${top}%` }}
               animate={{
-                y: isOpen ? -(50 + i * 18) * scale : 0,
+                y: isOpen ? -(10 + i * 18) * scale : 0,
                 x: isOpen ? (i % 2 === 0 ? -8 : 8) * scale : 0,
                 rotate: isOpen
                   ? (i % 2 === 0 ? -12 : 7)
@@ -169,7 +169,7 @@ export function Folder({
             transformOrigin: "bottom center",
           }}
           animate={{
-            rotateX: isOpen ? -15 : 0,
+            rotateX: isOpen ? -25 : 0,
             boxShadow: isOpen
               ? [
                   "0 -18px 40px rgba(0,0,0,0.12)",

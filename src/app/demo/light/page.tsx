@@ -3,13 +3,11 @@
 import { InsetFrame } from "../../../components/light/InsetFrame";
 import { LightButton } from "../../../components/light/LightButton";
 import { LightCard } from "../../../components/light/LightCard";
-import { LightProvider } from "../../../components/light/LightContext";
 import { LightRays } from "../../../components/light/LightRays";
 
 export default function LightPOCPage() {
   return (
-    <LightProvider>
-      <div className="min-h-screen bg-zinc-200 relative overflow-hidden flex flex-col items-center justify-center p-10 gap-10">
+    <div className="min-h-screen bg-zinc-200 relative overflow-hidden flex flex-col items-center justify-center p-10 gap-10">
         {/* Ambient Light Rays */}
         <LightRays />
 
@@ -49,6 +47,5 @@ export default function LightPOCPage() {
           </InsetFrame>
         </div>
       </div>
-    </LightProvider>
   );
 }

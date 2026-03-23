@@ -1,7 +1,6 @@
 "use client";
 
 import { Patch } from "@/app/projects/components/Patches";
-import { LightProvider } from "@/components/light/LightContext";
 import { Mail } from "@/components/mail/Mail";
 import DrawingHeadline from "@/components/natural-ui/DrawingHeadline";
 import { PencilUnderline } from "@/components/natural-ui/PencilStroke";
@@ -61,8 +60,7 @@ export default function Home() {
     <PageTransitionWrapper>
       <main className="min-h-screen relative flex flex-col gap-12 items-center justify-center">
         <Analytics />
-        <LightProvider>
-          <div className="min-h-screen flex flex-col py-12 gap-8 items-center justify-center">
+        <div className="min-h-screen flex flex-col py-12 gap-8 items-center justify-center">
             <DrawingHeadline
               className="text-6xl md:text-8xl text-zinc-800 font-sentient"
               triggerOnView={false}
@@ -93,8 +91,8 @@ export default function Home() {
           </div>
 
           {/* Projects Section */}
-          <section className="w-full max-w-site mx-auto px-8 py-24">
-            <div className="flex flex-wrap gap-24 md:gap-48 justify-center">
+          <section className="w-full max-w-site mx-auto px-8 md:py-24">
+            <div className="grid grid-cols-1 auto-rows-[90vh] place-items-center md:flex md:flex-wrap md:auto-rows-auto md:justify-center md:gap-48">
               <Folder
                 className="w-full"
                 href="/projects/convert-compress"
@@ -118,6 +116,12 @@ export default function Home() {
                     key="github"
                     src="/images/texture-icons/github.webp"
                     alt="GitHub"
+                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20"
+                  />,
+                  <Patch
+                    key="figma"
+                    src="/images/texture-icons/figma.webp"
+                    alt="Figma"
                     className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20"
                   />,
                 ]}
@@ -148,6 +152,12 @@ export default function Home() {
                 tags={["UX Design", "Web Design", "Flows", "Rive", "Animation"]}
                 patches={[
                   <Patch
+                    key="figma"
+                    src="/images/texture-icons/figma.webp"
+                    alt="Figma"
+                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20"
+                  />,
+                  <Patch
                     key="flutter"
                     src="/images/texture-icons/flutter.webp"
                     alt="Flutter"
@@ -175,6 +185,24 @@ export default function Home() {
                     key="docker"
                     src="/images/texture-icons/docker.webp"
                     alt="Docker"
+                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20"
+                  />,
+                  <Patch
+                    key="postgres"
+                    src="/images/texture-icons/postgres.webp"
+                    alt="PostgreSQL"
+                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20"
+                  />,
+                  <Patch
+                    key="graphql"
+                    src="/images/texture-icons/graphql.webp"
+                    alt="GraphQL"
+                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20"
+                  />,
+                  <Patch
+                    key="nginx"
+                    src="/images/texture-icons/nginx.webp"
+                    alt="Nginx"
                     className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20"
                   />,
                 ]}
@@ -265,7 +293,6 @@ export default function Home() {
               ))}
             </div>
           </TextureSection>
-        </LightProvider>
       </main>
     </PageTransitionWrapper>
   );

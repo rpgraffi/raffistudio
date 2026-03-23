@@ -77,7 +77,7 @@ export function LightButton({
         style={{
           background: `
             radial-gradient(
-              200px circle at calc(var(--mouse-x) - var(--btn-x)) calc(var(--mouse-y) - var(--btn-y)),
+              200px circle at calc(var(--mouse-x, 50vw) - var(--btn-x)) calc(var(--mouse-y, 40vh) - var(--btn-y)),
               rgba(255,255,255,${isDark ? "0.1" : "0.4"}),
               transparent 40%
             )

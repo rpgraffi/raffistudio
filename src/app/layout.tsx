@@ -57,7 +57,7 @@ export default function RootLayout({
       >
         <NoiseOverlay />
         {/* Persistent ShadowBackground - stays across page navigations */}
-        <div className="fixed inset-0 z-950 mix-blend-multiply pointer-events-none opacity-70">
+        <div className="fixed inset-0 z-[-1] mix-blend-multiply pointer-events-none opacity-70">
           <ShadowBackground className="h-lvh w-lvw" />
         </div>
         <PageTransitionProvider>{children}</PageTransitionProvider>

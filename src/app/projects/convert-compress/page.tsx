@@ -193,7 +193,7 @@ export default function ConvertCompressPage() {
               <Link
                 href="https://apps.apple.com/us/app/convert-compress/id6752861983"
                 target="_blank"
-                className="block h-[80px] md:h-[80px] w-auto hover:scale-105 transition-transform duration-300"
+                className="block h-[80px] md:h-[80px] w-auto hover:scale-105 hover:rotate-6 transition-transform duration-300"
               >
                 <Image
                   src="/images/texture-icons/download_mac_app_store.webp"

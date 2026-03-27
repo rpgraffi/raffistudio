@@ -2,8 +2,8 @@
 
 import { Patch } from "@/app/projects/components/Patches";
 import { Mail } from "@/components/mail/Mail";
-import DrawingHeadline from "@/components/natural-ui/DrawingHeadline";
 import { PencilUnderline } from "@/components/natural-ui/PencilStroke";
+import { RuledText } from "@/components/natural-ui/RuledText";
 import { PageTransitionWrapper } from "@/components/PageTransition";
 import { Folder } from "@/components/ui/Folder";
 import { GlassRuler } from "@/components/ui/GlassRuler";
@@ -59,38 +59,48 @@ const textureIcons = [
 export default function Home() {
   return (
     <PageTransitionWrapper>
-      <main className="min-h-screen relative flex flex-col gap-12 items-center justify-center">
+      <main className="min-h-screen relative flex flex-col gap-12 items-center">
         <Analytics />
         <GlassRuler />
-        <div className="min-h-screen flex flex-col py-12 gap-8 items-center justify-center">
-          <DrawingHeadline
-            className="text-6xl md:text-8xl text-zinc-800 font-sentient"
-            triggerOnView={false}
-            animate={true}
-            as="h1"
-          >
-            Hey, I'm Raffi!
-          </DrawingHeadline>
-          <p className="text-lg text-center">
-            and love to design and develop digital products.
-          </p>
-          <div className="flex gap-4">
-            <PencilUnderline href="https://www.linkedin.com/in/raphael-wennmacher/">
-              LinkedIn
-            </PencilUnderline>
-            <PencilUnderline href="https://github.com/rpgraffi">
-              {" "}
-              GitHub
-            </PencilUnderline>
-            <PencilUnderline href="https://www.instagram.com/raffis.insta/">
-              Instagram
-            </PencilUnderline>
-          </div>
+        <section className="min-h-screen w-full max-w-site mx-auto px-8 py-12 flex items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center w-full">
+            <div className="flex flex-col gap-8 items-start">
+              <h1 className="text-3xl md:text-5xl text-zinc-800">
+                I love to design and develop digital products.
+              </h1>
+              <RuledText className="text-lg max-w-xl">
+                Curious, always up to date, and obsessed with the details. I
+                understand products holistically, from the user all the way to
+                the customer's door, and I build things people actually want to
+                buy. Freelancing for 5+ years while studying at LMU Munich.
+              </RuledText>
+              <div className="flex gap-4">
+                <PencilUnderline href="https://github.com/rpgraffi">
+                  GitHub
+                </PencilUnderline>
+                <PencilUnderline href="https://www.linkedin.com/in/raphael-wennmacher/">
+                  LinkedIn
+                </PencilUnderline>
+                <PencilUnderline href="https://www.instagram.com/raffis.insta/">
+                  Instagram
+                </PencilUnderline>
+              </div>
+              <div className="flex flex-col md:flex-row gap-12 items-center mt-8">
+                <Mail width={100} url="mailto:me@raffi.studio" />
+              </div>
+            </div>
 
-          <div className="flex flex-col md:flex-row gap-12 items-center mt-8">
-            <Mail width={100} url="mailto:hello@raphaelwennmacher.com" />
+            <div className="w-full h-[50vh] lg:h-[70vh] relative rounded-2xl overflow-hidden">
+              <Image
+                src="/images/Profile.webp"
+                alt="Portrait of Raffi"
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
           </div>
-        </div>
+        </section>
 
         {/* Projects Section */}
         <section className="w-full max-w-site mx-auto px-8 md:py-24">

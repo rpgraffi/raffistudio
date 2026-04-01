@@ -36,7 +36,7 @@ export const StatsRow: React.FC<StatsRowProps> = ({
 }) => {
   return (
     <div
-      className={`flex gap-12 md:gap-16 overflow-x-auto scrollbar-hide ${className}`}
+      className={`flex gap-12 md:gap-16 overflow-x-auto overflow-y-hidden scrollbar-hide ${className}`}
     >
       {stats.map((stat, index) => (
         <StatItem key={index} value={stat.value} label={stat.label} />

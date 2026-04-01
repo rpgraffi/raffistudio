@@ -258,7 +258,7 @@ export default function LMUAppPage() {
               <Link
                 href="https://apps.apple.com/de/app/lmu-students/id6505039729"
                 target="_blank"
-                className="block h-[80px] md:h-[80px] w-auto hover:scale-105 transition-transform duration-300"
+                className="block h-[80px] md:h-[80px] w-auto hover:scale-105 hover:rotate-6 transition-transform duration-300"
               >
                 <Image
                   src="/images/texture-icons/download_app_store.webp"

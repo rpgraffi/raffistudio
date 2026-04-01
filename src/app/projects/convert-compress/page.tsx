@@ -176,10 +176,10 @@ export default function ConvertCompressPage() {
           <div className="py-20 md:py-32">
             <ProjectStats
               stats={[
-                { value: "2.200", label: "Downloads" },
+                { value: "4.100", label: "Downloads" },
                 { value: "4,9", label: "Stars" },
-                { value: "22", label: "Reviews" },
-                { value: "110", label: "GitHub Stars" },
+                { value: "61", label: "Reviews" },
+                { value: "119", label: "GitHub Stars" },
               ]}
               tools={[
                 { src: "/images/texture-icons/swift.webp", alt: "Swift" },
@@ -193,7 +193,7 @@ export default function ConvertCompressPage() {
               <Link
                 href="https://apps.apple.com/us/app/convert-compress/id6752861983"
                 target="_blank"
-                className="block h-[80px] md:h-[80px] w-auto hover:scale-105 transition-transform duration-300"
+                className="block h-[80px] md:h-[80px] w-auto hover:scale-105 hover:rotate-6 transition-transform duration-300"
               >
                 <Image
                   src="/images/texture-icons/download_mac_app_store.webp"

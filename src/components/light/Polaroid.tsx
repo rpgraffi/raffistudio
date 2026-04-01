@@ -78,7 +78,7 @@ export function Polaroid({
         style={{
           background: `
             radial-gradient(
-              600px circle at calc(var(--mouse-x) - var(--card-x)) calc(var(--mouse-y) - var(--card-y)),
+              600px circle at calc(var(--mouse-x, 50vw) - var(--card-x)) calc(var(--mouse-y, 40vh) - var(--card-y)),
               rgba(255,255,255,0.4),
               transparent 40%
             )

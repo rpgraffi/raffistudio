@@ -245,7 +245,7 @@ export function GlassRuler() {
     const startPadding = 24;
     st.current.x = startPadding + W / 2;
     st.current.y = window.scrollY + startPadding + H / 2;
-    st.current.angle = -0.12;
+    st.current.angle = 0.30;
     sync();
   }, [fid]);
 
@@ -326,8 +326,8 @@ export function GlassRuler() {
         className={cls}
         style={{
           position: "absolute",
-          top: 0,
-          left: 0,
+          top: "20vh",
+          left: "50%",
           width: W,
           height: H,
           borderRadius: R,

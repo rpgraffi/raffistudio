@@ -19,8 +19,8 @@ export interface FolderProps {
 
 const spring = {
   type: "spring" as const,
-  stiffness: 280,
-  damping: 26,
+  stiffness: 200,
+  damping: 25,
 };
 
 const seededRandom = (seed: number) => {
@@ -136,7 +136,7 @@ export function Folder({
                   ? (i % 2 === 0 ? -12 : 7)
                   : restRotation,
               }}
-              transition={{ ...spring, delay: isOpen ? i * 0.04 : 0 }}
+              transition={spring}
             >
               {patch}
             </motion.div>
@@ -146,10 +146,10 @@ export function Folder({
         {/* Card — role card, rotates outward on hover */}
         {card && (
           <motion.div
-            className="absolute w-[33%] aspect-7/9 right-[4%] top-[5%] z-20"
+            className="absolute w-[40%] aspect-7/10 right-[4%] filter drop-shadow-md/20 top-[5%] z-20"
             animate={{
-              y: isOpen ? -150 * scale : 0,
-              x: isOpen ? 12 * scale : 0,
+              y: isOpen ? -270 * scale : 0,
+              x: isOpen ? 30 * scale : 0,
               rotate: isOpen ? 13 : 0,
             }}
             transition={spring}
@@ -190,10 +190,10 @@ export function Folder({
         >
           {/* Time & Location */}
           <div className="flex justify-between px-[7%] pt-[7%]">
-            <span className="font-mono text-[10px] sm:text-xs md:text-sm uppercase text-foreground/70 tracking-wide">
+            <span className="font-mono text-[10px] sm:text-xs md:text-sm uppercase text-foreground/70">
               {title}
             </span>
-            <span className="font-mono text-[10px] sm:text-xs md:text-sm uppercase text-foreground/70 tracking-wide">
+            <span className="font-mono text-[10px] sm:text-xs md:text-sm uppercase text-foreground/70">
               {loc_and_time}
             </span>
           </div>
@@ -203,8 +203,8 @@ export function Folder({
 
           {/* Tags */}
           <div className="px-[7%]">
-            <p className="font-mono text-[10px] sm:text-xs md:text-sm uppercase text-foreground/70 tracking-wide">
-              {tags.join("  ")}
+            <p className="font-mono text-[10px] sm:text-xs md:text-sm uppercase text-foreground/70">
+              {tags.join(", ")}
             </p>
           </div>
 

@@ -11,27 +11,6 @@ import { TextureSection } from "@/components/ui/TextureSection";
 import { Analytics } from "@vercel/analytics/next";
 import Image from "next/image";
 
-const polaroidItems = [
-  {
-    id: 1,
-    src: "/images/mail/Background.webp",
-    alt: "Background",
-    caption: "Summer 2023",
-  },
-  {
-    id: 2,
-    src: "/images/mail/Top.webp",
-    alt: "Top",
-    caption: "Adventures",
-  },
-  {
-    id: 3,
-    src: "/images/mail/Bottom.webp",
-    alt: "Bottom",
-    caption: "Chill Vibes",
-  },
-];
-
 const textureIcons = [
   "figma",
   "blender",
@@ -54,6 +33,8 @@ const textureIcons = [
   "typescript",
   "unity",
   "unreal",
+  "webflow",
+  "rive",
 ];
 
 export default function Home() {
@@ -64,11 +45,11 @@ export default function Home() {
         <GlassRuler />
         <section className="min-h-screen w-full max-w-site mx-auto px-8 py-12 flex items-center">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center w-full">
-            <div className="flex flex-col gap-8 items-start">
-              <h1 className="text-3xl md:text-5xl text-zinc-800">
+            <div className="flex flex-col gap-10 items-start">
+              <h1 className="text-3xl md:text-5xl font-medium text-zinc-800">
                 I love to design and develop digital products.
               </h1>
-              <RuledText className="text-lg max-w-xl">
+              <RuledText className="text-lg max-w-xl leading-8">
                 Curious, always up to date, and obsessed with the details. I
                 understand products holistically, from the user all the way to
                 the customer's door, and I build things people actually want to
@@ -90,12 +71,12 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="w-full h-[50vh] lg:h-[70vh] relative rounded-2xl overflow-hidden">
+            <div className="w-full h-full lg:h-[70vh] relative rounded-2xl overflow-hidden">
               <Image
                 src="/images/Profile.webp"
                 alt="Portrait of Raffi"
                 fill
-                className="object-cover"
+                className="object-contain"
                 priority
               />
             </div>
@@ -110,7 +91,7 @@ export default function Home() {
               href="/projects/convert-compress"
               title="Convert & Compress"
               loc_and_time="Munich • Winter 2025"
-              tags={["UX Design", "Web Design", "Flows", "Rive", "Animation"]}
+              tags={["Development", "UX Design", "Marketing", "macOS"]}
               patches={[
                 <Patch
                   key="swift"
@@ -161,7 +142,7 @@ export default function Home() {
               href="/projects/lmu-app"
               title="LMU Students"
               loc_and_time="Munich • Fall 2024"
-              tags={["UX Design", "Web Design", "Flows", "Rive", "Animation"]}
+              tags={["UX Design", "Backend", "Mobile App"]}
               patches={[
                 <Patch
                   key="figma"
@@ -240,9 +221,9 @@ export default function Home() {
             <Folder
               className="w-full"
               href="/projects/tradar"
-              title="TRADAR"
+              title="WIP TRADAR"
               loc_and_time="Munich • 2023"
-              tags={["UX Design", "Web Design", "Flows", "Rive", "Animation"]}
+              tags={["UX Design", "Web Design", "Flows", "Animations"]}
               patches={[
                 <Patch
                   key="figma"
@@ -257,9 +238,9 @@ export default function Home() {
                   className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20"
                 />,
                 <Patch
-                  key="github"
-                  src="/images/texture-icons/github.webp"
-                  alt="GitHub"
+                  key="rive"
+                  src="/images/texture-icons/rive.webp"
+                  alt="Rive"
                   className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20"
                 />,
               ]}

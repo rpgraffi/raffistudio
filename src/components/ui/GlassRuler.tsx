@@ -389,6 +389,10 @@ export function GlassRuler() {
       </svg>
 
       <style>{`
+        .${cls} { display: none; }
+        @media (min-width: 768px) {
+          .${cls} { display: block; }
+        }
         .${cls}:active { cursor: grabbing; }
         .${cls}::before {
           content: '';

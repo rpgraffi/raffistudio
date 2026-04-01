@@ -45,7 +45,7 @@ export default function Home() {
         <GlassRuler />
         <section className="min-h-screen w-full max-w-site mx-auto px-8 py-12 flex items-center">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center w-full">
-            <div className="flex flex-col gap-10 items-start">
+            <div className="order-2 lg:order-1 flex flex-col gap-10 items-start">
               <h1 className="text-3xl md:text-5xl font-medium text-zinc-800">
                 I love to design and develop digital products.
               </h1>
@@ -71,7 +71,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="w-full h-full lg:h-[70vh] relative rounded-2xl overflow-hidden">
+            <div className="order-1 lg:order-2 w-full h-[45vh] sm:h-[55vh] lg:h-[70vh] relative rounded-2xl overflow-hidden">
               <Image
                 src="/images/Profile.webp"
                 alt="Portrait of Raffi"

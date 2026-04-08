@@ -50,9 +50,9 @@ export default function Home() {
                 I love to design and develop digital products.
               </h1>
               <RuledText className="text-lg max-w-xl leading-8">
-                Curious, always up to date, and obsessed with the details. I
+                Always up to date, and obsessed with the details. I
                 understand products holistically, from the user all the way to
-                the customer's door, and I build things people actually want to
+                the customer's door, and build things people actually want to
                 buy. Freelancing for 5+ years while studying at LMU Munich.
               </RuledText>
               <div className="flex gap-4">
@@ -221,7 +221,7 @@ export default function Home() {
             <Folder
               className="w-full"
               href="/projects/tradar"
-              title="WIP TRADAR"
+              title="TRADAR"
               loc_and_time="Munich • 2023"
               tags={["UX Design", "Web Design", "Flows", "Animations"]}
               patches={[

@@ -2,7 +2,14 @@
 
 import { useTexture } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import * as THREE from "three";
 
 // All available shadow images
@@ -10,12 +17,10 @@ const SHADOW_IMAGES = [
   "/images/shadows/plant_shadow-01.jpg",
   "/images/shadows/plant_shadow-02.jpg",
   "/images/shadows/plant_shadow-03.jpg",
-  "/images/shadows/plant_shadow-04.jpg",
   "/images/shadows/plant_shadow-05.jpg",
   "/images/shadows/plant_shadow-06.jpg",
   "/images/shadows/plant_shadow-07.jpg",
   "/images/shadows/plant_shadow-08.jpg",
-  "/images/shadows/plant_shadow-09.jpg",
   "/images/shadows/plant_shadow-10.jpg",
 ] as const;
 
@@ -160,6 +165,7 @@ interface TextureMeshProps {
   scale: number;
   windSpeed: number;
   windDirection: { x: number; y: number };
+  onReady?: () => void;
 }
 
 const TextureMesh = ({
@@ -172,10 +178,19 @@ const TextureMesh = ({
   scale,
   windSpeed,
   windDirection,
+  onReady,
 }: TextureMeshProps) => {
   const mesh = useRef<THREE.Mesh>(null);
   const { size } = useThree();
   const texture = useTexture(url);
+
+  // Signal readiness after the first frame paints with the loaded texture
+  const readyFired = useRef(false);
+  useEffect(() => {
+    if (readyFired.current) return;
+    readyFired.current = true;
+    requestAnimationFrame(() => onReady?.());
+  }, [onReady]);
 
   // Calculate rotation need
   const textureAspect = texture.image
@@ -210,7 +225,7 @@ const TextureMesh = ({
       uTextureSize: { value: new THREE.Vector2(1, 1) },
       uRotate: { value: shouldRotate },
     }),
-    [texture, size, shouldRotate]
+    [texture, size, shouldRotate],
   );
 
   useEffect(() => {
@@ -267,7 +282,10 @@ const ShadowPlane = ({
   scale,
   windSpeed,
   windDirection,
-}: Omit<Required<ShadowBackgroundProps>, "className" | "children">) => {
+  onReady,
+}: Omit<Required<ShadowBackgroundProps>, "className" | "children"> & {
+  onReady?: () => void;
+}) => {
   return (
     <Suspense fallback={null}>
       <TextureMesh
@@ -281,6 +299,7 @@ const ShadowPlane = ({
         scale={scale}
         windSpeed={windSpeed}
         windDirection={windDirection}
+        onReady={onReady}
       />
     </Suspense>
   );
@@ -328,22 +347,23 @@ export default function ShadowBackground({
   className = "",
   children,
 }: ShadowBackgroundProps) {
-  // Select random image on mount if not specified
   const [selectedImage] = useState<ShadowImage>(
-    () => image ?? getRandomShadowImage()
+    () => image ?? getRandomShadowImage(),
   );
+  const [ready, setReady] = useState(false);
+  const handleReady = useCallback(() => setReady(true), []);
 
-  // Use prop image if it changes, otherwise keep the randomly selected one
   const finalImage = image ?? selectedImage;
 
   return (
     <div className={`relative ${className}`}>
-      {/* Canvas overlay - force GPU layer to reduce scroll throttling */}
       <div
-        className="absolute inset-0 opacity-70 z-500 mix-blend-multiply pointer-events-none"
+        className="absolute inset-0 z-500 mix-blend-multiply pointer-events-none"
         style={{
-          willChange: "transform",
+          opacity: ready ? 0.7 : 0,
+          transition: "opacity 2.4s cubic-bezier(0.16,1,0.3,1)",
           transform: "translateZ(0)",
+          willChange: "transform",
           backfaceVisibility: "hidden",
         }}
       >
@@ -364,11 +384,11 @@ export default function ShadowBackground({
             scale={scale}
             windSpeed={windSpeed}
             windDirection={windDirection}
+            onReady={handleReady}
           />
         </Canvas>
       </div>
 
-      {/* Content */}
       {children}
     </div>
   );

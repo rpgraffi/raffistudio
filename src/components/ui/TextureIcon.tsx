@@ -31,7 +31,7 @@ export function TextureIcon({
         width: `${scale}em`,
         height: `${scale}em`,
         position: "relative",
-        verticalAlign: "middle",
+        verticalAlign: "-0.15em",
       }}
     >
       <Image

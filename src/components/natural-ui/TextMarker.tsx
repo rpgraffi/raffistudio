@@ -123,8 +123,6 @@ const MarkerSVGRenderer: React.FC<MarkerSVGRendererProps> = ({
             xChannelSelector="R"
             yChannelSelector="G"
           />
-          {/* Optional: Blur slightly for ink spread */}
-          <feGaussianBlur stdDeviation="0.3" />
         </filter>
       </defs>
       <path

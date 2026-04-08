@@ -325,13 +325,11 @@ export const PencilUnderline: React.FC<PencilUnderlineProps> = ({
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (!href) return;
 
-    // Allow cmd/ctrl click for new tab
     if (e.metaKey || e.ctrlKey) return;
 
-    // Only handle internal links (starting with /)
     if (href.startsWith("/")) {
       e.preventDefault();
-      navigateTo(href);
+      navigateTo(href, { x: e.pageX, y: e.pageY });
     }
   };
 

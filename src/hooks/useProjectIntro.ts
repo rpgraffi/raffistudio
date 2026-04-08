@@ -3,9 +3,9 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 // Animation timing constants
-const DRAWING_ANIMATION_DURATION = 3000; // Time for DrawingHeadline to complete (ms)
-const HEADLINE_MOVE_DELAY = 500; // Extra delay before moving headline (ms)
-const BACKGROUND_REVEAL_DELAY = 500; // Time before background fades in (ms)
+const DRAWING_ANIMATION_DURATION = 1500; // Time for DrawingHeadline to complete (ms)
+const HEADLINE_MOVE_DELAY = 550; // Extra delay before moving headline (ms)
+const BACKGROUND_REVEAL_DELAY = 300; // Time before background fades in (ms)
 
 export interface UseProjectIntroOptions {
   /** Duration for the drawing animation in ms (default: 3000) */

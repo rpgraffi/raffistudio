@@ -1,8 +1,8 @@
 "use client";
 
+import { TransitionLink } from "@/components/PageTransition";
 import { cn } from "@/lib/utils";
 import { motion, useInView } from "framer-motion";
-import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 
 export interface FolderProps {
@@ -79,7 +79,7 @@ export function Folder({
   const isOpen = isTouchDevice ? isInView : isHovered;
 
   return (
-    <Link
+    <TransitionLink
       href={href}
       className={cn(
         "relative block w-full max-w-[600px] cursor-pointer",
@@ -162,8 +162,8 @@ export function Folder({
         <motion.div
           className={cn(
             "absolute inset-x-0 bottom-0 top-[15%] z-50",
-            "rounded-3xl sm:rounded-[36px] md:rounded-[48px] border-t-2 border-white/50",
-            "bg-white/80 backdrop-blur-lg",
+            "rounded-3xl sm:rounded-[36px] md:rounded-[48px] border-t border-white/80",
+            "bg-white/75 backdrop-blur-sm",
           )}
           style={{
             transformOrigin: "bottom center",
@@ -174,14 +174,14 @@ export function Folder({
               ? [
                   "0 -18px 40px rgba(0,0,0,0.12)",
                   "0 -4px 10px rgba(0,0,0,0.08)",
-                  "inset 0 8px 8px rgba(255,255,255,0.5)",
+                  "inset 0 4px 4px rgba(255,255,255,0.3)",
                   "inset 0 -4px 4px rgba(0,0,0,0.06)",
                   "inset 0 -12px 12px rgba(0,0,0,0.06)",
                 ].join(", ")
               : [
                   "0 -4px 12px rgba(0,0,0,0.06)",
                   "0 -1px 3px rgba(0,0,0,0.08)",
-                  "inset 0 8px 8px rgba(255,255,255,0.5)",
+                  "inset 0 4px 4px rgba(255,255,255,0.3)",
                   "inset 0 -4px 4px rgba(0,0,0,0.06)",
                   "inset 0 -12px 12px rgba(0,0,0,0.06)",
                 ].join(", "),
@@ -222,6 +222,6 @@ export function Folder({
           )}
         </motion.div>
       </div>
-    </Link>
+    </TransitionLink>
   );
 }

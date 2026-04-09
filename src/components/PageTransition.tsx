@@ -1,6 +1,12 @@
 "use client";
 
-import { motion } from "framer-motion";
+import {
+  animate as fmAnimate,
+  motion,
+  useMotionTemplate,
+  useMotionValue,
+  useTransform,
+} from "framer-motion";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -10,6 +16,7 @@ import {
   useContext,
   useEffect,
   useLayoutEffect,
+  useRef,
   useState,
 } from "react";
 
@@ -23,22 +30,23 @@ interface ClickPosition {
 interface PageTransitionContextType {
   isExiting: boolean;
   direction: TransitionDirection;
-  clickPosition: ClickPosition | null;
   navigateTo: (href: string, clickPos?: ClickPosition) => void;
 }
 
 const PageTransitionContext = createContext<PageTransitionContextType>({
   isExiting: false,
   direction: "forward",
-  clickPosition: null,
   navigateTo: () => {},
 });
 
 export const usePageTransition = () => useContext(PageTransitionContext);
 
-const TRANSITION_DURATION = 0.4;
+const TRANSITION_DURATION = 0.9;
 const ENTER_DURATION = 0.8;
 const ENTER_DELAY = 0.3;
+const CONTENT_FADE_DELAY = 0.3;
+const BLUR_AMOUNT = 20;
+const INNER_RADIUS_PCT = 0.1;
 
 interface PageTransitionProviderProps {
   children: ReactNode;
@@ -56,6 +64,16 @@ export function PageTransitionProvider({
     null,
   );
 
+  const radius = useMotionValue(0);
+  const innerRadius = useTransform(radius, (r) => r * INNER_RADIUS_PCT);
+  const animRef = useRef<ReturnType<typeof fmAnimate> | null>(null);
+  const maxRadiusRef = useRef(2500);
+
+  const cx = clickPosition?.x ?? 0;
+  const cy = clickPosition?.y ?? 0;
+
+  const maskImage = useMotionTemplate`radial-gradient(circle at ${cx}px ${cy}px, black ${innerRadius}px, transparent ${radius}px)`;
+
   const navigateTo = useCallback(
     (href: string, clickPos?: ClickPosition) => {
       if (href === pathname) return;
@@ -64,12 +82,27 @@ export function PageTransitionProvider({
       const targetDepth = href.split("/").filter(Boolean).length;
 
       setDirection(targetDepth > currentDepth ? "forward" : "backward");
-      setClickPosition(clickPos ?? null);
+      setClickPosition(
+        clickPos ?? { x: window.innerWidth / 2, y: window.innerHeight / 2 },
+      );
+      maxRadiusRef.current =
+        Math.hypot(window.innerWidth, window.innerHeight) * 2;
       setIsExiting(true);
       setPendingHref(href);
     },
     [pathname],
   );
+
+  useEffect(() => {
+    if (isExiting && clickPosition) {
+      animRef.current?.stop();
+      radius.jump(0);
+      animRef.current = fmAnimate(radius, maxRadiusRef.current, {
+        duration: TRANSITION_DURATION,
+        ease: [0.4, 0, 0.2, 1],
+      });
+    }
+  }, [isExiting, clickPosition, radius]);
 
   useEffect(() => {
     if (isExiting && pendingHref) {
@@ -88,13 +121,44 @@ export function PageTransitionProvider({
     setIsExiting(false);
     setPendingHref(null);
     setClickPosition(null);
-  }, [pathname]);
+    animRef.current?.stop();
+    radius.jump(0);
+  }, [pathname, radius]);
 
   return (
     <PageTransitionContext.Provider
-      value={{ isExiting, direction, clickPosition, navigateTo }}
+      value={{ isExiting, direction, navigateTo }}
     >
       {children}
+
+      {/* Progressive radial blur */}
+      <motion.div
+        className="fixed inset-0 pointer-events-none z-9999"
+        style={{
+          backdropFilter: `blur(${BLUR_AMOUNT}px)`,
+          WebkitBackdropFilter: `blur(${BLUR_AMOUNT}px)`,
+          maskImage,
+          WebkitMaskImage: maskImage,
+        }}
+        animate={{ opacity: isExiting ? 1 : 0 }}
+        transition={{
+          opacity: { duration: isExiting ? 0 : ENTER_DELAY + 0.2 },
+        }}
+      />
+
+      {/* White radial glow from click point */}
+      <motion.div
+        className="fixed inset-0 pointer-events-none z-9999"
+        style={{
+          background: `radial-gradient(circle at ${cx}px ${cy}px, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.06) 35%, transparent 70%)`,
+          maskImage,
+          WebkitMaskImage: maskImage,
+        }}
+        animate={{ opacity: isExiting ? 1 : 0 }}
+        transition={{
+          opacity: { duration: isExiting ? 0 : ENTER_DELAY + 0.2 },
+        }}
+      />
     </PageTransitionContext.Provider>
   );
 }
@@ -108,45 +172,23 @@ export function PageTransitionWrapper({
   children,
   className,
 }: PageTransitionWrapperProps) {
-  const { isExiting, direction, clickPosition } = usePageTransition();
-
-  const exitScale = direction === "forward" ? 1.15 : 0.85;
-
-  const origin =
-    isExiting && clickPosition
-      ? `${clickPosition.x}px ${clickPosition.y}px`
-      : undefined;
+  const { isExiting } = usePageTransition();
 
   return (
-    <>
-      {/* Backdrop-filter overlay — cheaper than filter on the whole subtree */}
-      <motion.div
-        className="fixed inset-0 pointer-events-none z-9999"
-        animate={{
-          backdropFilter: isExiting ? "blur(12px)" : "blur(0px)",
-          opacity: isExiting ? 1 : 0,
-        }}
-        transition={{ duration: TRANSITION_DURATION, ease: [0.4, 0, 0.2, 1] }}
-      />
-
-      {/* Content — scale + opacity with entrance and exit animations */}
-      <motion.div
-        className={className}
-        style={origin ? { transformOrigin: origin } : undefined}
-        initial={{ opacity: 0, scale: 0.97 }}
-        animate={{
-          opacity: isExiting ? 0 : 1,
-          scale: isExiting ? exitScale : 1,
-        }}
-        transition={{
-          duration: isExiting ? TRANSITION_DURATION : ENTER_DURATION,
-          ease: isExiting ? [0.4, 0, 0.2, 1] : [0.16, 1, 0.3, 1],
-          delay: isExiting ? 0 : ENTER_DELAY,
-        }}
-      >
-        {children}
-      </motion.div>
-    </>
+    <motion.div
+      className={className}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: isExiting ? 0 : 1 }}
+      transition={{
+        duration: isExiting
+          ? TRANSITION_DURATION - CONTENT_FADE_DELAY
+          : ENTER_DURATION,
+        ease: isExiting ? [0.4, 0, 0.2, 1] : [0.16, 1, 0.3, 1],
+        delay: isExiting ? CONTENT_FADE_DELAY : ENTER_DELAY,
+      }}
+    >
+      {children}
+    </motion.div>
   );
 }
 
@@ -171,7 +213,7 @@ export function TransitionLink({
 
     if (hrefString.startsWith("/")) {
       e.preventDefault();
-      navigateTo(hrefString, { x: e.pageX, y: e.pageY });
+      navigateTo(hrefString, { x: e.clientX, y: e.clientY });
     }
   };
 

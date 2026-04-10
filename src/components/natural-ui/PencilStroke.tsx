@@ -101,10 +101,11 @@ const PencilStrokeRenderer: React.FC<PencilStrokeProps & { id: string }> = ({
         <defs>
           <filter
             id={`${id}-pencil`}
-            x="-50%"
-            y="-50%"
-            width="200%"
-            height="200%"
+            filterUnits="userSpaceOnUse"
+            x={-4}
+            y={-4}
+            width={width + 8}
+            height={height + 8}
           >
             <feTurbulence
               type="fractalNoise"

@@ -7,6 +7,7 @@ import { RuledText } from "@/components/natural-ui/RuledText";
 import { PageTransitionWrapper } from "@/components/PageTransition";
 import { Folder } from "@/components/ui/Folder";
 import { GlassRuler } from "@/components/ui/GlassRuler";
+import { ReviewStack } from "@/components/reviews/ReviewStack";
 import { TextureSection } from "@/components/ui/TextureSection";
 import { Analytics } from "@vercel/analytics/next";
 import Image from "next/image";
@@ -265,6 +266,9 @@ export default function Home() {
             />
           </div>
         </section>
+
+        {/* Reviews Section */}
+        <ReviewStack />
 
         <TextureSection className="py-12 my-12 flex flex-col items-center justify-center text-center gap-8">
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-8 p-4 max-w-5xl w-full">

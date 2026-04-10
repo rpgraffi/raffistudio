@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Animation timing constants
 const DRAWING_ANIMATION_DURATION = 1500; // Time for DrawingHeadline to complete (ms)
@@ -73,15 +73,25 @@ export function useProjectIntro(
   const [hasInitialPosition, setHasInitialPosition] = useState(false);
   const headlineRef = useRef<HTMLDivElement>(null);
 
-  // Calculate offset to center the headline in viewport
-  useLayoutEffect(() => {
+  // Calculate the transform needed to center the headline in the viewport.
+  //
+  // Two things must be true before we measure:
+  //  1. Fonts must be loaded (display:swap causes a layout shift on font swap).
+  //  2. Scroll must be at 0. The parent PageTransitionProvider resets scroll in
+  //     a useLayoutEffect, but a child useLayoutEffect would fire *before* that.
+  //     Using useEffect (+ fonts.ready) guarantees all useLayoutEffects have run.
+  //
+  // The calculation itself is also scroll-aware: we convert getBoundingClientRect
+  // (viewport-relative) to document-relative coordinates so the resulting offset
+  // is correct regardless of the current scroll position.
+  useEffect(() => {
     const calculateOffset = () => {
       if (headlineRef.current) {
         const rect = headlineRef.current.getBoundingClientRect();
         const viewportCenterX = window.innerWidth / 2;
         const viewportCenterY = window.innerHeight / 2;
-        const elementCenterX = rect.left + rect.width / 2;
-        const elementCenterY = rect.top + rect.height / 2;
+        const elementCenterX = rect.left + window.scrollX + rect.width / 2;
+        const elementCenterY = rect.top + window.scrollY + rect.height / 2;
 
         setHeadlineOffset({
           x: viewportCenterX - elementCenterX,
@@ -90,10 +100,8 @@ export function useProjectIntro(
       }
     };
 
-    // Calculate immediately
-    calculateOffset();
+    document.fonts.ready.then(calculateOffset);
 
-    // Recalculate on resize
     window.addEventListener("resize", calculateOffset);
     return () => window.removeEventListener("resize", calculateOffset);
   }, []);

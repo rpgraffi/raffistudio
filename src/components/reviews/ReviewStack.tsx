@@ -75,7 +75,7 @@ export function ReviewStack() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative" style={{ height: `${(postcards.length + 1) * 100}vh` }}>
+    <section ref={sectionRef} className="relative" style={{ height: `${(postcards.length + 1) * 50}vh` }}>
       <div ref={stackRef} className="h-screen w-full flex items-center justify-center">
         <div className="relative w-[400px] h-[280px] sm:w-[520px] sm:h-[365px] md:w-[640px] md:h-[450px]">
           {postcards.map((card, i) => (

@@ -10,13 +10,11 @@ import {
   ProjectTextBlock,
 } from "@/app/projects/components/ProjectContent";
 import Header from "@/components/Header";
-import ShadowBackground from "@/components/shadows/ShadowBackground";
 import { CodeBlock, CodeBlockDark, InlineCode } from "@/components/ui/Code";
 
 export default function CodeDemoPage() {
   return (
     <main className="min-h-screen font-sans relative">
-      <ShadowBackground className="min-h-screen flex flex-col">
         <Header />
 
         {/* Hero Content */}
@@ -31,7 +29,6 @@ export default function CodeDemoPage() {
             project documentation.
           </p>
         </div>
-      </ShadowBackground>
 
       <ProjectContent>
         {/* Inline Code Demo */}

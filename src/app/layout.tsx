@@ -1,6 +1,6 @@
 import NoiseOverlay from "@/components/NoiseOverlay";
 import { PageTransitionProvider } from "@/components/PageTransition";
-import ShadowBackground from "@/components/shadows/ShadowBackground";
+import { ShadowBackgroundV2 } from "@/components/shadows/ShadowBackground";
 import type { Metadata } from "next";
 import { Caveat, Fira_Code, Heebo } from "next/font/google";
 import localFont from "next/font/local";
@@ -36,12 +36,54 @@ const heebo = Heebo({
   subsets: ["latin"],
 });
 
+const baseUrl = "https://raffi.studio";
+
 export const metadata: Metadata = {
-  title: "Raphael Wennmacher • Portfolio",
+  metadataBase: new URL(baseUrl),
+  title: {
+    default: "Raphael Wennmacher • Portfolio",
+    template: "%s • Raphael Wennmacher",
+  },
   description:
-    "I focus on HCI, UX/UI systems, and AI interfaces. I craft digital products with intent. Based in munich, finishing my master’s in HCI and CS at LMU.",
+    "I focus on HCI, UX/UI systems, and AI interfaces. I craft digital products with intent. Based in Munich, finishing my master's in HCI and CS at LMU.",
+  keywords: [
+    "HCI",
+    "UX design",
+    "UI design",
+    "portfolio",
+    "Munich",
+    "AI interfaces",
+    "product design",
+    "freelance designer",
+    "LMU",
+  ],
+  authors: [{ name: "Raphael Wennmacher", url: baseUrl }],
   icons: {
     icon: "/favicon.png",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: baseUrl,
+    siteName: "Raphael Wennmacher",
+    title: "Raphael Wennmacher • Portfolio",
+    description:
+      "I focus on HCI, UX/UI systems, and AI interfaces. I craft digital products with intent. Based in Munich, finishing my master's in HCI and CS at LMU.",
+    images: [
+      {
+        url: "/images/Profile.webp",
+        width: 1200,
+        height: 630,
+        alt: "Raphael Wennmacher — Portfolio",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Raphael Wennmacher • Portfolio",
+    description:
+      "I focus on HCI, UX/UI systems, and AI interfaces. I craft digital products with intent. Based in Munich, finishing my master's in HCI and CS at LMU.",
+    images: ["/images/Profile.webp"],
   },
 };
 
@@ -57,8 +99,8 @@ export default function RootLayout({
       >
         <NoiseOverlay />
         {/* Persistent ShadowBackground - stays across page navigations */}
-        <div className="fixed inset-0 z-[-1] mix-blend-multiply pointer-events-none opacity-70">
-          <ShadowBackground className="h-lvh w-lvw" />
+        <div className="fixed top-0 left-0 h-lvh w-full z-[-1] mix-blend-multiply pointer-events-none">
+          <ShadowBackgroundV2 className="h-lvh w-full" shadowScale={0.8} />
         </div>
         <PageTransitionProvider>{children}</PageTransitionProvider>
       </body>

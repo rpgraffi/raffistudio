@@ -11,6 +11,7 @@ import { ReviewStack } from "@/components/reviews/ReviewStack";
 import { TextureSection } from "@/components/ui/TextureSection";
 import { Analytics } from "@vercel/analytics/next";
 import Image from "next/image";
+import { Resume } from "@/components/resume/Resume";
 
 const textureIcons = [
   "figma",
@@ -38,10 +39,37 @@ const textureIcons = [
   "rive",
 ];
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Raphael Wennmacher",
+  url: "https://raffi.studio",
+  email: "me@raffi.studio",
+  jobTitle: "UX/UI Designer & Developer",
+  description:
+    "HCI researcher, UX/UI designer, and developer based in Munich. Finishing a master's in HCI and CS at LMU.",
+  sameAs: [
+    "https://github.com/rpgraffi",
+    "https://www.linkedin.com/in/raphael-wennmacher/",
+    "https://www.instagram.com/raffis.insta/",
+  ],
+  knowsAbout: ["HCI", "UX Design", "UI Systems", "AI Interfaces", "Product Design"],
+  alumniOf: {
+    "@type": "CollegeOrUniversity",
+    name: "Ludwig Maximilian University of Munich",
+    url: "https://www.lmu.de",
+  },
+};
+
 export default function Home() {
   return (
     <PageTransitionWrapper>
-      <main className="min-h-screen relative flex flex-col gap-12 items-center">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <main className="min-h-screen relative flex flex-col gap-12 items-center overflow-x-hidden">
+ 
         <Analytics />
         <GlassRuler />
         <section className="min-h-screen w-full max-w-site mx-auto px-8 py-12 flex items-center">
@@ -67,8 +95,9 @@ export default function Home() {
                   Instagram
                 </PencilUnderline>
               </div>
-              <div className="flex flex-col md:flex-row gap-12 items-center mt-8">
+              <div className="flex flex-row gap-12 items-center mt-8">
                 <Mail width={100} url="mailto:me@raffi.studio" />
+                <Resume width={80} url="/files/resume.pdf" filename="Raphael-Wennmacher-Resume.pdf" />
               </div>
             </div>
 
@@ -86,7 +115,7 @@ export default function Home() {
 
         {/* Projects Section */}
         <section className="w-full max-w-site mx-auto px-8 md:py-24">
-          <div className="grid grid-cols-1 auto-rows-[90vh] place-items-center md:flex md:flex-wrap md:auto-rows-auto md:justify-center md:gap-48">
+          <div className="grid grid-cols-1 auto-rows-[70vh] place-items-center md:flex md:flex-wrap md:auto-rows-auto md:justify-center md:gap-48">
             <Folder
               className="w-full"
               href="/projects/convert-compress"
@@ -285,6 +314,7 @@ export default function Home() {
                   alt={icon}
                   fill
                   className="object-contain"
+                  sizes="(max-width: 768px) 96px, 128px"
                 />
               </div>
             ))}

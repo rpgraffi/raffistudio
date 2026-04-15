@@ -202,7 +202,8 @@ export default function TradarPage() {
                 { value: "10.000", label: "Users" },
                 { value: "4,6", label: "Stars" },
                 { value: "60", label: "Ratings" },
-                { value: "Insolvent", label: "Status" },
+                { value: "5m", label: "Funds" },
+                { value: "Aquired", label: "Status" },
               ]}
               tools={[
                 { src: "/images/texture-icons/figma.webp", alt: "Figma" },

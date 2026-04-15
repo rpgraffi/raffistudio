@@ -1,0 +1,30 @@
+# Raphael Wennmacher — Portfolio
+
+> HCI researcher, UX/UI designer, and developer based in Munich.
+> Finishing a master's in HCI and CS at LMU Munich.
+> Freelancing for 5+ years crafting digital products with intent.
+
+## About
+
+Raphael Wennmacher is a product designer and developer who specialises in
+Human-Computer Interaction (HCI), UX/UI systems, and AI interfaces. He builds
+end-to-end digital products — from research and wireframes to production code.
+
+## Projects
+
+- [Tradar](https://raffi.studio/projects/tradar): UX/UI and web design case study. React, Rive animations, user flows. Munich, 2023.
+- [LMU Students App](https://raffi.studio/projects/lmu-app): Full-stack mobile app for LMU Munich students. Flutter, Python/FastAPI, PostgreSQL, Docker. Munich, Fall 2024.
+- [Convert & Compress](https://raffi.studio/projects/convert-compress): Native macOS app for image conversion and compression. Swift, Xcode. Munich, Winter 2025.
+
+## Pages
+
+- [Home](https://raffi.studio)
+- [Tradar](https://raffi.studio/projects/tradar)
+- [LMU Students App](https://raffi.studio/projects/lmu-app)
+- [Convert & Compress](https://raffi.studio/projects/convert-compress)
+
+## Contact
+
+- Email: me@raffi.studio
+- GitHub: https://github.com/rpgraffi
+- LinkedIn: https://www.linkedin.com/in/raphael-wennmacher/

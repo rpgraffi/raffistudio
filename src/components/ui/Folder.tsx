@@ -60,7 +60,7 @@ export function Folder({
   const [scale, setScale] = useState(1);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
 
-  const isInView = useInView(containerRef, { amount: 0.4 });
+  const isInView = useInView(containerRef, { amount: 1 });
 
   useEffect(() => {
     setIsTouchDevice(window.matchMedia("(hover: none)").matches);

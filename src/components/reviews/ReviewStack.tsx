@@ -34,8 +34,7 @@ export function ReviewStack() {
         y: "110vh",
         rotateX: 130,
         scale: 4,
-        filter: "blur(8px)",
-        opacity: 0.99,
+        opacity: 0.50,
         transformPerspective: 800,
         transformOrigin: "center center",
       });
@@ -60,7 +59,6 @@ export function ReviewStack() {
             rotateX: 0,
             rotateZ: landRotation,
             scale: 1,
-            filter: "blur(0px)",
             opacity: 1,
             transformPerspective: 800,
             duration: 1,
@@ -77,7 +75,7 @@ export function ReviewStack() {
   return (
     <section ref={sectionRef} className="relative" style={{ height: `${(postcards.length + 1) * 50}vh` }}>
       <div ref={stackRef} className="h-screen w-full flex items-center justify-center">
-        <div className="relative w-[400px] h-[280px] sm:w-[520px] sm:h-[365px] md:w-[640px] md:h-[450px]">
+        <div className="relative w-[90vw] h-[50vh] md:h-[60vh] max-w-[600px] max-h-[600px]">
           {postcards.map((card, i) => (
             <div
               key={card.src}

@@ -39,7 +39,7 @@ export interface ShadowV2Config {
 export const DEFAULT_CONFIG: ShadowV2Config = {
   speed:         1.9,
   strength:      0.64,
-  shadowOpacity: 0.20,
+  shadowOpacity: 0.15,
   goboBlur:      0.5,
   debugMode:     "none",
 };

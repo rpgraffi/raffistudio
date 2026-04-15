@@ -2,397 +2,376 @@
 
 import { useTexture } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import {
-  Suspense,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
-// All available shadow images
-const SHADOW_IMAGES = [
-  "/images/shadows/plant_shadow-01.jpg",
-  "/images/shadows/plant_shadow-02.jpg",
-  "/images/shadows/plant_shadow-03.jpg",
-  "/images/shadows/plant_shadow-05.jpg",
-  "/images/shadows/plant_shadow-06.jpg",
-  "/images/shadows/plant_shadow-07.jpg",
-  "/images/shadows/plant_shadow-08.jpg",
-  "/images/shadows/plant_shadow-10.jpg",
-] as const;
+// ─── Config ──────────────────────────────────────────────────────────────────
 
-export type ShadowImage = (typeof SHADOW_IMAGES)[number];
+export type DebugMode =
+  | "none"
+  | "channel_r"
+  | "channel_g"
+  | "channel_b"
+  | "channel_a"
+  | "rgb_raw"
+  | "motion"
+  | "final_greyscale";
 
-export interface ShadowBackgroundProps {
-  /** Specific shadow image to use. If not provided, a random one is selected */
-  image?: ShadowImage;
-  /** Background color (where light hits) */
-  backgroundColor?: string;
-  /** Shadow color (where shadows fall) */
-  shadowColor?: string;
-  /** Shadow intensity (0-1). Higher = darker shadows */
-  intensity?: number;
-  /** Texture contrast adjustment (0.5-3) */
-  contrast?: number;
-  /** Texture brightness adjustment (-0.5 to 0.5) */
-  brightness?: number;
-  /** Zoom/scale level (0.5-5). Higher = more zoomed in */
-  scale?: number;
-  /** Wind animation speed (0-2). Set to 0 to disable animation */
-  windSpeed?: number;
-  /** Wind direction as {x, y} normalized vector */
-  windDirection?: { x: number; y: number };
-  /** Additional className for the container */
-  className?: string;
-  /** Children to render on top of the background */
-  children?: React.ReactNode;
+export const DEBUG_MODE_VALUES: Record<DebugMode, number> = {
+  none:             0,
+  channel_r:        1,
+  channel_g:        2,
+  channel_b:        3,
+  channel_a:        4,
+  rgb_raw:          5,
+  motion:           6,
+  final_greyscale:  7,
+};
+
+export interface ShadowV2Config {
+  speed: number;            // time multiplier for the sine waves
+  strength: number;         // amplitude multiplier applied to G and A
+  shadowOpacity: number;    // 0–1
+  goboBlur: number;         // blur radius when sampling the gobo FBO (softens B edges)
+  debugMode: DebugMode;
 }
 
-const vertexShader = `
-varying vec2 vUv;
-void main() {
-  vUv = uv;
-  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-}
+export const DEFAULT_CONFIG: ShadowV2Config = {
+  speed:         1.9,
+  strength:      0.64,
+  shadowOpacity: 0.20,
+  goboBlur:      0.5,
+  debugMode:     "none",
+};
+
+const GOBO_RT_SIZE = 512;
+
+// ─── Pass 1: Gobo shader → renders to 512×512 FBO (opaque greyscale) ────────
+
+const GOBO_VERT = /* glsl */ `
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
 `;
 
-const fragmentShader = `
-uniform float uTime;
-uniform vec3 uColor;
-uniform vec3 uShadowColor;
-uniform float uIntensity;
-uniform float uScale;
-uniform vec2 uWindDir;
-uniform float uWindSpeed;
-uniform sampler2D uTexture;
-uniform vec2 uResolution;
-uniform vec2 uTextureSize;
-uniform bool uRotate;
-uniform float uContrast;
-uniform float uBrightness;
+const GOBO_FRAG = /* glsl */ `
+  uniform sampler2D uTexture;
+  uniform float     uTime;
+  uniform float     uStrength;
+  uniform int       uDebugMode;
 
-varying vec2 vUv;
+  varying vec2 vUv;
 
-// Simplex 2D noise
-vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
+  void main() {
+    vec4 params = texture2D(uTexture, vUv);
 
-float snoise(vec2 v){
-  const vec4 C = vec4(0.211324865405187, 0.366025403784439,
-           -0.577350269189626, 0.024390243902439);
-  vec2 i  = floor(v + dot(v, C.yy) );
-  vec2 x0 = v -   i + dot(i, C.xx);
-  vec2 i1;
-  i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-  vec4 x12 = x0.xyxy + C.xxzz;
-  x12.xy -= i1;
-  i = mod(i, 289.0);
-  vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
-  + i.x + vec3(0.0, i1.x, 1.0 ));
-  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
-  m = m*m ;
-  m = m*m ;
-  vec3 x = 2.0 * fract(p * C.www) - 1.0;
-  vec3 h = abs(x) - 0.5;
-  vec3 ox = floor(x + 0.5);
-  vec3 a0 = x - ox;
-  m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
-  vec3 g;
-  g.x  = a0.x  * x0.x  + h.x  * x0.y;
-  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
-  return 130.0 * dot(m, g);
-}
+    float s      = params.r;
+    float amp1   = params.g * uStrength;
+    float phase1 = (params.b - 0.5) * 6.283185;
+    float amp23  = params.a * uStrength;
 
-void main() {
-  // 1. Handle Rotation (if orientations mismatch)
-  vec2 baseUv = vUv;
-  vec2 texSize = uTextureSize;
-  
-  if (uRotate) {
-     baseUv = vec2(vUv.y, 1.0 - vUv.x);
-     texSize = vec2(uTextureSize.y, uTextureSize.x);
+    vec3  waves  = sin(uTime * vec3(1.0, 2.0, 3.0) + phase1 * vec3(1.0, 2.0, 0.5));
+    float motion = (amp1 * waves.x) + (amp23 * 0.5 * waves.y) + (amp23 * 0.3 * waves.z);
+    float gobo   = clamp(s + motion, 0.0, 1.0);
+
+    // Debug: channel views render directly without FBO blur
+    if (uDebugMode == 1) { gl_FragColor = vec4(vec3(params.r), 1.0); return; }
+    if (uDebugMode == 2) { gl_FragColor = vec4(vec3(params.g), 1.0); return; }
+    if (uDebugMode == 3) { gl_FragColor = vec4(vec3(params.b), 1.0); return; }
+    if (uDebugMode == 4) { gl_FragColor = vec4(vec3(params.a), 1.0); return; }
+    if (uDebugMode == 5) { gl_FragColor = vec4(params.rgb, 1.0); return; }
+    if (uDebugMode == 6) {
+      float m = motion * 0.5 + 0.5;
+      gl_FragColor = vec4(vec3(m), 1.0); return;
+    }
+
+    // Opaque greyscale gobo → written to FBO
+    gl_FragColor = vec4(vec3(gobo), 1.0);
+  }
+`;
+
+// ─── Pass 2: Composite — reads blurred FBO, outputs coloured shadow ─────────
+
+const COMP_VERT = /* glsl */ `
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+
+const COMP_FRAG = /* glsl */ `
+  uniform sampler2D uGobo;
+  uniform float     uOpacity;
+  uniform vec3      uShadowColor;
+  uniform float     uBlurRadius;
+  uniform vec2      uTexelSize;    // 1.0 / FBO size
+  uniform int       uDebugMode;
+
+  varying vec2 vUv;
+
+  float sampleBlurred(vec2 uv) {
+    if (uBlurRadius < 0.01) {
+      return texture2D(uGobo, uv).r;
+    }
+    // 9-tap Gaussian (matching the original's blur9 approach)
+    float sum = 0.0;
+    sum += texture2D(uGobo, uv).r                                      * 0.1633;
+    sum += texture2D(uGobo, uv - uTexelSize * uBlurRadius).r           * 0.1531;
+    sum += texture2D(uGobo, uv + uTexelSize * uBlurRadius).r           * 0.1531;
+    sum += texture2D(uGobo, uv - uTexelSize * uBlurRadius * 2.0).r    * 0.12245;
+    sum += texture2D(uGobo, uv + uTexelSize * uBlurRadius * 2.0).r    * 0.12245;
+    sum += texture2D(uGobo, uv - uTexelSize * uBlurRadius * 3.0).r    * 0.0918;
+    sum += texture2D(uGobo, uv + uTexelSize * uBlurRadius * 3.0).r    * 0.0918;
+    sum += texture2D(uGobo, uv - uTexelSize * uBlurRadius * 4.0).r    * 0.051;
+    sum += texture2D(uGobo, uv + uTexelSize * uBlurRadius * 4.0).r    * 0.051;
+    return sum;
   }
 
-  // 2. Aspect Ratio Correction (Cover Mode)
-  float screenAspect = uResolution.x / uResolution.y;
-  float textureAspect = texSize.x / texSize.y; 
-  
-  vec2 ratio = vec2(
-    min((screenAspect / textureAspect), 1.0),
-    min((textureAspect / screenAspect), 1.0)
-  );
+  void main() {
+    // Debug: greyscale gobo preview (post-blur)
+    if (uDebugMode == 7) {
+      float g = sampleBlurred(vUv);
+      gl_FragColor = vec4(vec3(g), 1.0); return;
+    }
 
-  vec2 uv = vec2(
-    baseUv.x * ratio.x + (1.0 - ratio.x) * 0.5,
-    baseUv.y * ratio.y + (1.0 - ratio.y) * 0.5
-  );
-
-  // 3. Wind distortion
-  vec2 windOffset = uWindDir * uTime * uWindSpeed;
-  float n = snoise(baseUv * 1.5 + windOffset * 0.5);
-  
-  vec2 distortedUv = uv + vec2(n * 0.03 * uWindSpeed);
-
-  // 4. Scale from Center
-  vec2 center = vec2(0.5);
-  distortedUv = (distortedUv - center) * uScale + center;
-
-  // Sample texture
-  vec4 texColor = texture2D(uTexture, distortedUv);
-  
-  float rawValue = texColor.r;
-  float contrastValue = (rawValue - 0.5) * uContrast + 0.5 + uBrightness;
-  
-  float shadowMask = contrastValue;
-  
-  float finalMix = clamp(shadowMask + (1.0 - uIntensity), 0.0, 1.0);
-  
-  vec3 finalColor = mix(uShadowColor, uColor, finalMix);
-  
-  gl_FragColor = vec4(finalColor, 1.0);
-}
+    float gobo  = sampleBlurred(vUv);
+    float alpha = (1.0 - gobo) * uOpacity;
+    gl_FragColor = vec4(uShadowColor, alpha);
+  }
 `;
 
-interface TextureMeshProps {
-  url: string;
-  backgroundColor: string;
-  shadowColor: string;
-  intensity: number;
-  contrast: number;
-  brightness: number;
-  scale: number;
-  windSpeed: number;
-  windDirection: { x: number; y: number };
+// ─── GoboScene — two-pass: renders gobo to FBO, then composites ─────────────
+
+interface GoboSceneProps {
+  src: string;
+  config: ShadowV2Config;
+  shadowColor: THREE.Color;
+  offsetX: number;
+  offsetY: number;
+  shadowScale: number;
   onReady?: () => void;
 }
 
-const TextureMesh = ({
-  url,
-  backgroundColor,
+function GoboScene({
+  src,
+  config,
   shadowColor,
-  intensity,
-  contrast,
-  brightness,
-  scale,
-  windSpeed,
-  windDirection,
+  offsetX,
+  offsetY,
+  shadowScale,
   onReady,
-}: TextureMeshProps) => {
-  const mesh = useRef<THREE.Mesh>(null);
-  const { size } = useThree();
-  const texture = useTexture(url);
+}: GoboSceneProps) {
+  const { viewport, gl, size } = useThree();
+  const goboMeshRef = useRef<THREE.Mesh>(null);
+  const compMeshRef = useRef<THREE.Mesh>(null);
+  const readyFiredRef = useRef(false);
 
-  // Signal readiness after the first frame paints with the loaded texture
-  const readyFired = useRef(false);
-  useEffect(() => {
-    if (readyFired.current) return;
-    readyFired.current = true;
-    requestAnimationFrame(() => onReady?.());
-  }, [onReady]);
+  const texture = useTexture(src, (tex) => {
+    tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
+    tex.minFilter = tex.magFilter = THREE.LinearFilter;
+    tex.needsUpdate = true;
+  });
 
-  // Calculate rotation need
-  const textureAspect = texture.image
-    ? (texture.image as HTMLImageElement).width /
-      (texture.image as HTMLImageElement).height
-    : 1;
-  const screenAspect = size.width / size.height;
+  // FBO: 512×512 render target for the gobo pass (matches original)
+  const renderTarget = useMemo(() => {
+    const rt = new THREE.WebGLRenderTarget(GOBO_RT_SIZE, GOBO_RT_SIZE, {
+      minFilter: THREE.LinearFilter,
+      magFilter: THREE.LinearFilter,
+      format: THREE.RGBAFormat,
+      type: THREE.UnsignedByteType,
+    });
+    return rt;
+  }, []);
 
-  const isTexturePortrait = textureAspect < 1;
-  const isScreenPortrait = screenAspect < 1;
-  const shouldRotate = isTexturePortrait !== isScreenPortrait;
+  useEffect(() => () => renderTarget.dispose(), [renderTarget]);
 
-  useEffect(() => {
-    if (texture) {
-      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-    }
-  }, [texture]);
+  // Gobo material (pass 1 — renders to FBO)
+  const goboMaterial = useMemo(
+    () =>
+      new THREE.ShaderMaterial({
+        uniforms: {
+          uTexture:   { value: texture },
+          uTime:      { value: 0 },
+          uStrength:  { value: config.strength },
+          uDebugMode: { value: DEBUG_MODE_VALUES[config.debugMode] },
+        },
+        vertexShader:   GOBO_VERT,
+        fragmentShader: GOBO_FRAG,
+        depthWrite: false,
+        depthTest:  false,
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [texture]
+  );
 
-  const uniforms = useMemo(
-    () => ({
-      uTime: { value: 0 },
-      uColor: { value: new THREE.Color(backgroundColor) },
-      uShadowColor: { value: new THREE.Color(shadowColor) },
-      uIntensity: { value: intensity },
-      uContrast: { value: contrast },
-      uBrightness: { value: brightness },
-      uScale: { value: scale },
-      uWindDir: { value: new THREE.Vector2(windDirection.x, windDirection.y) },
-      uWindSpeed: { value: windSpeed },
-      uTexture: { value: texture },
-      uResolution: { value: new THREE.Vector2(size.width, size.height) },
-      uTextureSize: { value: new THREE.Vector2(1, 1) },
-      uRotate: { value: shouldRotate },
-    }),
-    [texture, size, shouldRotate],
+  // Composite material (pass 2 — reads FBO, outputs to screen)
+  const compMaterial = useMemo(
+    () =>
+      new THREE.ShaderMaterial({
+        uniforms: {
+          uGobo:       { value: renderTarget.texture },
+          uOpacity:    { value: config.shadowOpacity },
+          uShadowColor:{ value: shadowColor },
+          uBlurRadius: { value: config.goboBlur },
+          uTexelSize:  { value: new THREE.Vector2(1 / GOBO_RT_SIZE, 1 / GOBO_RT_SIZE) },
+          uDebugMode:  { value: DEBUG_MODE_VALUES[config.debugMode] },
+        },
+        vertexShader:   COMP_VERT,
+        fragmentShader: COMP_FRAG,
+        blending:    THREE.NormalBlending,
+        transparent: true,
+        depthWrite:  false,
+        depthTest:   false,
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [renderTarget, shadowColor]
   );
 
   useEffect(() => {
-    if (texture.image && mesh.current) {
-      const img = texture.image as HTMLImageElement;
-      (
-        mesh.current.material as THREE.ShaderMaterial
-      ).uniforms.uTextureSize.value.set(img.width, img.height);
+    return () => {
+      goboMaterial.dispose();
+      compMaterial.dispose();
+    };
+  }, [goboMaterial, compMaterial]);
+
+  // Separate camera for rendering the gobo fullscreen into the FBO
+  const goboCamera = useMemo(
+    () => new THREE.OrthographicCamera(-0.5, 0.5, 0.5, -0.5, 0.1, 10),
+    []
+  );
+  goboCamera.position.z = 1;
+
+  useFrame(({ clock }) => {
+    const goboMesh = goboMeshRef.current;
+    const compMesh = compMeshRef.current;
+    if (!goboMesh || !compMesh) return;
+
+    // ── Pass 1: render gobo to FBO ──────────────────────────────────────
+    const gu = (goboMesh.material as THREE.ShaderMaterial).uniforms;
+    gu.uTime.value      = clock.getElapsedTime() * config.speed;
+    gu.uStrength.value  = config.strength;
+    gu.uDebugMode.value = DEBUG_MODE_VALUES[config.debugMode];
+
+    goboMesh.visible = true;
+    compMesh.visible = false;
+
+    gl.setRenderTarget(renderTarget);
+    gl.clear();
+    gl.render(goboMesh.parent!, goboCamera);
+    gl.setRenderTarget(null);
+
+    goboMesh.visible = false;
+
+    // ── Pass 2: composite (reads FBO, renders to screen) ────────────────
+    // Anchor the shadow to the viewport's left edge instead of shifting the canvas container.
+    // `offsetX` stays in pixels and is converted to world units each frame, so it updates on resize.
+    const unitsPerPixelX = size.width > 0 ? viewport.width / size.width : 0;
+    const anchoredOffsetX = -viewport.width * 0.5 + offsetX * unitsPerPixelX;
+
+    compMesh.visible = true;
+    compMesh.position.x = anchoredOffsetX;
+    compMesh.position.y = -offsetY;
+
+    const cover = Math.max(viewport.width, viewport.height) * 1.15 * shadowScale;
+    compMesh.scale.setScalar(cover);
+
+    const cu = (compMesh.material as THREE.ShaderMaterial).uniforms;
+    cu.uOpacity.value     = config.shadowOpacity;
+    cu.uShadowColor.value = shadowColor;
+    cu.uBlurRadius.value  = config.goboBlur;
+    cu.uDebugMode.value   = DEBUG_MODE_VALUES[config.debugMode];
+
+    // Debug modes 1-6 bypass the FBO: render gobo directly to screen
+    if (config.debugMode !== "none" && config.debugMode !== "final_greyscale") {
+      goboMesh.visible = true;
+      compMesh.visible = false;
+      goboMesh.position.x = anchoredOffsetX;
+      goboMesh.position.y = -offsetY;
+      goboMesh.scale.setScalar(cover);
     }
-  }, [texture]);
 
-  useFrame((state) => {
-    if (mesh.current) {
-      const material = mesh.current.material as THREE.ShaderMaterial;
-      material.uniforms.uTime.value = state.clock.getElapsedTime();
-      material.uniforms.uColor.value.set(backgroundColor);
-      material.uniforms.uShadowColor.value.set(shadowColor);
-      material.uniforms.uIntensity.value = intensity;
-      material.uniforms.uContrast.value = contrast;
-      material.uniforms.uBrightness.value = brightness;
-      material.uniforms.uScale.value = scale;
-      material.uniforms.uWindDir.value.set(windDirection.x, windDirection.y);
-      material.uniforms.uWindSpeed.value = windSpeed;
-      material.uniforms.uResolution.value.set(size.width, size.height);
-      material.uniforms.uTexture.value = texture;
-
-      // Update rotation in real-time if window is resized
-      const currentScreenAspect = size.width / size.height;
-      const isCurrentScreenPortrait = currentScreenAspect < 1;
-      const needsRotation = isTexturePortrait !== isCurrentScreenPortrait;
-      material.uniforms.uRotate.value = needsRotation;
+    // Fire readiness once after the first rendered frame.
+    if (!readyFiredRef.current) {
+      readyFiredRef.current = true;
+      requestAnimationFrame(() => onReady?.());
     }
   });
 
   return (
-    <mesh ref={mesh} scale={[size.width, size.height, 1]}>
-      <planeGeometry args={[1, 1]} />
-      <shaderMaterial
-        vertexShader={vertexShader}
-        fragmentShader={fragmentShader}
-        uniforms={uniforms}
-      />
-    </mesh>
-  );
-};
+    <>
+      {/* Pass 1 mesh — rendered to FBO (fullscreen in gobo camera space) */}
+      <mesh ref={goboMeshRef} material={goboMaterial} visible={false}>
+        <planeGeometry args={[1, 1]} />
+      </mesh>
 
-const ShadowPlane = ({
-  image,
-  backgroundColor,
-  shadowColor,
-  intensity,
-  contrast,
-  brightness,
-  scale,
-  windSpeed,
-  windDirection,
-  onReady,
-}: Omit<Required<ShadowBackgroundProps>, "className" | "children"> & {
-  onReady?: () => void;
-}) => {
-  return (
-    <Suspense fallback={null}>
-      <TextureMesh
-        key={image}
-        url={image}
-        backgroundColor={backgroundColor}
-        shadowColor={shadowColor}
-        intensity={intensity}
-        contrast={contrast}
-        brightness={brightness}
-        scale={scale}
-        windSpeed={windSpeed}
-        windDirection={windDirection}
-        onReady={onReady}
-      />
-    </Suspense>
-  );
-};
-
-/** Get a random shadow image */
-export const getRandomShadowImage = (): ShadowImage => {
-  return SHADOW_IMAGES[Math.floor(Math.random() * SHADOW_IMAGES.length)];
-};
-
-/**
- * ShadowBackground - A decorative background component with animated organic shadows
- *
- * Uses WebGL shaders to create a realistic, gently moving shadow effect
- * that simulates sunlight through foliage. Perfect for hero sections.
- *
- * @example
- * ```tsx
- * // Basic usage with random shadow
- * <ShadowBackground>
- *   <h1>Welcome</h1>
- * </ShadowBackground>
- *
- * // Custom colors and specific image
- * <ShadowBackground
- *   image="/images/shadows/tree_shadow-01.jpg"
- *   backgroundColor="#f5f0e8"
- *   shadowColor="#2d3748"
- *   intensity={0.8}
- * >
- *   <YourContent />
- * </ShadowBackground>
- * ```
- */
-export default function ShadowBackground({
-  image,
-  backgroundColor = "#F8F8F8",
-  shadowColor = "#000000",
-  intensity = 1.0,
-  contrast = 1.0,
-  brightness = 0.0,
-  scale = 0.9,
-  windSpeed = 0.5,
-  windDirection = { x: 0.5, y: 0.5 },
-  className = "",
-  children,
-}: ShadowBackgroundProps) {
-  const [selectedImage] = useState<ShadowImage>(
-    () => image ?? getRandomShadowImage(),
-  );
-  const [ready, setReady] = useState(false);
-  const handleReady = useCallback(() => setReady(true), []);
-
-  const finalImage = image ?? selectedImage;
-
-  return (
-    <div className={`relative ${className}`}>
-      <div
-        className="absolute inset-0 z-500 mix-blend-multiply pointer-events-none"
-        style={{
-          opacity: ready ? 0.7 : 0,
-          transition: "opacity 2.4s cubic-bezier(0.16,1,0.3,1)",
-          transform: "translateZ(0)",
-          willChange: "transform",
-          backfaceVisibility: "hidden",
-        }}
-      >
-        <Canvas
-          orthographic
-          camera={{ zoom: 1, position: [0, 0, 1] }}
-          frameloop="always"
-          gl={{ antialias: false, powerPreference: "high-performance" }}
-          style={{ pointerEvents: "none" }}
-        >
-          <ShadowPlane
-            image={finalImage}
-            backgroundColor={backgroundColor}
-            shadowColor={shadowColor}
-            intensity={intensity}
-            contrast={contrast}
-            brightness={brightness}
-            scale={scale}
-            windSpeed={windSpeed}
-            windDirection={windDirection}
-            onReady={handleReady}
-          />
-        </Canvas>
-      </div>
-
-      {children}
-    </div>
+      {/* Pass 2 mesh — composited to screen */}
+      <mesh ref={compMeshRef} material={compMaterial}>
+        <planeGeometry args={[1, 1]} />
+      </mesh>
+    </>
   );
 }
 
-/** Export the list of available shadow images for external use */
-export { SHADOW_IMAGES };
+// ─── ShadowBackgroundV2 ──────────────────────────────────────────────────────
+
+export interface ShadowBackgroundV2Props {
+  src?: string;
+  config?: ShadowV2Config;
+  shadowColor?: string;
+  bgColor?: string;
+  offsetX?: number;
+  offsetY?: number;
+  shadowScale?: number;
+  className?: string;
+}
+
+export function ShadowBackgroundV2({
+  src = "/images/shadow_rgb/palm_shadow.avif",
+  config = DEFAULT_CONFIG,
+  shadowColor = "#3d4459",
+  bgColor = "transparent",
+  offsetX = 0,
+  offsetY = 0,
+  shadowScale = 1.0,
+  className,
+}: ShadowBackgroundV2Props) {
+  const colorObj = useMemo(() => new THREE.Color(shadowColor), [shadowColor]);
+  const hasOpaqueBackground = bgColor !== "transparent";
+  const [ready, setReady] = useState(false);
+  const handleReady = useCallback(() => setReady(true), []);
+
+  return (
+    <div
+      className={className}
+      style={{
+        opacity: ready ? 1 : 0,
+        transition:
+          "opacity 2.1s cubic-bezier(0.16,1,0.3,1)",
+        willChange: "opacity",
+      }}
+    >
+      <Canvas
+        orthographic
+        camera={{ position: [0, 0, 1], near: 0.1, far: 10 }}
+        gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
+        style={{ display: "block", background: "transparent" }}
+      >
+        {hasOpaqueBackground ? <color attach="background" args={[bgColor]} /> : null}
+        <Suspense fallback={null}>
+          <GoboScene
+            src={src}
+            config={config}
+            shadowColor={colorObj}
+            offsetX={offsetX}
+            offsetY={offsetY}
+            shadowScale={shadowScale}
+            onReady={handleReady}
+          />
+        </Suspense>
+      </Canvas>
+    </div>
+  );
+}

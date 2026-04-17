@@ -1,6 +1,6 @@
-import NoiseOverlay from "@/components/NoiseOverlay";
-import { PageTransitionProvider } from "@/components/PageTransition";
-import { ShadowBackgroundV2 } from "@/components/shadows/ShadowBackground";
+import NoiseOverlay from "@/components/layout/NoiseOverlay";
+import { PageTransitionProvider } from "@/components/layout/PageTransition";
+import { ShadowBackground } from "@/components/shadows/ShadowBackground";
 import type { Metadata } from "next";
 import { Caveat, Fira_Code, Heebo } from "next/font/google";
 import localFont from "next/font/local";
@@ -100,7 +100,7 @@ export default function RootLayout({
         <NoiseOverlay />
         {/* Persistent ShadowBackground - stays across page navigations */}
         <div className="fixed top-0 left-0 h-lvh w-full z-[-1] mix-blend-multiply pointer-events-none">
-          <ShadowBackgroundV2 className="h-lvh w-full" shadowScale={0.8} />
+          <ShadowBackground className="h-lvh w-full" shadowScale={0.8} />
         </div>
         <PageTransitionProvider>{children}</PageTransitionProvider>
       </body>

@@ -1,17 +1,17 @@
 "use client";
 
-import { Patch } from "@/app/projects/components/Patches";
-import { Mail } from "@/components/mail/Mail";
+import { PageTransitionWrapper } from "@/components/layout/PageTransition";
 import { PencilUnderline } from "@/components/natural-ui/PencilStroke";
 import { RuledText } from "@/components/natural-ui/RuledText";
-import { PageTransitionWrapper } from "@/components/PageTransition";
-import { Folder } from "@/components/ui/Folder";
+import { Patch } from "@/components/projects/Patches";
+import { Folder } from "@/components/site/Folder";
+import { Mail } from "@/components/site/Mail";
+import { Resume } from "@/components/site/Resume";
+import { ReviewStack } from "@/components/site/ReviewStack";
 import { GlassRuler } from "@/components/ui/GlassRuler";
-import { ReviewStack } from "@/components/reviews/ReviewStack";
 import { TextureSection } from "@/components/ui/TextureSection";
 import { Analytics } from "@vercel/analytics/next";
 import Image from "next/image";
-import { Resume } from "@/components/resume/Resume";
 
 const textureIcons = [
   "figma",

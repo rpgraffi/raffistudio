@@ -570,5 +570,3 @@ export const DrawingHeadline: React.FC<DrawingHeadlineProps> = ({
     </Tag>
   );
 };
-
-export default DrawingHeadline;

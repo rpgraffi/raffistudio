@@ -8,8 +8,8 @@ import {
   ProjectSubHeading,
   ProjectText,
   ProjectTextBlock,
-} from "@/app/projects/components/ProjectContent";
-import Header from "@/components/Header";
+} from "@/components/projects/ProjectContent";
+import Header from "@/components/layout/Header";
 import { CodeBlock, CodeBlockDark, InlineCode } from "@/components/ui/Code";
 
 export default function CodeDemoPage() {

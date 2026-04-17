@@ -1,6 +1,6 @@
 "use client";
 
-import { BlueprintContainer } from "@/components/BlueprintContainer";
+import { BlueprintContainer } from "./BlueprintContainer";
 
 export default function BlueprintDemoPage() {
   return (

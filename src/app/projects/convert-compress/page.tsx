@@ -8,14 +8,14 @@ import {
   ProjectSubHeading,
   ProjectText,
   ProjectTextBlock,
-} from "@/app/projects/components/ProjectContent";
-import { ProjectStats } from "@/app/projects/components/ProjectStats";
-import Header from "@/components/Header";
-import DrawingHeadline from "@/components/natural-ui/DrawingHeadline";
+} from "@/components/projects/ProjectContent";
+import { ProjectStats } from "@/components/projects/ProjectStats";
+import Header from "@/components/layout/Header";
+import { DrawingHeadline } from "@/components/natural-ui/DrawingHeadline";
 import { PencilUnderline } from "@/components/natural-ui/PencilStroke";
 import { RuledText } from "@/components/natural-ui/RuledText";
 import { TextMarker } from "@/components/natural-ui/TextMarker";
-import { PageTransitionWrapper } from "@/components/PageTransition";
+import { PageTransitionWrapper } from "@/components/layout/PageTransition";
 import { GridSection } from "@/components/ui/GridSection";
 import { ImageFrame } from "@/components/ui/ImageFrame";
 import { StarRating } from "@/components/ui/StarRating";

@@ -1,11 +1,7 @@
 "use client";
 
-import {
-  DEFAULT_CONFIG,
-  ShadowBackgroundV2,
-  type DebugMode,
-  type ShadowV2Config,
-} from "@/components/shadows/ShadowBackground";
+import { DEFAULT_CONFIG, type DebugMode, type ShadowConfig } from "@/components/shadows/config";
+import { ShadowBackground } from "@/components/shadows/ShadowBackground";
 import { useEffect, useRef, useState } from "react";
 
 interface TweakState {
@@ -34,7 +30,7 @@ const DEFAULT_TWEAK: TweakState = {
   debugMode: "none",
 };
 
-function tweakToConfig(t: TweakState): ShadowV2Config {
+function tweakToConfig(t: TweakState): ShadowConfig {
   return {
     speed: t.speed,
     strength: t.strength,
@@ -44,7 +40,7 @@ function tweakToConfig(t: TweakState): ShadowV2Config {
   };
 }
 
-export default function ShadowBackgroundV2Demo() {
+export default function ShadowBackgroundDemo() {
   const [state, setState] = useState<TweakState>({ ...DEFAULT_TWEAK });
   const stateRef = useRef<TweakState>({ ...DEFAULT_TWEAK });
 
@@ -155,7 +151,7 @@ export default function ShadowBackgroundV2Demo() {
 
   return (
     <main className="min-h-screen w-full relative overflow-hidden">
-      <ShadowBackgroundV2
+      <ShadowBackground
         config={tweakToConfig(state)}
         shadowColor={state.shadowColor}
         bgColor={state.bgColor}

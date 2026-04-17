@@ -1,6 +1,6 @@
 "use client";
 
-import { usePageTransition } from "@/components/PageTransition";
+import { usePageTransition } from "@/components/layout/PageTransition";
 import { createSeededRandom, stringToSeed } from "@/lib/utils";
 import React, { useEffect, useId, useMemo, useRef, useState } from "react";
 

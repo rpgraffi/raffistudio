@@ -5,6 +5,13 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
+import compositeFrag from "@/shaders/composite/fragment.glsl";
+import compositeVert from "@/shaders/composite/vertex.glsl";
+import goboFrag from "@/shaders/gobo/fragment.glsl";
+import goboVert from "@/shaders/gobo/vertex.glsl";
+import gaussianBlur9 from "@/shaders/includes/gaussianBlur9.glsl";
+import { loadShader } from "@/shaders/loadShader";
+
 // ─── Config ──────────────────────────────────────────────────────────────────
 
 export type DebugMode =
@@ -46,102 +53,11 @@ export const DEFAULT_CONFIG: ShadowV2Config = {
 
 const GOBO_RT_SIZE = 512;
 
-// ─── Pass 1: Gobo shader → renders to 512×512 FBO (opaque greyscale) ────────
-
-const GOBO_VERT = /* glsl */ `
-  varying vec2 vUv;
-  void main() {
-    vUv = uv;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  }
-`;
-
-const GOBO_FRAG = /* glsl */ `
-  uniform sampler2D uTexture;
-  uniform float     uTime;
-  uniform float     uStrength;
-  uniform int       uDebugMode;
-
-  varying vec2 vUv;
-
-  void main() {
-    vec4 params = texture2D(uTexture, vUv);
-
-    float s      = params.r;
-    float amp1   = params.g * uStrength;
-    float phase1 = (params.b - 0.5) * 6.283185;
-    float amp23  = params.a * uStrength;
-
-    vec3  waves  = sin(uTime * vec3(1.0, 2.0, 3.0) + phase1 * vec3(1.0, 2.0, 0.5));
-    float motion = (amp1 * waves.x) + (amp23 * 0.5 * waves.y) + (amp23 * 0.3 * waves.z);
-    float gobo   = clamp(s + motion, 0.0, 1.0);
-
-    // Debug: channel views render directly without FBO blur
-    if (uDebugMode == 1) { gl_FragColor = vec4(vec3(params.r), 1.0); return; }
-    if (uDebugMode == 2) { gl_FragColor = vec4(vec3(params.g), 1.0); return; }
-    if (uDebugMode == 3) { gl_FragColor = vec4(vec3(params.b), 1.0); return; }
-    if (uDebugMode == 4) { gl_FragColor = vec4(vec3(params.a), 1.0); return; }
-    if (uDebugMode == 5) { gl_FragColor = vec4(params.rgb, 1.0); return; }
-    if (uDebugMode == 6) {
-      float m = motion * 0.5 + 0.5;
-      gl_FragColor = vec4(vec3(m), 1.0); return;
-    }
-
-    // Opaque greyscale gobo → written to FBO
-    gl_FragColor = vec4(vec3(gobo), 1.0);
-  }
-`;
-
-// ─── Pass 2: Composite — reads blurred FBO, outputs coloured shadow ─────────
-
-const COMP_VERT = /* glsl */ `
-  varying vec2 vUv;
-  void main() {
-    vUv = uv;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  }
-`;
-
-const COMP_FRAG = /* glsl */ `
-  uniform sampler2D uGobo;
-  uniform float     uOpacity;
-  uniform vec3      uShadowColor;
-  uniform float     uBlurRadius;
-  uniform vec2      uTexelSize;    // 1.0 / FBO size
-  uniform int       uDebugMode;
-
-  varying vec2 vUv;
-
-  float sampleBlurred(vec2 uv) {
-    if (uBlurRadius < 0.01) {
-      return texture2D(uGobo, uv).r;
-    }
-    // 9-tap Gaussian (matching the original's blur9 approach)
-    float sum = 0.0;
-    sum += texture2D(uGobo, uv).r                                      * 0.1633;
-    sum += texture2D(uGobo, uv - uTexelSize * uBlurRadius).r           * 0.1531;
-    sum += texture2D(uGobo, uv + uTexelSize * uBlurRadius).r           * 0.1531;
-    sum += texture2D(uGobo, uv - uTexelSize * uBlurRadius * 2.0).r    * 0.12245;
-    sum += texture2D(uGobo, uv + uTexelSize * uBlurRadius * 2.0).r    * 0.12245;
-    sum += texture2D(uGobo, uv - uTexelSize * uBlurRadius * 3.0).r    * 0.0918;
-    sum += texture2D(uGobo, uv + uTexelSize * uBlurRadius * 3.0).r    * 0.0918;
-    sum += texture2D(uGobo, uv - uTexelSize * uBlurRadius * 4.0).r    * 0.051;
-    sum += texture2D(uGobo, uv + uTexelSize * uBlurRadius * 4.0).r    * 0.051;
-    return sum;
-  }
-
-  void main() {
-    // Debug: greyscale gobo preview (post-blur)
-    if (uDebugMode == 7) {
-      float g = sampleBlurred(vUv);
-      gl_FragColor = vec4(vec3(g), 1.0); return;
-    }
-
-    float gobo  = sampleBlurred(vUv);
-    float alpha = (1.0 - gobo) * uOpacity;
-    gl_FragColor = vec4(uShadowColor, alpha);
-  }
-`;
+// Resolve shader #include directives once at module load.
+const GOBO_VERT = goboVert;
+const GOBO_FRAG = goboFrag;
+const COMP_VERT = compositeVert;
+const COMP_FRAG = loadShader(compositeFrag, { gaussianBlur9 });
 
 // ─── GoboScene — two-pass: renders gobo to FBO, then composites ─────────────
 

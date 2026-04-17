@@ -37,6 +37,7 @@
     "baseline-browser-mapping": "^2.10.19",
     "eslint": "^9",
     "eslint-config-next": "16.0.3",
+    "raw-loader": "^4.0.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

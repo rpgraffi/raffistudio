@@ -1,14 +1,12 @@
 "use client";
 
 import { PageTransitionWrapper } from "@/components/layout/PageTransition";
-import { PencilUnderline } from "@/components/natural-ui/PencilStroke";
-import { RuledText } from "@/components/natural-ui/RuledText";
 import { Patch } from "@/components/projects/Patches";
-import { Folder } from "@/components/site/Folder";
-import { Mail } from "@/components/site/Mail";
-import { Resume } from "@/components/site/Resume";
-import { ReviewStack } from "@/components/site/ReviewStack";
-import { GlassRuler } from "@/components/ui/GlassRuler";
+import { CompanyWelcome } from "@/components/site/CompanyWelcome";
+import { Folder } from "@/components/site/projects/Folder";
+import { Hero } from "@/components/site/hero/Hero";
+import { ReviewStack } from "@/components/site/reviews/ReviewStack";
+import { ToolsSection } from "@/components/site/tools/ToolsSection";
 import { TextureSection } from "@/components/ui/TextureSection";
 import { Analytics } from "@vercel/analytics/next";
 import Image from "next/image";
@@ -53,7 +51,13 @@ const jsonLd = {
     "https://www.linkedin.com/in/raphael-wennmacher/",
     "https://www.instagram.com/raffis.insta/",
   ],
-  knowsAbout: ["HCI", "UX Design", "UI Systems", "AI Interfaces", "Product Design"],
+  knowsAbout: [
+    "HCI",
+    "UX Design",
+    "UI Systems",
+    "AI Interfaces",
+    "Product Design",
+  ],
   alumniOf: {
     "@type": "CollegeOrUniversity",
     name: "Ludwig Maximilian University of Munich",
@@ -69,53 +73,20 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <main className="min-h-screen relative flex flex-col gap-12 items-center overflow-x-hidden">
- 
         <Analytics />
-        <GlassRuler />
-        <section className="min-h-screen w-full max-w-site mx-auto px-8 py-12 flex items-center">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center w-full">
-            <div className="order-2 lg:order-1 flex flex-col gap-10 items-start">
-              <h1 className="text-3xl md:text-5xl font-medium text-zinc-800">
-                I love to design and develop digital products.
-              </h1>
-              <RuledText className="text-lg max-w-xl leading-8">
-                Always up to date, and obsessed with the details. I
-                understand products holistically, from the user all the way to
-                the customer's door, and build things people actually want to
-                buy. Freelancing for 5+ years while studying at LMU Munich.
-              </RuledText>
-              <div className="flex gap-4">
-                <PencilUnderline href="https://github.com/rpgraffi">
-                  GitHub
-                </PencilUnderline>
-                <PencilUnderline href="https://www.linkedin.com/in/raphael-wennmacher/">
-                  LinkedIn
-                </PencilUnderline>
-                <PencilUnderline href="https://www.instagram.com/raffis.insta/">
-                  Instagram
-                </PencilUnderline>
-              </div>
-              <div className="flex flex-row gap-12 items-center mt-8">
-                <Mail width={100} url="mailto:me@raffi.studio" />
-                <Resume width={80} url="/files/resume.pdf" filename="Raphael-Wennmacher-Resume.pdf" />
-              </div>
-            </div>
+        {/* <GlassRuler /> */}
+        <CompanyWelcome />
+        <Hero />
 
-            <div className="order-1 lg:order-2 w-full h-[45vh] sm:h-[55vh] lg:h-[70vh] relative rounded-2xl overflow-hidden">
-              <Image
-                src="/images/Profile.webp"
-                alt="Portrait of Raffi"
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
-          </div>
-        </section>
+        {/* Tools Section — WebGL stream of tool icons funneling into a folder */}
+        <ToolsSection />
 
         {/* Projects Section */}
-        <section className="w-full max-w-site mx-auto px-8 md:py-24">
-          <div className="grid grid-cols-1 auto-rows-[70vh] place-items-center md:flex md:flex-wrap md:auto-rows-auto md:justify-center md:gap-48">
+        <section className="w-full max-w-site mx-auto px-8 py-32">
+          <h2 className="text-balance text-4xl font-semibold tracking-tight md:text-6xl text-center md:mb-32">
+            My Work
+          </h2>
+          <div className="grid grid-cols-1 auto-rows-[70vh] place-items-center md:flex md:flex-wrap md:auto-rows-auto md:justify-center md:gap-52">
             <Folder
               className="w-full"
               href="/projects/convert-compress"
@@ -299,27 +270,6 @@ export default function Home() {
         {/* Reviews Section */}
         <ReviewStack />
 
-        <TextureSection className="py-12 my-12 flex flex-col items-center justify-center text-center gap-8">
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-8 p-4 max-w-5xl w-full">
-            {textureIcons.map((icon, index) => (
-              <div
-                key={icon}
-                className="relative w-24 h-24 md:w-32 md:h-32 mx-auto"
-                style={{
-                  transform: `rotate(${((index * 137) % 15) - 7}deg)`,
-                }}
-              >
-                <Image
-                  src={`/images/texture-icons/${icon}.webp`}
-                  alt={icon}
-                  fill
-                  className="object-contain"
-                  sizes="(max-width: 768px) 96px, 128px"
-                />
-              </div>
-            ))}
-          </div>
-        </TextureSection>
       </main>
     </PageTransitionWrapper>
   );

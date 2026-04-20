@@ -3,7 +3,7 @@
 import {
   PageTransitionWrapper,
   TransitionLink,
-} from "@/components/PageTransition";
+} from "@/components/layout/PageTransition";
 
 export default function TransitionTarget() {
   return (

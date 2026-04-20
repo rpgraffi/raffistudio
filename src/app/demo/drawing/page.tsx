@@ -1,6 +1,6 @@
 "use client";
 
-import DrawingHeadline from "@/components/natural-ui/DrawingHeadline";
+import { DrawingHeadline } from "@/components/natural-ui/DrawingHeadline";
 import { useState } from "react";
 
 export default function DrawingDemoPage() {

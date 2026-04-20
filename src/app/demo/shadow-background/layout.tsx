@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ShadowBackgroundV2Layout({
+export default function ShadowBackgroundLayout({
   children,
 }: {
   children: React.ReactNode;

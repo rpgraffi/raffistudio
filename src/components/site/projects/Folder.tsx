@@ -1,6 +1,6 @@
 "use client";
 
-import { TransitionLink } from "@/components/PageTransition";
+import { TransitionLink } from "@/components/layout/PageTransition";
 import { cn } from "@/lib/utils";
 import { motion, useInView } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";

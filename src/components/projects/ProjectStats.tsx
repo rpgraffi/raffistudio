@@ -1,7 +1,7 @@
 "use client";
 
-import { PatchesRow } from "@/app/projects/components/Patches";
-import { StatsRow } from "@/app/projects/components/Stats";
+import { PatchesRow } from "./Patches";
+import { StatsRow } from "./Stats";
 import { PencilStroke } from "@/components/natural-ui/PencilStroke";
 import React from "react";
 

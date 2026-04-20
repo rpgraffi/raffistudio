@@ -1,6 +1,6 @@
 "use client";
 
-import { TransitionLink } from "@/components/PageTransition";
+import { TransitionLink } from "@/components/layout/PageTransition";
 import {
   animate as fmAnimate,
   AnimatePresence,

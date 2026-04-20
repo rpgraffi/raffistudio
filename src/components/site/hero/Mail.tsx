@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { lightSourceVars } from "../../app/styles/shadows";
+import { lightSourceVars } from "@/app/styles/shadows";
 
 interface MailProps {
   width?: number | string;
@@ -25,7 +25,7 @@ export function Mail({ width, height, className = "", url }: MailProps) {
   return (
     <Link
       href={url}
-      className={`group relative inline-block [perspective:1000px] ${className}`}
+      className={`group relative inline-block perspective-[1000px] ${className}`}
       style={{
         width: width,
         height: height,
@@ -50,7 +50,7 @@ export function Mail({ width, height, className = "", url }: MailProps) {
       <img
         src="/images/mail/Top.webp"
         alt=""
-        className="absolute inset-0 z-20 block w-full h-full object-contain select-none pointer-events-none origin-top transition-transform duration-500 ease-out group-hover:[transform:rotateX(-45deg)]"
+        className="absolute inset-0 z-20 block w-full h-full object-contain select-none pointer-events-none origin-top transition-transform duration-500 ease-out group-hover:transform-[rotateX(-45deg)]"
         style={{ filter: shadowFilter }}
       />
     </Link>

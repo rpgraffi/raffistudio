@@ -11,6 +11,8 @@ interface RuledTextProps {
   opacity?: number;
   deviation?: number;
   seed?: number;
+  /** When true, lines render fully visible immediately (used after the reveal animation fires) */
+  revealed?: boolean;
 }
 
 export const RuledText: React.FC<RuledTextProps> = ({
@@ -21,6 +23,7 @@ export const RuledText: React.FC<RuledTextProps> = ({
   opacity = 1,
   deviation = 0.5,
   seed,
+  revealed = false,
 }) => {
   const id = useId();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -105,13 +108,16 @@ export const RuledText: React.FC<RuledTextProps> = ({
         {lines.map((line, i) => (
           <span
             key={i}
+            className="ruled-line"
+            data-ruled-line=""
             style={{
               position: "absolute",
               left: 0,
               top: line.top,
               width: line.width,
               height: 10,
-              lineHeight: 0, // Reset inherited line-height
+              lineHeight: 0,
+              clipPath: revealed ? "inset(0 0% 0 0)" : "inset(0 100% 0 0)",
             }}
           >
             <PencilStroke

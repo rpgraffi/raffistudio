@@ -7,35 +7,8 @@ import { Folder } from "@/components/site/projects/Folder";
 import { Hero } from "@/components/site/hero/Hero";
 import { ReviewStack } from "@/components/site/reviews/ReviewStack";
 import { ToolsSection } from "@/components/site/tools/ToolsSection";
-import { TextureSection } from "@/components/ui/TextureSection";
 import { Analytics } from "@vercel/analytics/next";
 import Image from "next/image";
-
-const textureIcons = [
-  "figma",
-  "blender",
-  "openai",
-  "flutter",
-  "dart",
-  "swift",
-  "directus",
-  "docker",
-  "fastapi",
-  "firebase",
-  "git",
-  "github",
-  "graphql",
-  "nginx",
-  "postgres",
-  "python",
-  "react",
-  "tailwind",
-  "typescript",
-  "unity",
-  "unreal",
-  "webflow",
-  "rive",
-];
 
 const jsonLd = {
   "@context": "https://schema.org",

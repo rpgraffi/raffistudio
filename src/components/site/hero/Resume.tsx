@@ -21,8 +21,9 @@ export function Resume({ width, height, className = "", url, filename }: ResumeP
     >
       {/* Background Layer - Acts as the relative anchor for size */}
       <img
-        src="/images/resume/Resume.avif"
+        src="/images/resume/resume.avif"
         alt=""
+        loading="lazy"
         className="relative z-0 block w-full h-full object-contain select-none pointer-events-none"
       />
     </a>

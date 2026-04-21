@@ -91,7 +91,7 @@ export const metadata: Metadata = {
       "I focus on HCI, UX/UI systems, and AI interfaces. I craft digital products with intent. Based in Munich, finishing my master's in HCI and CS at LMU.",
     images: [
       {
-        url: "/images/Profile.webp",
+        url: "/images/Profile.avif",
         width: 1200,
         height: 630,
         alt: "Raphael Wennmacher — Portfolio",
@@ -103,7 +103,7 @@ export const metadata: Metadata = {
     title: "Raphael Wennmacher • Portfolio",
     description:
       "I focus on HCI, UX/UI systems, and AI interfaces. I craft digital products with intent. Based in Munich, finishing my master's in HCI and CS at LMU.",
-    images: ["/images/Profile.webp"],
+    images: ["/images/Profile.avif"],
   },
 };
 

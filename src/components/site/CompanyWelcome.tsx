@@ -1,15 +1,15 @@
 "use client";
 
+import { scrollToWithLenis } from "@/components/layout/SmoothScroll";
 import { TextMarker } from "@/components/natural-ui/TextMarker";
 import { useLoading } from "@/context/LoadingContext";
 import { track } from "@vercel/analytics";
 import { gsap } from "gsap";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
 
-gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger);
 
 const COMPANY_MAX = 40;
 const NOTE_MAX = 200;
@@ -171,18 +171,21 @@ function CompanyWelcomeInner() {
         }),
       });
 
-      // After the intro, auto-scroll to the real hero. `autoKill` bails
-      // if the user takes over scrolling themselves.
+      // Auto-scroll to the hero after the intro.
+      // Lenis.scrollTo is used instead of GSAP's ScrollToPlugin because iOS
+      // fires native touchstart/scroll events during programmatic scrolls,
+      // which would immediately kill a ScrollToPlugin tween (autoKill:true).
       const nextSection = section.nextElementSibling as HTMLElement | null;
-      tl.to(
-        window,
-        {
-          scrollTo: nextSection
-            ? { y: nextSection, autoKill: true }
-            : { y: window.innerHeight, autoKill: true },
-          duration: 1.2,
-          ease: "power2.inOut",
+      const target: HTMLElement | number = nextSection ?? window.innerHeight;
+      tl.call(
+        () => {
+          scrollToWithLenis(target, {
+            duration: 1.2,
+            easing: (t: number) =>
+              t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
+          });
         },
+        [],
         "+=1.5",
       );
     }, section);
@@ -208,12 +211,11 @@ function CompanyWelcomeInner() {
       aria-label={`Welcome ${company}`}
       className="min-h-screen w-full max-w-site mx-auto px-8 flex flex-col justify-center gap-10"
     >
-      
-            {role ? (
-              <div className="welcome-badge self-start" style={{ opacity: 0 }}>
-                <AvailabilityBadge role={role} />
-              </div>
-            ) : null}
+      {role ? (
+        <div className="welcome-badge self-start opacity-0">
+          <AvailabilityBadge role={role} />
+        </div>
+      ) : null}
       <h1 className="text-3xl md:text-5xl font-medium text-zinc-900 leading-tight">
         <WordLine words={line1} keyPrefix="l1" />
         <br />
@@ -221,10 +223,7 @@ function CompanyWelcomeInner() {
       </h1>
 
       {note ? (
-        <p
-        className="welcome-note max-w-2xl text-lg md:text-xl text-zinc-700 leading-relaxed"
-        style={{ opacity: 0 }}
-        >
+        <p className="welcome-note max-w-2xl text-lg md:text-xl text-zinc-700 leading-relaxed opacity-0">
           {note}
         </p>
       ) : null}
@@ -238,8 +237,7 @@ function WordLine({ words, keyPrefix }: { words: Word[]; keyPrefix: string }) {
       {words.map((w, i) => (
         <span key={`${keyPrefix}-${i}`}>
           <span
-            className="welcome-word inline-block"
-            style={{ opacity: 0, willChange: "transform, opacity" }}
+            className="welcome-word inline-block opacity-0 will-change-[transform,opacity]"
           >
             {w.isCompany ? (
               <>

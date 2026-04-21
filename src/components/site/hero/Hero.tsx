@@ -12,10 +12,10 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const HEADING = "I love to design and develop digital products.";
+const HEADING = "I design and build digital products.";
 
 const DESCRIPTION =
-  "Always up to date, and obsessed with the details. I understand products holistically, from the user all the way to the customer's door, and build things people actually want to buy. Freelancing for 5+ years while studying at LMU Munich.";
+  "I work at the intersection of design and engineering to turn complex ideas into functional software. I handle the entire process, from the first concept to the production code, with a focus on detail and usability. Currently finishing my M.Sc. in Human-Computer Interaction at LMU Munich alongside five years of freelance experience.";
 
 function splitWords(text: string): string[] {
   return text.split(/(\s+)/).filter((chunk) => chunk.length > 0);
@@ -23,15 +23,27 @@ function splitWords(text: string): string[] {
 
 function groupByLine(elements: HTMLElement[]): HTMLElement[][] {
   const buckets = new Map<number, HTMLElement[]>();
-  elements.forEach((el) => {
+  for (const el of elements) {
     const top = Math.round(el.offsetTop);
     const bucket = buckets.get(top);
     if (bucket) bucket.push(el);
     else buckets.set(top, [el]);
-  });
+  }
   return Array.from(buckets.entries())
     .sort((a, b) => a[0] - b[0])
     .map(([, group]) => group);
+}
+
+function wordSpans(text: string, markerClass: string) {
+  return splitWords(text).map((chunk, i) =>
+    /^\s+$/.test(chunk) ? (
+      <React.Fragment key={i}>{chunk}</React.Fragment>
+    ) : (
+      <span key={i} className={`${markerClass} inline-block will-change-transform`}>
+        {chunk}
+      </span>
+    ),
+  );
 }
 
 export function Hero() {
@@ -92,9 +104,8 @@ export function Hero() {
     const runIntro = () => {
       if (cancelled || timelineReady) return;
 
-      const ruledLinesNow = section.querySelectorAll<HTMLElement>(
-        "[data-ruled-line]",
-      );
+      const ruledLinesNow =
+        section.querySelectorAll<HTMLElement>("[data-ruled-line]");
 
       if (ruledLinesNow.length === 0) {
         rafId = requestAnimationFrame(runIntro);
@@ -152,11 +163,7 @@ export function Hero() {
       descLines.forEach((line, i) => {
         const lineStart = 0.22 + i * LINE_STAGGER;
 
-        tl.to(
-          line,
-          { opacity: 1, y: 0, duration: 1.0 },
-          lineStart,
-        );
+        tl.to(line, { opacity: 1, y: 0, duration: 1.0 }, lineStart);
 
         const stroke = ruledLinesNow[i];
         if (stroke) {
@@ -192,54 +199,24 @@ export function Hero() {
     };
   }, [isLoading]);
 
-  // Memoised so RuledText's children reference stays stable between renders
-  // (e.g. when linesRevealed flips). This prevents a spurious measure() call
-  // inside RuledText that would otherwise re-run on every Hero re-render.
-  const headingWordElements = useMemo(
-    () =>
-      splitWords(HEADING).map((chunk, i) =>
-        /^\s+$/.test(chunk) ? (
-          <React.Fragment key={i}>{chunk}</React.Fragment>
-        ) : (
-          <span
-            key={i}
-            className="hero-heading-word inline-block will-change-transform"
-          >
-            {chunk}
-          </span>
-        ),
-      ),
-    [],
-  );
-
-  const descWordElements = useMemo(
-    () =>
-      splitWords(DESCRIPTION).map((chunk, i) =>
-        /^\s+$/.test(chunk) ? (
-          <React.Fragment key={i}>{chunk}</React.Fragment>
-        ) : (
-          <span key={i} className="hero-desc-word inline-block will-change-transform">
-            {chunk}
-          </span>
-        ),
-      ),
-    [],
-  );
+  // Stable references prevent RuledText from remeasuring on every Hero re-render.
+  const headingWordElements = useMemo(() => wordSpans(HEADING, "hero-heading-word"), []);
+  const descWordElements = useMemo(() => wordSpans(DESCRIPTION, "hero-desc-word"), []);
 
   return (
     <section
       ref={sectionRef}
       className="min-h-screen w-full max-w-site mx-auto px-8 py-12 flex items-center"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-40 items-center w-full">
         <div className="order-2 lg:order-1 flex flex-col gap-10 items-start">
-          <h1 className="text-3xl md:text-5xl font-medium text-zinc-800">
+          <h1 className="text-3xl md:text-5xl font-medium leading-tight text-zinc-800">
             {headingWordElements}
           </h1>
 
           <div className="hero-desc w-full">
             <RuledText
-              className="text-lg max-w-xl leading-8"
+              className="text-lg max-w-xl leading-8 text-justify"
               revealed={linesRevealed}
             >
               {descWordElements}
@@ -280,8 +257,8 @@ export function Hero() {
 
         <div className="hero-image order-1 lg:order-2 w-full h-[45vh] sm:h-[55vh] lg:h-[70vh] relative rounded-2xl overflow-hidden will-change-transform">
           <Image
-            src="/images/Profile.webp"
-            alt="Portrait of Raffi"
+            src="/images/Profile.avif"
+            alt="Portrait of Raphael Wennmacher (Raffi)"
             fill
             className="object-contain"
             priority

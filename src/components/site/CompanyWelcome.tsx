@@ -1,6 +1,7 @@
 "use client";
 
 import { TextMarker } from "@/components/natural-ui/TextMarker";
+import { useLoading } from "@/context/LoadingContext";
 import { track } from "@vercel/analytics";
 import { gsap } from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
@@ -74,6 +75,7 @@ function CompanyWelcomeInner() {
 
   const [mounted, setMounted] = useState(false);
   const [isReturning, setIsReturning] = useState(false);
+  const { isLoading } = useLoading();
 
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -105,7 +107,7 @@ function CompanyWelcomeInner() {
   }, [company, role, ref]);
 
   useEffect(() => {
-    if (!mounted || !company) return;
+    if (isLoading || !mounted || !company) return;
     const section = sectionRef.current;
     if (!section) return;
 
@@ -189,7 +191,7 @@ function CompanyWelcomeInner() {
       cancelAnimationFrame(raf);
       ctx.revert();
     };
-  }, [mounted, company]);
+  }, [isLoading, mounted, company]);
 
   if (!company) return null;
 

@@ -4,6 +4,7 @@ import { PencilUnderline } from "@/components/natural-ui/PencilStroke";
 import { RuledText } from "@/components/natural-ui/RuledText";
 import { Mail } from "@/components/site/hero/Mail";
 import { Resume } from "@/components/site/hero/Resume";
+import { useLoading } from "@/context/LoadingContext";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
@@ -21,17 +22,12 @@ function splitWords(text: string): string[] {
 }
 
 function groupByLine(elements: HTMLElement[]): HTMLElement[][] {
-  // Group word spans by their visual top offset so we can reveal true text
-  // lines, even when wrapping changes with viewport size.
   const buckets = new Map<number, HTMLElement[]>();
   elements.forEach((el) => {
     const top = Math.round(el.offsetTop);
     const bucket = buckets.get(top);
-    if (bucket) {
-      bucket.push(el);
-    } else {
-      buckets.set(top, [el]);
-    }
+    if (bucket) bucket.push(el);
+    else buckets.set(top, [el]);
   });
   return Array.from(buckets.entries())
     .sort((a, b) => a[0] - b[0])
@@ -40,6 +36,7 @@ function groupByLine(elements: HTMLElement[]): HTMLElement[][] {
 
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
+  const { isLoading } = useLoading();
 
   // Tracks whether the ruled-line reveal animation has completed.
   // Passed to RuledText so that any re-renders after the animation (e.g. from
@@ -50,6 +47,8 @@ export function Hero() {
   });
 
   useEffect(() => {
+    if (isLoading) return;
+
     const section = sectionRef.current;
     if (!section) return;
 
@@ -104,9 +103,6 @@ export function Hero() {
 
       timelineReady = true;
 
-      // No gsap.set needed — RuledText renders lines with clip-path: inset(0 100% 0 0)
-      // initially (revealed=false), so they are hidden by default via React state.
-
       const descLines = groupByLine(descWords);
 
       const tl = gsap.timeline({
@@ -151,28 +147,23 @@ export function Hero() {
         0.38,
       );
 
+      const LINE_STAGGER = 0.15;
+
       descLines.forEach((line, i) => {
+        const lineStart = 0.22 + i * LINE_STAGGER;
+
         tl.to(
           line,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.42,
-            stagger: 0.012,
-          },
-          i === 0 ? "0.22" : "-=0.28",
+          { opacity: 1, y: 0, duration: 1.0 },
+          lineStart,
         );
 
         const stroke = ruledLinesNow[i];
         if (stroke) {
           tl.to(
             stroke,
-            {
-              clipPath: "inset(0 0% 0 0)",
-              duration: 0.48,
-              ease: "power2.inOut",
-            },
-            "<0.05",
+            { clipPath: "inset(0 0% 0 0)", duration: 1.0, ease: "power3.out" },
+            lineStart + 0.15,
           );
         }
       });
@@ -199,7 +190,7 @@ export function Hero() {
       cancelAnimationFrame(rafId);
       introTl?.kill();
     };
-  }, []);
+  }, [isLoading]);
 
   // Memoised so RuledText's children reference stays stable between renders
   // (e.g. when linesRevealed flips). This prevents a spurious measure() call
@@ -227,10 +218,7 @@ export function Hero() {
         /^\s+$/.test(chunk) ? (
           <React.Fragment key={i}>{chunk}</React.Fragment>
         ) : (
-          <span
-            key={i}
-            className="hero-desc-word inline-block will-change-transform"
-          >
+          <span key={i} className="hero-desc-word inline-block will-change-transform">
             {chunk}
           </span>
         ),

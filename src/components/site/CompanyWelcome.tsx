@@ -109,6 +109,13 @@ function CompanyWelcomeInner() {
     const section = sectionRef.current;
     if (!section) return;
 
+    // CompanyWelcome inserts a full min-h-screen section that shifts every
+    // downstream element. Refresh all ScrollTrigger positions after one frame
+    // so sibling triggers (ToolsScene, ReviewStack, etc.) recalculate with the
+    // correct offsets. Without this, scroll-pinned animations are broken when
+    // a request parameter is present.
+    const raf = requestAnimationFrame(() => ScrollTrigger.refresh());
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline();
 
@@ -178,7 +185,10 @@ function CompanyWelcomeInner() {
       );
     }, section);
 
-    return () => ctx.revert();
+    return () => {
+      cancelAnimationFrame(raf);
+      ctx.revert();
+    };
   }, [mounted, company]);
 
   if (!company) return null;

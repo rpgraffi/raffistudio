@@ -35,6 +35,7 @@ export function Mail({ width, height, className = "", url }: MailProps) {
       <img
         src="/images/mail/Background.webp"
         alt=""
+        loading="lazy"
         className="relative z-0 block w-full h-full object-contain select-none pointer-events-none"
       />
 
@@ -42,6 +43,7 @@ export function Mail({ width, height, className = "", url }: MailProps) {
       <img
         src="/images/mail/Bottom.webp"
         alt=""
+        loading="lazy"
         className="absolute inset-0 z-10 block w-full h-full object-contain select-none pointer-events-none"
         style={{ filter: shadowFilter }}
       />
@@ -50,6 +52,7 @@ export function Mail({ width, height, className = "", url }: MailProps) {
       <img
         src="/images/mail/Top.webp"
         alt=""
+        loading="lazy"
         className="absolute inset-0 z-20 block w-full h-full object-contain select-none pointer-events-none origin-top transition-transform duration-500 ease-out group-hover:transform-[rotateX(-45deg)]"
         style={{ filter: shadowFilter }}
       />

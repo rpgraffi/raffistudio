@@ -10,41 +10,9 @@ import { ToolsSection } from "@/components/site/tools/ToolsSection";
 import { Analytics } from "@vercel/analytics/next";
 import Image from "next/image";
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Raphael Wennmacher",
-  url: "https://raffi.studio",
-  email: "me@raffi.studio",
-  jobTitle: "UX/UI Designer & Developer",
-  description:
-    "HCI researcher, UX/UI designer, and developer based in Munich. Finishing a master's in HCI and CS at LMU.",
-  sameAs: [
-    "https://github.com/rpgraffi",
-    "https://www.linkedin.com/in/raphael-wennmacher/",
-    "https://www.instagram.com/raffis.insta/",
-  ],
-  knowsAbout: [
-    "HCI",
-    "UX Design",
-    "UI Systems",
-    "AI Interfaces",
-    "Product Design",
-  ],
-  alumniOf: {
-    "@type": "CollegeOrUniversity",
-    name: "Ludwig Maximilian University of Munich",
-    url: "https://www.lmu.de",
-  },
-};
-
 export default function Home() {
   return (
     <PageTransitionWrapper>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
       <main className="min-h-screen relative flex flex-col gap-12 items-center overflow-x-hidden">
         <Analytics />
         {/* <GlassRuler /> */}

@@ -9,9 +9,30 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+/** Module-level singleton — lets sibling components call {@link scrollToWithLenis} without context or prop-drilling. */
+let _lenis: Lenis | null = null;
+
+type LenisScrollToOptions = Parameters<Lenis["scrollTo"]>[1];
+
+/** Scroll to a target via Lenis, keeping it in sync with the smooth-scroll loop.
+ *  Falls back to native scroll when Lenis hasn't initialised yet. */
+export function scrollToWithLenis(
+  target: HTMLElement | number,
+  options?: LenisScrollToOptions,
+) {
+  if (_lenis) {
+    _lenis.scrollTo(target, options);
+  } else if (target instanceof HTMLElement) {
+    target.scrollIntoView({ behavior: "smooth" });
+  } else {
+    window.scrollTo({ top: target, behavior: "smooth" });
+  }
+}
+
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const lenis = new Lenis();
+    _lenis = lenis;
 
     lenis.on("scroll", ScrollTrigger.update);
 
@@ -22,6 +43,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     return () => {
       gsap.ticker.remove(rafCallback);
       lenis.destroy();
+      _lenis = null;
     };
   }, []);
 

@@ -37,7 +37,7 @@ export const ProjectStats: React.FC<ProjectStatsProps> = ({
 
       {/* Divider */}
       <div className="w-full max-w-site mx-auto overflow-hidden px-8 md:px-12">
-        <PencilStroke className="w-full" opacity={0.1} strokeWidth={3} />
+        <PencilStroke className="w-full" opacity={0.1} strokeWidth={3} deviation={0.2} />
       </div>
 
       {/* Row 2: Tech Stack Patches */}
@@ -47,7 +47,7 @@ export const ProjectStats: React.FC<ProjectStatsProps> = ({
 
       {/* Divider */}
       <div className="w-full max-w-site mx-auto overflow-hidden px-8 md:px-12">
-        <PencilStroke className="w-full" opacity={0.1} strokeWidth={3} />
+        <PencilStroke className="w-full" opacity={0.1} strokeWidth={3} deviation={0.2}/>
       </div>
     </section>
   );

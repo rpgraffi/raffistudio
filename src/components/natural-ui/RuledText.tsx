@@ -21,9 +21,9 @@ export const RuledText: React.FC<RuledTextProps> = ({
   color = "rgba(0,0,0,0.1)",
   strokeWidth = 1.5,
   opacity = 1,
-  deviation = 0.5,
+  deviation = 0.2,
   seed,
-  revealed = false,
+  revealed = true,
 }) => {
   const id = useId();
   const containerRef = useRef<HTMLDivElement>(null);

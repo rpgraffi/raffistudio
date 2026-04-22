@@ -216,7 +216,7 @@ export default function LMUAppPage() {
               transition={{ ...springConfig, delay: 0.3 }}
             >
               <div className="text-xl md:text-2xl text-zinc-800 leading-10 font-normal">
-                <RuledText className="leading-10">
+                <RuledText className="leading-10 text-justify">
                   An open source mobile app for students of the Ludwig
                   Maximilian University of Munich.
                   <br />

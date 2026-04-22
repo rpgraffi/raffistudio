@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     url: "https://raffi.studio/projects/convert-compress",
     images: [
       {
-        url: "/images/project/work-cards/onepager.webp",
+        url: "/images/project/work-cards/studio-raffi.avif",
         width: 1200,
         height: 630,
         alt: "Convert & Compress — Raphael Wennmacher",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     title: "Convert & Compress • Raphael Wennmacher",
     description:
       "Case study: Convert & Compress — a native macOS app for image conversion and compression. Swift, UX design, and marketing. Munich, Winter 2025.",
-    images: ["/images/project/work-cards/onepager.webp"],
+    images: ["/images/project/work-cards/studio-raffi.avif"],
   },
 };
 

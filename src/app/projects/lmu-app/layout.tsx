@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     url: "https://raffi.studio/projects/lmu-app",
     images: [
       {
-        url: "/images/project/work-cards/lmu.webp",
+        url: "/images/project/work-cards/lmu.avif",
         width: 1200,
         height: 630,
         alt: "LMU Students App — Raphael Wennmacher",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     title: "LMU Students App • Raphael Wennmacher",
     description:
       "Case study: LMU Students App — a full-stack mobile app redesign for LMU Munich students. UX design, Flutter frontend, Python/FastAPI backend, PostgreSQL. Munich, Fall 2024.",
-    images: ["/images/project/work-cards/lmu.webp"],
+    images: ["/images/project/work-cards/lmu.avif"],
   },
 };
 

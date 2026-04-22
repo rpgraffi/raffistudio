@@ -98,9 +98,11 @@ export function Folder({
           className="absolute inset-0 rounded-3xl sm:rounded-[36px] md:rounded-[48px] bg-white"
           style={{
             boxShadow:
-              "0 8px 16px rgba(0,0,0,0.05), 0 16px 32px rgba(0,0,0,0.1)",
+              "0 2px 4px rgba(0,0,0,0.05), 0 8px 16px rgba(0,0,0,0.05), 0 16px 32px rgba(0,0,0,0.1)",
             transformOrigin: "bottom center",
+            ...({ cornerShape: "superellipse(1.6)" } as React.CSSProperties),
           }}
+     
           animate={{
             rotateX: isOpen ? 3 : 0,
           }}
@@ -167,6 +169,7 @@ export function Folder({
           )}
           style={{
             transformOrigin: "bottom center",
+            ...({ cornerShape: "superellipse(1.6)" } as React.CSSProperties),
           }}
           animate={{
             rotateX: isOpen ? -25 : 0,

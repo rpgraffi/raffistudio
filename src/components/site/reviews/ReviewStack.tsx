@@ -33,7 +33,7 @@ export function ReviewStack() {
       gsap.set(cards, {
         y: "110vh",
         rotateX: 130,
-        scale: 4,
+        scale: 3,
         opacity: 0.50,
         transformPerspective: 800,
         transformOrigin: "center center",
@@ -44,7 +44,7 @@ export function ReviewStack() {
           trigger: section,
           start: "top top",
           end: "bottom bottom",
-          scrub: 0.8,
+          scrub: 0.4,
           pin: stack,
         },
       });
@@ -75,19 +75,22 @@ export function ReviewStack() {
   return (
     <section ref={sectionRef} className="relative" style={{ height: `${(postcards.length + 1) * 50}vh` }}>
       <div ref={stackRef} className="h-screen w-full flex items-center justify-center">
-        <div className="relative w-[90vw] h-[50vh] md:h-[60vh] max-w-[600px] max-h-[600px]">
+        <h2 className="absolute inset-0 flex items-center justify-center text-center tracking-tight text-4xl md:text-6xl text-foreground pointer-events-none select-none z-0">
+          Love from my<br />colleagues
+        </h2>
+        <div className="relative w-[90vw] max-w-[600px] aspect-900/628">
           {postcards.map((card, i) => (
             <div
               key={card.src}
               ref={(el) => { cardRefs.current[i] = el; }}
-              className="absolute inset-0 will-change-transform"
-              style={{ zIndex: i }}
+              className="absolute inset-0 will-change-transform [box-shadow:0_4px_8px_rgba(0,0,0,0.18)]"
+              style={{ zIndex: i + 1 }}
             >
               <Image
                 src={card.src}
                 alt={card.alt}
                 fill
-                className="object-contain drop-shadow-lg"
+                className="object-contain"
                 sizes="(max-width: 640px) 400px, (max-width: 768px) 520px, 640px"
               />
             </div>

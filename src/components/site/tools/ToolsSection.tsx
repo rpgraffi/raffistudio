@@ -73,7 +73,7 @@ export function ToolsSection() {
           className="pointer-events-none relative flex h-full flex-col items-center justify-start px-8 pt-[12vh] text-center"
           style={{ zIndex: 30 }}
         >
-          <h2 className="text-balance text-4xl font-semibold tracking-tight md:text-6xl">
+          <h2 className="text-balance text-4xl tracking-tight md:text-6xl">
             Pixels & Code
           </h2>
           <p className="mt-4 max-w-xl text-base text-neutral-600 md:text-lg">

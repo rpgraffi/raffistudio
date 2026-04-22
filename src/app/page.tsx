@@ -24,7 +24,7 @@ export default function Home() {
 
         {/* Projects Section */}
         <section className="w-full max-w-site mx-auto px-8 py-32">
-          <h2 className="text-balance text-4xl font-semibold tracking-tight md:text-6xl text-center md:mb-32">
+          <h2 className="text-balance text-4xl tracking-tight md:text-6xl text-center md:mb-32">
             My Work
           </h2>
           <div className="grid grid-cols-1 auto-rows-[70vh] place-items-center md:flex md:flex-wrap md:auto-rows-auto md:justify-center md:gap-52">
@@ -62,7 +62,7 @@ export default function Home() {
               ]}
               card={
                 <Image
-                  src="/images/project/work-cards/studio-raffi.webp"
+                  src="/images/project/work-cards/studio-raffi.avif"
                   alt="Studio Raffi"
                   fill
                   className="object-contain"
@@ -143,7 +143,7 @@ export default function Home() {
               ]}
               card={
                 <Image
-                  src="/images/project/work-cards/lmu.webp"
+                  src="/images/project/work-cards/lmu.avif"
                   alt="LMU App"
                   fill
                   className="object-contain"
@@ -188,7 +188,7 @@ export default function Home() {
               ]}
               card={
                 <Image
-                  src="/images/project/work-cards/tradar.webp"
+                  src="/images/project/work-cards/tradar.avif"
                   alt="TRADAR"
                   fill
                   className="object-contain"

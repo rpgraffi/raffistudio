@@ -210,7 +210,7 @@ export function Hero() {
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-40 items-center w-full">
         <div className="order-2 lg:order-1 flex flex-col gap-10 items-start">
-          <h1 className="text-3xl md:text-5xl font-medium leading-tight text-zinc-800">
+          <h1 className="text-3xl md:text-5xl tracking-tight font-[450] leading-tight text-zinc-800">
             {headingWordElements}
           </h1>
 

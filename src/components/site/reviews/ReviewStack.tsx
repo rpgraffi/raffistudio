@@ -75,7 +75,7 @@ export function ReviewStack() {
   return (
     <section ref={sectionRef} className="relative" style={{ height: `${(postcards.length + 1) * 50}vh` }}>
       <div ref={stackRef} className="h-screen w-full flex items-center justify-center">
-        <h2 className="absolute inset-0 flex items-center justify-center text-center text-4xl md:text-6xl font-bold text-foreground pointer-events-none select-none z-0">
+        <h2 className="absolute inset-0 flex items-center justify-center text-center tracking-tight text-4xl md:text-6xl text-foreground pointer-events-none select-none z-0">
           Love from my<br />colleagues
         </h2>
         <div className="relative w-[90vw] max-w-[600px] aspect-900/628">

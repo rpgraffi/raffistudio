@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     url: "https://raffi.studio/projects/tradar",
     images: [
       {
-        url: "/images/project/work-cards/tradar.webp",
+        url: "/images/project/work-cards/tradar.avif",
         width: 1200,
         height: 630,
         alt: "Tradar project — Raphael Wennmacher",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     title: "Tradar • Raphael Wennmacher",
     description:
       "Case study: Tradar — a UX/UI and web design project featuring animations, user flows, and interactive prototypes. Built with React and Rive. Munich, 2023.",
-    images: ["/images/project/work-cards/tradar.webp"],
+    images: ["/images/project/work-cards/tradar.avif"],
   },
 };
 

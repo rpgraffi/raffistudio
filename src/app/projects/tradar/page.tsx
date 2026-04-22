@@ -185,7 +185,7 @@ export default function TradarPage() {
               transition={{ ...springConfig, delay: 0.3 }}
             >
               <div className="text-xl md:text-2xl text-zinc-800 leading-10 font-normal">
-                <RuledText className="leading-10">
+                <RuledText className="leading-10 text-justify">
                   A mobile platform for football fans to legally invest in
                   soccer players. Built for MFC Labs GmbH in cooperation with
                   Userdoo.

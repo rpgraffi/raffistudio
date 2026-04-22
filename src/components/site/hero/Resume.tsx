@@ -24,7 +24,7 @@ export function Resume({ width, height, className = "", url, filename }: ResumeP
         src="/images/resume/resume.avif"
         alt=""
         loading="lazy"
-        className="relative z-0 block w-full h-full object-contain select-none pointer-events-none"
+        className="relative z-0 block w-full h-full object-contain select-none pointer-events-none shadow-sm"
       />
     </a>
   );

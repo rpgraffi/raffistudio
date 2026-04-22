@@ -77,11 +77,11 @@ export function Hero() {
     const icons = section.querySelectorAll<HTMLElement>(".hero-icon");
     const image = section.querySelector<HTMLElement>(".hero-image");
 
-    gsap.set(headingWords, { opacity: 0, yPercent: 55 });
-    gsap.set(descWords, { opacity: 0, y: 10 });
+    gsap.set(headingWords, { opacity: 0, xPercent: -20 });
+    gsap.set(descWords, { opacity: 0, x: -20 });
     gsap.set(links, { opacity: 0, x: -28 });
-    gsap.set(icons, { opacity: 0, y: 12 });
-    if (image) gsap.set(image, { opacity: 0, scale: 0.94 });
+    gsap.set(icons, { opacity: 0, x: -28 });
+    if (image) gsap.set(image, { opacity: 0, scale: 0.92 });
 
     if (prefersReduced) {
       // linesRevealed is already true when prefersReduced (lazy-initialised above),
@@ -139,11 +139,11 @@ export function Hero() {
         headingWords,
         {
           opacity: 1,
-          yPercent: 0,
-          duration: 0.48,
-          stagger: 0.04,
+          xPercent: 0,
+          duration: 0.6,
+          stagger: 0.05,
         },
-        0.02,
+        0.10,
       );
 
       tl.to(
@@ -151,11 +151,11 @@ export function Hero() {
         {
           opacity: 1,
           x: 0,
-          duration: 0.4,
+          duration: 0.5,
           stagger: 0.055,
-          ease: "power2.out",
+          ease: "power3.out",
         },
-        0.38,
+        1.25,
       );
 
       const LINE_STAGGER = 0.15;
@@ -163,14 +163,14 @@ export function Hero() {
       descLines.forEach((line, i) => {
         const lineStart = 0.22 + i * LINE_STAGGER;
 
-        tl.to(line, { opacity: 1, y: 0, duration: 1.0 }, lineStart);
+        tl.to(line, { opacity: 1, x: 0, duration: 1.2 }, lineStart);
 
         const stroke = ruledLinesNow[i];
         if (stroke) {
           tl.to(
             stroke,
-            { clipPath: "inset(0 0% 0 0)", duration: 1.0, ease: "power3.out" },
-            lineStart + 0.15,
+            { clipPath: "inset(0 0% 0 0)", duration: 0.8, ease: "power3.out" },
+            lineStart + 0.015,
           );
         }
       });
@@ -179,12 +179,12 @@ export function Hero() {
         icons,
         {
           opacity: 1,
-          y: 0,
+          x: 0,
           duration: 0.45,
           stagger: 0.08,
-          ease: "back.out(1.25)",
+          ease: "power3.out",
         },
-        "-=0.35",
+        "-=0.65",
       );
     };
 

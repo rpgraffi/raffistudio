@@ -12,7 +12,7 @@
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.4.0",
     "@rive-app/react-canvas": "^4.28.4",
-    "@types/three": "^0.181.0",
+    "@types/three": "^0.184.1",
     "@vercel/analytics": "^2.0.1",
     "clsx": "^2.1.1",
     "embla-carousel-autoplay": "^8.6.0",
